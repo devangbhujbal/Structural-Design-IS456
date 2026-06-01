@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One-Way Slabs | Structural Design IS 456</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'$',right:'$',display:false}
+    ]});"></script>
+  <style>
+    :root {
+      --bg: #f5f2eb;
+      --surface: #fffef9;
+      --border: #d9d0bc;
+      --accent: #b5451b;
+      --accent-light: #f0ddd6;
+      --text: #1e1b16;
+      --text-muted: #6b6256;
+      --heading-font: 'Merriweather', Georgia, serif;
+      --body-font: 'Source Sans 3', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--body-font); font-size: 17px; line-height: 1.75; }
+
+    header { background: var(--text); color: #fff; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 62px; position: sticky; top: 0; z-index: 100; border-bottom: 3px solid var(--accent); }
+    .site-title { font-family: var(--heading-font); font-size: 1rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .site-title span { color: var(--accent); }
+    nav a { color: #ccc; text-decoration: none; margin-left: 1.5rem; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: #fff; }
+
+    .hero { background: var(--text); color: #fff; padding: 3.5rem 2rem 3rem; border-bottom: 4px solid var(--accent); }
+    .hero-inner { max-width: 820px; margin: 0 auto; }
+    .breadcrumb { font-size: 0.8rem; color: #999; margin-bottom: 1rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .breadcrumb a { color: #aaa; text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+    .hero h1 { font-family: var(--heading-font); font-size: 2.6rem; line-height: 1.25; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--accent); }
+    .hero-meta { font-size: 0.88rem; color: #aaa; }
+    .tag { display: inline-block; background: var(--accent); color: #fff; padding: 2px 10px; border-radius: 2px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-right: 0.5rem; }
+
+    .page-body { max-width: 820px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+
+    .toc { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 1.25rem 1.5rem; margin-bottom: 3rem; border-radius: 0 4px 4px 0; }
+    .toc h3 { font-family: var(--heading-font); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .toc ol { padding-left: 1.2rem; }
+    .toc ol li { margin-bottom: 0.25rem; }
+    .toc a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+    .toc a:hover { text-decoration: underline; }
+
+    .section { margin-bottom: 3rem; }
+    h2 { font-family: var(--heading-font); font-size: 1.5rem; color: var(--text); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+    h3 { font-family: var(--heading-font); font-size: 1.1rem; color: var(--text); margin: 1.5rem 0 0.5rem; }
+    p { margin-bottom: 1rem; }
+    ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.35rem; }
+
+    .callout { padding: 1.25rem 1.5rem; border-radius: 4px; margin: 1.5rem 0; border: 1px solid transparent; }
+    .callout.definition { background: #eef4ff; border-color: #bed3f5; border-left: 4px solid #3a7bd5; }
+    .callout.code-ref { background: var(--accent-light); border-color: #e4bfb2; border-left: 4px solid var(--accent); }
+    .callout.note { background: #f0f8f0; border-color: #b8ddb8; border-left: 4px solid #4a9e4a; }
+    .callout.warning { background: #fffbe6; border-color: #ffe58f; border-left: 4px solid #d4a017; }
+    .callout.worked { background: #1e1b16; border-left: 4px solid var(--accent); color: #f0ebe0; }
+    .callout-title { font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+    .callout.definition .callout-title { color: #3a7bd5; }
+    .callout.code-ref .callout-title { color: var(--accent); }
+    .callout.note .callout-title { color: #4a9e4a; }
+    .callout.warning .callout-title { color: #d4a017; }
+    .callout.worked .callout-title { color: var(--accent); }
+    .callout.worked p, .callout.worked li { color: #c8c0b0; }
+    .callout.worked strong { color: #f0ebe0; }
+
+    .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: var(--surface); }
+    thead tr { background: var(--text); color: #fff; }
+    thead th { font-family: var(--heading-font); font-size: 0.85rem; padding: 0.75rem 1rem; text-align: left; font-weight: 700; }
+    tbody tr:nth-child(even) { background: #f5f0e8; }
+    tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+    .formula-block { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; text-align: center; font-size: 1.05rem; }
+    .formula-caption { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+    .diagram-wrap { margin: 1.5rem 0; text-align: center; }
+    .diagram-caption { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; font-style: italic; }
+
+    /* Two-col feature cards */
+    .feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    .feat-card { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--accent); padding: 1.25rem; border-radius: 0 0 4px 4px; }
+    .feat-card.blue { border-top-color: #3a7bd5; }
+    .feat-card h4 { font-family: var(--heading-font); font-size: 0.95rem; margin-bottom: 0.6rem; }
+    .feat-card p, .feat-card li { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* Reinforcement detail cards */
+    .detail-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px,1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .detail-card { background: var(--surface); border: 1px solid var(--border); padding: 1rem 1.25rem; border-radius: 4px; }
+    .detail-card .label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .detail-card .value { font-family: var(--heading-font); font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .detail-card .sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    /* Procedure steps */
+    .proc-steps { list-style: none; padding: 0; margin: 1.5rem 0; counter-reset: proc; }
+    .proc-steps > li { counter-increment: proc; display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem; margin-bottom: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1rem 1.25rem 1rem 0; align-items: start; }
+    .proc-steps > li::before { content: counter(proc); width: 2.5rem; height: 2.5rem; background: var(--accent); color: #fff; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; border-radius: 0 4px 4px 0; flex-shrink: 0; margin-left: -1px; }
+    .proc-step-content strong { display: block; font-size: 1rem; margin-bottom: 0.3rem; color: var(--text); }
+    .proc-step-content { font-size: 0.93rem; color: var(--text-muted); }
+
+    /* Worked example */
+    .ex-step { background: #2a2620; border-radius: 4px; padding: 1rem 1.25rem; margin: 0.75rem 0; }
+    .ex-step-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); font-weight: 700; margin-bottom: 0.4rem; }
+    .ex-step p { color: #c8c0b0; margin-bottom: 0.5rem; font-size: 0.93rem; }
+    .ex-step .result { color: #fff; font-weight: 700; font-size: 0.97rem; margin-top: 0.25rem; }
+
+    .nav-footer { margin-top: 3rem; border-top: 2px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .prev-btn, .next-btn { padding: 0.75rem 1.5rem; border-radius: 3px; text-decoration: none; font-weight: 600; font-size: 0.92rem; transition: background 0.2s; }
+    .prev-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .prev-btn:hover { background: var(--bg); }
+    .next-btn { background: var(--accent); color: #fff; }
+    .next-btn:hover { background: #922f0f; }
+
+    footer { background: var(--text); color: #888; text-align: center; padding: 1.5rem; font-size: 0.85rem; border-top: 3px solid var(--accent); }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      nav { display: none; }
+      .feat-grid { grid-template-columns: 1fr; }
+      .detail-cards { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="site-title" href="index.html">Structural Design <span>IS 456</span></a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="limit-state-method.html">LSM</a>
+    <a href="singly-reinforced-beams.html">Beams</a>
+    <a href="flanged-beams.html">T-Beams</a>
+    <a href="#">Columns</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> ›
+      <a href="flanged-beams.html">Flanged Beams</a> ›
+      One-Way Slabs
+    </div>
+    <h1>One-Way <span>Slabs</span></h1>
+    <div class="hero-meta">
+      <span class="tag">IS 456 : 2000</span>
+      <span class="tag">Cl. 24</span>
+      <span class="tag">Cl. 26.5.2</span>
+      Design of slabs spanning in one direction — main steel, distribution steel, and detailing
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#intro">What is a One-Way Slab?</a></li>
+      <li><a href="#criterion">One-Way vs Two-Way Criterion</a></li>
+      <li><a href="#loads">Load Calculation on Slabs</a></li>
+      <li><a href="#effective-span">Effective Span</a></li>
+      <li><a href="#depth">Depth of Slab — Span/Depth Ratio</a></li>
+      <li><a href="#design-strip">Design as a 1 m Wide Strip</a></li>
+      <li><a href="#main-steel">Main Reinforcement Design</a></li>
+      <li><a href="#dist-steel">Distribution (Secondary) Reinforcement</a></li>
+      <li><a href="#detailing">Detailing Rules — IS 456 Cl. 26.5.2</a></li>
+      <li><a href="#shear">Shear Check</a></li>
+      <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
+      <li><a href="#example">Worked Example</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. INTRO -->
+  <div class="section" id="intro">
+    <h2>1. What is a One-Way Slab?</h2>
+    <div class="callout definition">
+      <div class="callout-title">Definition</div>
+      A <strong>one-way slab</strong> is a flat RCC structural element that bends and spans in <em>one direction only</em> — from support to support along the shorter span. It is designed as a series of parallel beams of unit width (1 m strip) running in the direction of the shorter span.
+    </div>
+    <p>
+      One-way slabs are the most common type of slab used in buildings. Examples include floor slabs supported on two parallel walls or beams, staircase landings, roof slabs over rectangular rooms with a high length-to-width ratio, and verandah slabs.
+    </p>
+    <p>
+      The slab carries <strong>main reinforcement</strong> (spanning bars) along the short direction, and <strong>distribution reinforcement</strong> (shrinkage and temperature bars) perpendicular to the span.
+    </p>
+  </div>
+
+  <!-- 2. CRITERION -->
+  <div class="section" id="criterion">
+    <h2>2. One-Way vs Two-Way Criterion</h2>
+
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 24.1</div>
+      Slabs spanning in one direction (one-way slabs) are those in which the ratio of the longer span to shorter span exceeds 2.
+    </div>
+
+    <div class="formula-block">
+      $$\frac{l_y}{l_x} > 2 \quad \Rightarrow \quad \text{One-Way Slab}$$
+      $$\frac{l_y}{l_x} \leq 2 \quad \Rightarrow \quad \text{Two-Way Slab}$$
+      <div class="formula-caption">$l_y$ = longer span, $l_x$ = shorter span — IS 456:2000, Cl. 24.1</div>
+    </div>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;width:100%;font-family:'Source Sans 3',sans-serif;">
+        <rect width="680" height="210" fill="#fffef9"/>
+        <text x="340" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#1e1b16">One-Way vs Two-Way Slab</text>
+
+        <!-- ONE-WAY SLAB -->
+        <text x="145" y="42" text-anchor="middle" font-size="11" fill="#6b6256" font-style="italic">One-Way Slab (l$_y$/l$_x$ &gt; 2)</text>
+        <rect x="40" y="50" width="80" height="140" fill="#f0ddd6" stroke="#b5451b" stroke-width="1.5"/>
+        <!-- Load arrows pointing in short direction -->
+        <line x1="80" y1="55"  x2="80" y2="75"  stroke="#b5451b" stroke-width="1.8" marker-end="url(#arr_r)"/>
+        <line x1="80" y1="95"  x2="80" y2="115" stroke="#b5451b" stroke-width="1.8" marker-end="url(#arr_r)"/>
+        <line x1="80" y1="135" x2="80" y2="155" stroke="#b5451b" stroke-width="1.8" marker-end="url(#arr_r)"/>
+        <!-- Support hatching left -->
+        <rect x="28" y="50" width="12" height="140" fill="#ccc" stroke="#999" stroke-width="1"/>
+        <!-- Support right -->
+        <rect x="120" y="50" width="12" height="140" fill="#ccc" stroke="#999" stroke-width="1"/>
+        <!-- Span label -->
+        <line x1="40"  y1="198" x2="40"  y2="205" stroke="#b5451b" stroke-width="1"/>
+        <line x1="120" y1="198" x2="120" y2="205" stroke="#b5451b" stroke-width="1"/>
+        <line x1="40"  y1="202" x2="120" y2="202" stroke="#b5451b" stroke-width="1.2"/>
+        <text x="80" y="210" text-anchor="middle" font-size="10" fill="#b5451b" font-weight="600">l$_x$ (short span)</text>
+        <!-- ly label -->
+        <text x="215" y="130" text-anchor="middle" font-size="10" fill="#6b6256">l$_y$ &gt; 2l$_x$</text>
+        <text x="215" y="145" text-anchor="middle" font-size="10" fill="#6b6256">(long direction,</text>
+        <text x="215" y="158" text-anchor="middle" font-size="10" fill="#6b6256">load transfers</text>
+        <text x="215" y="171" text-anchor="middle" font-size="10" fill="#6b6256">short way only)</text>
+        <!-- Main bars indication -->
+        <line x1="55" y1="75"  x2="105" y2="75"  stroke="#b5451b" stroke-width="2" stroke-dasharray="5,3"/>
+        <line x1="55" y1="105" x2="105" y2="105" stroke="#b5451b" stroke-width="2" stroke-dasharray="5,3"/>
+        <line x1="55" y1="135" x2="105" y2="135" stroke="#b5451b" stroke-width="2" stroke-dasharray="5,3"/>
+        <line x1="55" y1="165" x2="105" y2="165" stroke="#b5451b" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="80" y="88" text-anchor="middle" font-size="9" fill="#b5451b">Main steel →</text>
+
+        <!-- TWO-WAY SLAB -->
+        <text x="500" y="42" text-anchor="middle" font-size="11" fill="#6b6256" font-style="italic">Two-Way Slab (l$_y$/l$_x$ ≤ 2)</text>
+        <rect x="400" y="50" width="200" height="140" fill="#eef4ff" stroke="#3a7bd5" stroke-width="1.5"/>
+        <!-- Supports all 4 sides -->
+        <rect x="388" y="50"  width="12" height="140" fill="#ccc" stroke="#999" stroke-width="1"/>
+        <rect x="600" y="50"  width="12" height="140" fill="#ccc" stroke="#999" stroke-width="1"/>
+        <rect x="400" y="38"  width="200" height="12" fill="#ccc" stroke="#999" stroke-width="1"/>
+        <rect x="400" y="190" width="200" height="12" fill="#ccc" stroke="#999" stroke-width="1"/>
+        <!-- Steel both ways -->
+        <line x1="415" y1="75"  x2="585" y2="75"  stroke="#3a7bd5" stroke-width="1.8" stroke-dasharray="5,3"/>
+        <line x1="415" y1="110" x2="585" y2="110" stroke="#3a7bd5" stroke-width="1.8" stroke-dasharray="5,3"/>
+        <line x1="415" y1="145" x2="585" y2="145" stroke="#3a7bd5" stroke-width="1.8" stroke-dasharray="5,3"/>
+        <line x1="415" y1="175" x2="585" y2="175" stroke="#3a7bd5" stroke-width="1.8" stroke-dasharray="5,3"/>
+        <line x1="430" y1="55"  x2="430" y2="185" stroke="#3a7bd5" stroke-width="1.8" stroke-dasharray="5,3"/>
+        <line x1="470" y1="55"  x2="470" y2="185" stroke="#3a7bd5" stroke-width="1.8" stroke-dasharray="5,3"/>
+        <line x1="530" y1="55"  x2="530" y2="185" stroke="#3a7bd5" stroke-width="1.8" stroke-dasharray="5,3"/>
+        <line x1="570" y1="55"  x2="570" y2="185" stroke="#3a7bd5" stroke-width="1.8" stroke-dasharray="5,3"/>
+        <text x="500" y="130" text-anchor="middle" font-size="10" fill="#3a7bd5" font-weight="600">Steel both directions</text>
+
+        <defs>
+          <marker id="arr_r" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto">
+            <path d="M0,0 L7,3.5 L0,7 Z" fill="#b5451b"/>
+          </marker>
+        </defs>
+      </svg>
+      <div class="diagram-caption">Fig. 1 — One-way slab spans in the short direction only; two-way slab spans in both directions</div>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Physical Reason</div>
+      When $l_y/l_x > 2$, the slab is much stiffer in the short direction and almost all the load is transferred to the two short-side supports. The long sides carry negligible load — hence it is treated as one-way. For a square slab ($l_y/l_x = 1$), load is shared equally in both directions.
+    </div>
+  </div>
+
+  <!-- 3. LOADS -->
+  <div class="section" id="loads">
+    <h2>3. Load Calculation on Slabs</h2>
+    <p>Slabs carry loads per unit area (kN/m²). The typical loads are:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Load Type</th><th>Description</th><th>Typical Values</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Self-weight (Dead)</td>
+            <td>Unit weight of RCC × slab thickness</td>
+            <td>$25 \times D$ kN/m² (D in metres)</td>
+          </tr>
+          <tr>
+            <td>Floor finish (Dead)</td>
+            <td>Marble, tiles, screed, etc.</td>
+            <td>0.5 – 1.5 kN/m²</td>
+          </tr>
+          <tr>
+            <td>Partition wall load (Dead)</td>
+            <td>If walls rest on slab</td>
+            <td>1.0 – 2.0 kN/m²</td>
+          </tr>
+          <tr>
+            <td>Live load</td>
+            <td>As per IS 875 Part 2</td>
+            <td>Residential: 2.0 kN/m²; Office: 3.0–4.0 kN/m²</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="formula-block">
+      $$w_u = 1.5 \times (w_{DL} + w_{LL}) \quad \text{kN/m}^2$$
+      <div class="formula-caption">Factored load per unit area — IS 456:2000, Table 18</div>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Converting to Load per Metre on a 1 m Strip</div>
+      When designing a 1 m wide strip of slab: $w_u$ (kN/m²) × 1 m = $w_u$ (kN/m). The strip is then designed exactly like a simply supported beam of span $l$ and width $b = 1000$ mm.
+    </div>
+  </div>
+
+  <!-- 4. EFFECTIVE SPAN -->
+  <div class="section" id="effective-span">
+    <h2>4. Effective Span</h2>
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 22.2</div>
+      Effective span of a simply supported slab:
+    </div>
+    <div class="formula-block">
+      $$l_{eff} = \text{min}\left(l_c + d, \; l_c + t_w\right)$$
+      <div class="formula-caption">$l_c$ = clear span; $d$ = effective depth; $t_w$ = support width. Take the lesser value.</div>
+    </div>
+    <p>
+      In most practical cases for slabs on masonry or concrete walls, the effective span is taken as the <strong>centre-to-centre distance of supports</strong> or the clear span + effective depth, whichever is less.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Support Condition</th><th>Effective Span</th></tr></thead>
+        <tbody>
+          <tr><td>Simply supported (SS)</td><td>Lesser of: $l_c + d$ or $l_c + t_w$ (IS 456 Cl. 22.2a)</td></tr>
+          <tr><td>Continuous slab</td><td>Centre-to-centre of supports (IS 456 Cl. 22.2b)</td></tr>
+          <tr><td>Cantilever</td><td>$l_c + d/2$ from face of support to free end</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5. DEPTH -->
+  <div class="section" id="depth">
+    <h2>5. Depth of Slab — Span/Depth Ratio</h2>
+    <p>
+      The depth of the slab is primarily governed by <strong>deflection control</strong>, not by moment. IS 456 Cl. 23.2.1 provides basic span-to-effective-depth ratios:
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Support Condition</th><th>Basic $l/d$ Ratio</th></tr></thead>
+        <tbody>
+          <tr><td>Simply supported</td><td>20</td></tr>
+          <tr><td>Continuous (interior spans)</td><td>26</td></tr>
+          <tr><td>Cantilever</td><td>7</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="formula-block">
+      $$d \geq \frac{l_{eff}}{(l/d)_{\text{basic}} \times M_f}$$
+      <div class="formula-caption">$M_f$ = modification factor for tension steel (from IS 456 Fig. 4) — typically between 1.0 and 2.0. For slabs, $M_f$ is often taken as 1.0–1.4 at the preliminary stage.</div>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Practical Minimum Slab Thickness</div>
+      <ul>
+        <li>For simply supported slabs: $D \geq l/20 + \text{cover}$, minimum <strong>100 mm</strong></li>
+        <li>For two-way slabs at edges: minimum cover = 15 mm (mild exposure, IS 456 Cl. 26.4.2.1)</li>
+        <li>For roof slabs exposed to weather: minimum cover = 20 mm</li>
+      </ul>
+    </div>
+
+    <h3>Overall Depth from Effective Depth</h3>
+    <div class="formula-block">
+      $$D = d + \text{clear cover} + \frac{\phi}{2}$$
+      <div class="formula-caption">Minimum clear cover for slabs: 15 mm (mild), 25 mm (moderate) — IS 456 Cl. 26.4.2</div>
+    </div>
+  </div>
+
+  <!-- 6. DESIGN STRIP -->
+  <div class="section" id="design-strip">
+    <h2>6. Design as a 1 m Wide Strip</h2>
+    <p>
+      A one-way slab is designed by cutting a <strong>1 m wide strip</strong> perpendicular to the supports and treating it as a simply supported (or continuous) beam. All quantities per metre width are used.
+    </p>
+
+    <div class="feat-grid">
+      <div class="feat-card">
+        <h4>Width of design strip</h4>
+        <p>$b = 1000$ mm (always)</p>
+        <p>The slab is designed per metre run — all steel areas are in mm²/m.</p>
+      </div>
+      <div class="feat-card blue">
+        <h4>Moment and Shear</h4>
+        <p>SS slab: $M_u = \dfrac{w_u \cdot l^2}{8}$ kN·m/m</p>
+        <p>SS slab: $V_u = \dfrac{w_u \cdot l}{2}$ kN/m</p>
+      </div>
+    </div>
+
+    <div class="formula-block">
+      $$M_u = \frac{w_u \cdot l_{eff}^2}{8} \quad \text{(kN·m per metre width)}$$
+      <div class="formula-caption">For simply supported one-way slab under uniformly distributed load</div>
+    </div>
+  </div>
+
+  <!-- 7. MAIN STEEL -->
+  <div class="section" id="main-steel">
+    <h2>7. Main Reinforcement Design</h2>
+    <p>
+      The main reinforcement runs along the <strong>short span direction</strong> (direction of bending) and is designed to resist the factored bending moment $M_u$.
+    </p>
+    <p>Using the standard rectangular section formula with $b = 1000$ mm:</p>
+    <div class="formula-block">
+      $$A_{st} = \frac{0.5 \, f_{ck}}{f_y}\left[1 - \sqrt{1 - \frac{4.6 \, M_u}{f_{ck} \times 1000 \times d^2}}\right] \times 1000 \times d$$
+      <div class="formula-caption">Area of main steel (mm²/m). $M_u$ in N·mm (multiply kN·m by 10⁶).</div>
+    </div>
+
+    <h3>Spacing of Main Bars</h3>
+    <p>Once $A_{st}$ is found, the spacing of bars of chosen diameter $\phi$ is:</p>
+    <div class="formula-block">
+      $$s = \frac{a_\phi \times 1000}{A_{st}} \quad \text{mm}$$
+      <div class="formula-caption">$a_\phi = \pi\phi^2/4$ = area of one bar (mm²); $s$ = spacing centre to centre</div>
+    </div>
+
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 26.3.3 — Maximum Spacing of Main Bars</div>
+      Maximum spacing of main reinforcement in slabs shall not exceed the lesser of:
+      <ul style="margin-top:0.5rem;">
+        <li><strong>3d</strong> or <strong>300 mm</strong> — whichever is less</li>
+      </ul>
+    </div>
+
+    <h3>Minimum Steel (IS 456 Cl. 26.5.2.1)</h3>
+    <div class="formula-block">
+      $$A_{st,\min} = 0.12\% \text{ of } bD \quad \text{(for HYSD bars Fe 415, Fe 500)}$$
+      $$A_{st,\min} = 0.15\% \text{ of } bD \quad \text{(for mild steel Fe 250)}$$
+      <div class="formula-caption">$b = 1000$ mm, $D$ = overall depth. This applies to <em>both</em> main and distribution steel.</div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title">Note — Percentage for Slabs vs Beams</div>
+      The minimum steel percentage for <strong>slabs</strong> (0.12% of $bD$) is different from that for <strong>beams</strong> ($0.85/f_y$ of $bd$). Always use the correct formula for slabs — IS 456 Cl. 26.5.2.1.
+    </div>
+  </div>
+
+  <!-- 8. DISTRIBUTION STEEL -->
+  <div class="section" id="dist-steel">
+    <h2>8. Distribution (Secondary) Reinforcement</h2>
+    <p>
+      Distribution reinforcement runs <strong>perpendicular to the main steel</strong> (i.e., along the long direction) and serves to:
+    </p>
+    <ul>
+      <li>Distribute loads laterally across the slab</li>
+      <li>Resist shrinkage and temperature stresses</li>
+      <li>Tie the main bars in position during construction</li>
+    </ul>
+
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 26.5.2.1</div>
+      Area of distribution reinforcement shall not be less than <strong>0.12% of $bD$</strong> (for HYSD) — same as minimum main steel. It is placed above the main steel (closer to the neutral axis).
+    </div>
+
+    <div class="formula-block">
+      $$A_{dist,\min} = \frac{0.12}{100} \times 1000 \times D = 1.2 D \quad \text{mm}^2\text{/m}$$
+      <div class="formula-caption">Minimum distribution steel for Fe 415 / Fe 500 slabs ($D$ in mm)</div>
+    </div>
+
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 26.3.3 — Maximum Spacing of Distribution Bars</div>
+      Maximum spacing of distribution bars shall not exceed the lesser of <strong>5d</strong> or <strong>450 mm</strong>.
+    </div>
+  </div>
+
+  <!-- 9. DETAILING -->
+  <div class="section" id="detailing">
+    <h2>9. Detailing Rules — IS 456 Cl. 26.5.2</h2>
+
+    <div class="detail-cards">
+      <div class="detail-card">
+        <div class="label">Min Clear Cover (Mild)</div>
+        <div class="value">15 mm</div>
+        <div class="sub">IS 456 Cl. 26.4.2.1</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Min Bar Dia (Main)</div>
+        <div class="value">8 mm</div>
+        <div class="sub">Practical minimum for slabs</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Max Spacing (Main)</div>
+        <div class="value">3d or 300 mm</div>
+        <div class="sub">IS 456 Cl. 26.3.3 — lesser of the two</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Max Spacing (Distribution)</div>
+        <div class="value">5d or 450 mm</div>
+        <div class="sub">IS 456 Cl. 26.3.3 — lesser of the two</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Min Steel (HYSD)</div>
+        <div class="value">0.12% of bD</div>
+        <div class="sub">IS 456 Cl. 26.5.2.1</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Bar Curtailment (SS)</div>
+        <div class="value">50% at l/8 from support</div>
+        <div class="sub">IS 456 Cl. 26.2.3 / SP 34</div>
+      </div>
+    </div>
+
+    <h3>Curtailment of Main Bars</h3>
+    <p>For simply supported slabs, alternate main bars may be bent up (cranked) near the supports:</p>
+    <ul>
+      <li>50% of the main bars are bent up at <strong>$l/7$ from the face of support</strong></li>
+      <li>These bent-up bars provide additional shear resistance near supports</li>
+      <li>The remaining 50% straight bars are extended to within <strong>cover distance from the end</strong></li>
+      <li>All bars must have adequate <strong>development length $L_d$</strong> beyond the theoretical cut-off point</li>
+    </ul>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 680 190" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;width:100%;font-family:'Source Sans 3',sans-serif;">
+        <rect width="680" height="190" fill="#fffef9"/>
+        <text x="340" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#1e1b16">One-Way Slab — Reinforcement Layout (Longitudinal)</text>
+
+        <!-- Slab outline -->
+        <rect x="60" y="40" width="560" height="60" fill="#e8e2d8" stroke="#9a9080" stroke-width="1.5"/>
+        <!-- Supports -->
+        <rect x="40"  y="40" width="20" height="60" fill="#ccc" stroke="#999" stroke-width="1.2"/>
+        <rect x="620" y="40" width="20" height="60" fill="#ccc" stroke="#999" stroke-width="1.2"/>
+
+        <!-- Straight main bars (alternate) -->
+        <line x1="65"  y1="88" x2="615" y2="88" stroke="#b5451b" stroke-width="2.5"/>
+        <line x1="65"  y1="78" x2="615" y2="78" stroke="#b5451b" stroke-width="2.5" stroke-dasharray="1,0"/>
+
+        <!-- Cranked/bent bars -->
+        <polyline points="65,88 140,88 170,60 510,60 540,88 615,88" fill="none" stroke="#7a2e10" stroke-width="2" stroke-dasharray="6,3"/>
+
+        <!-- Distribution bars (top, perpendicular — shown as dots) -->
+        <circle cx="100" cy="55" r="3.5" fill="#2558a8"/>
+        <circle cx="160" cy="55" r="3.5" fill="#2558a8"/>
+        <circle cx="220" cy="55" r="3.5" fill="#2558a8"/>
+        <circle cx="280" cy="55" r="3.5" fill="#2558a8"/>
+        <circle cx="340" cy="55" r="3.5" fill="#2558a8"/>
+        <circle cx="400" cy="55" r="3.5" fill="#2558a8"/>
+        <circle cx="460" cy="55" r="3.5" fill="#2558a8"/>
+        <circle cx="520" cy="55" r="3.5" fill="#2558a8"/>
+        <circle cx="580" cy="55" r="3.5" fill="#2558a8"/>
+
+        <!-- Labels -->
+        <text x="340" y="107" text-anchor="middle" font-size="10" fill="#b5451b">─── Straight main bars (50%)</text>
+        <text x="340" y="120" text-anchor="middle" font-size="10" fill="#7a2e10">- - - Cranked bars (50%) bent at l/7 from support</text>
+        <text x="340" y="133" text-anchor="middle" font-size="10" fill="#2558a8">• Distribution bars (perpendicular, cross-section view)</text>
+
+        <!-- l/7 dimension -->
+        <line x1="60"  y1="155" x2="60"  y2="165" stroke="#555" stroke-width="1"/>
+        <line x1="170" y1="155" x2="170" y2="165" stroke="#555" stroke-width="1"/>
+        <line x1="60"  y1="160" x2="170" y2="160" stroke="#555" stroke-width="1.2"/>
+        <text x="115" y="175" text-anchor="middle" font-size="10" fill="#555">l/7</text>
+
+        <line x1="510" y1="155" x2="510" y2="165" stroke="#555" stroke-width="1"/>
+        <line x1="620" y1="155" x2="620" y2="165" stroke="#555" stroke-width="1"/>
+        <line x1="510" y1="160" x2="620" y2="160" stroke="#555" stroke-width="1.2"/>
+        <text x="565" y="175" text-anchor="middle" font-size="10" fill="#555">l/7</text>
+
+        <!-- l span -->
+        <line x1="60"  y1="182" x2="620" y2="182" stroke="#333" stroke-width="1"/>
+        <text x="340" y="190" text-anchor="middle" font-size="10.5" fill="#333" font-weight="600">Effective span l</text>
+      </svg>
+      <div class="diagram-caption">Fig. 2 — Reinforcement detailing in a simply supported one-way slab (longitudinal section)</div>
+    </div>
+  </div>
+
+  <!-- 10. SHEAR -->
+  <div class="section" id="shear">
+    <h2>10. Shear Check</h2>
+    <p>
+      In slabs, shear reinforcement is <strong>generally not provided</strong>. The design shear strength of concrete $\tau_c$ must be greater than the nominal shear stress $\tau_v$ from factored loads.
+    </p>
+
+    <div class="formula-block">
+      $$\tau_v = \frac{V_u}{b \cdot d} = \frac{V_u}{1000 \times d} \quad \text{(for 1 m wide strip)}$$
+      <div class="formula-caption">Nominal shear stress — IS 456:2000, Cl. 40.1</div>
+    </div>
+
+    <p>Find $\tau_c$ from <strong>IS 456 Table 19</strong> based on $p_t = \dfrac{100 \, A_{st}}{1000 \times d}$ and grade of concrete.</p>
+
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 40.2.1</div>
+      For slabs, the design shear strength of concrete $\tau_c$ shall be multiplied by a factor $k$:
+      $$k \times \tau_c \geq \tau_v$$
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Overall Depth $D$ (mm)</th><th>$k$ factor</th></tr></thead>
+        <tbody>
+          <tr><td>≤ 150</td><td>1.30</td></tr>
+          <tr><td>175</td><td>1.20</td></tr>
+          <tr><td>200</td><td>1.15</td></tr>
+          <tr><td>225</td><td>1.10</td></tr>
+          <tr><td>250</td><td>1.05</td></tr>
+          <tr><td>≥ 300</td><td>1.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Shear Usually Not Critical in Slabs</div>
+      In practice, one-way slabs rarely fail in shear because: (a) the span-to-depth ratio is controlled by deflection (giving a deeper section), and (b) the $k$ factor boosts $\tau_c$ for thin slabs. If $\tau_v > k\tau_c$, increase slab thickness — do not add stirrups.
+    </div>
+  </div>
+
+  <!-- 11. PROCEDURE -->
+  <div class="section" id="procedure">
+    <h2>11. Step-by-Step Design Procedure</h2>
+
+    <ul class="proc-steps">
+      <li>
+        <div class="proc-step-content">
+          <strong>Check One-Way or Two-Way</strong>
+          Compute $l_y/l_x$. If $> 2$ → one-way slab. Design proceeds along the short span $l_x$.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Assume Depth $D$ from Span/Depth Ratio</strong>
+          $d \approx l_{eff} / 20$ (SS); $d \approx l_{eff} / 26$ (continuous). Round up $D$ to next 10 mm. Assume cover = 15 mm (mild), main bar dia = 8 or 10 mm.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Calculate Effective Span $l_{eff}$</strong>
+          $l_{eff} = \min(l_c + d,\; l_c + t_w)$ for SS slab.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Calculate Factored Load $w_u$</strong>
+          Self-weight = $25D$ kN/m². Add floor finish, LL. Apply $\gamma_f = 1.5$.
+          $w_u = 1.5(w_{DL} + w_{LL})$ kN/m².
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Factored BM and SF (per metre width)</strong>
+          $M_u = w_u l_{eff}^2 / 8$; $V_u = w_u l_{eff} / 2$.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Check $M_u \leq M_{u,\lim}$</strong>
+          $M_{u,\lim} = R_{u,\lim} \times f_{ck} \times 1000 \times d^2$. If exceeded, increase depth.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Calculate Main Steel $A_{st}$</strong>
+          Use direct design formula with $b = 1000$ mm. Check $A_{st} \geq A_{st,\min} = 1.2D$ mm²/m.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Find Spacing of Main Bars</strong>
+          $s = (a_\phi \times 1000) / A_{st}$. Round down to nearest 5 mm. Check $s \leq \min(3d, 300)$ mm.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Calculate Distribution Steel</strong>
+          $A_{dist} = 1.2D$ mm²/m (minimum). Find spacing of chosen dia. Check $s \leq \min(5d, 450)$ mm.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Shear Check</strong>
+          $\tau_v = V_u/(1000d)$. Find $\tau_c$ from IS 456 Table 19, apply $k$ factor. Verify $k\tau_c \geq \tau_v$. If not, increase $D$.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Verify Deflection (Span/Depth)</strong>
+          Recalculate $l_{eff}/d$ with final depth and check against modified permissible ratio.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Draw Detailing Sketch</strong>
+          Show: cross-section with main and distribution bars, cover, spacing, cranked bars, overall dimensions.
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 12. WORKED EXAMPLE -->
+  <div class="section" id="example">
+    <h2>12. Worked Example</h2>
+
+    <div class="callout worked">
+      <div class="callout-title">Problem Statement</div>
+      <p>Design a simply supported one-way slab for the following data:</p>
+      <ul>
+        <li>Clear span = <strong>3.5 m</strong></li>
+        <li>Support width = <strong>230 mm</strong> (masonry wall)</li>
+        <li>Live load = <strong>3.0 kN/m²</strong></li>
+        <li>Floor finish = <strong>1.0 kN/m²</strong></li>
+        <li>Concrete: <strong>M20</strong> ($f_{ck}$ = 20 MPa)</li>
+        <li>Steel: <strong>Fe 415</strong> ($f_y$ = 415 MPa)</li>
+        <li>Exposure: Mild (clear cover = 15 mm)</li>
+      </ul>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 1 — Assume Depth</div>
+      <p>Basic $l/d$ = 20 (SS). Trial: $d = 3500/20 = 175$ mm.</p>
+      <p>Assume main bar dia = 10 mm. $D = d + 15 + 5 = 175 + 20 = 195$ mm → Round to <strong>$D = 200$ mm</strong>.</p>
+      <div class="result">$D$ = 200 mm; $d$ = 200 − 15 − 5 = <strong>180 mm</strong></div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 2 — Effective Span</div>
+      <p>$l_c$ = 3500 mm; $d$ = 180 mm; $t_w$ = 230 mm</p>
+      <p>Option 1: $l_c + d = 3500 + 180 = 3680$ mm</p>
+      <p>Option 2: $l_c + t_w = 3500 + 230 = 3730$ mm</p>
+      <div class="result">$l_{eff}$ = min(3680, 3730) = <strong>3680 mm = 3.68 m</strong></div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 3 — Factored Load</div>
+      <p>Self-weight = $25 \times 0.200 = 5.0$ kN/m²</p>
+      <p>Floor finish = 1.0 kN/m²</p>
+      <p>Total DL = 6.0 kN/m². LL = 3.0 kN/m²</p>
+      <p>$w_u = 1.5 \times (6.0 + 3.0) = 1.5 \times 9.0$</p>
+      <div class="result">$w_u$ = 13.5 kN/m²</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 4 — Factored BM and SF (per metre width)</div>
+      <p>$M_u = \dfrac{13.5 \times 3.68^2}{8} = \dfrac{13.5 \times 13.54}{8} = \dfrac{182.8}{8}$</p>
+      <div class="result">$M_u$ = 22.85 kN·m/m</div>
+      <p style="margin-top:0.5rem;">$V_u = \dfrac{13.5 \times 3.68}{2} = \dfrac{49.68}{2}$</p>
+      <div class="result">$V_u$ = 24.84 kN/m</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 5 — Check Limiting Moment</div>
+      <p>For M20, Fe 415: $R_{u,\lim} = 0.138$</p>
+      <p>$M_{u,\lim} = 0.138 \times 20 \times 1000 \times 180^2 = 0.138 \times 20 \times 1000 \times 32400$</p>
+      <div class="result">$M_{u,\lim}$ = 89.42 kN·m/m</div>
+      <p style="color:#aaa;">$M_u$ (22.85) $\ll$ $M_{u,\lim}$ (89.42) ✓ — Depth is more than adequate.</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 6 — Main Steel $A_{st}$</div>
+      <p>Inner term = $\dfrac{4.6 \times 22.85 \times 10^6}{20 \times 1000 \times 180^2} = \dfrac{105.11 \times 10^6}{648 \times 10^6} = 0.1622$</p>
+      <p>$\sqrt{1 - 0.1622} = \sqrt{0.8378} = 0.9153$</p>
+      <p>$A_{st} = \dfrac{0.5 \times 20}{415} \times (1 - 0.9153) \times 1000 \times 180$</p>
+      <p>$= 0.02410 \times 0.0847 \times 180{,}000 = 0.02410 \times 15{,}246$</p>
+      <div class="result">$A_{st}$ = 367 mm²/m</div>
+      <p style="margin-top:0.4rem; color:#aaa;">Minimum steel = $0.12/100 \times 1000 \times 200 = 240$ mm²/m. Calculated $A_{st}$ (367) &gt; $A_{st,\min}$ (240) ✓</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 7 — Spacing of Main Bars (10 mm dia)</div>
+      <p>$a_{10} = \pi \times 100/4 = 78.54$ mm²</p>
+      <p>$s = \dfrac{78.54 \times 1000}{367} = 214$ mm</p>
+      <p>Max spacing = min($3d$, 300) = min(540, 300) = 300 mm</p>
+      <div class="result">Provide 10 mm dia bars @ <strong>210 mm c/c</strong> — $A_{st,\text{prov}}$ = 374 mm²/m ✓</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 8 — Distribution Steel (8 mm dia)</div>
+      <p>$A_{dist} = 0.12/100 \times 1000 \times 200 = 240$ mm²/m</p>
+      <p>$a_8 = \pi \times 64/4 = 50.27$ mm²</p>
+      <p>$s = \dfrac{50.27 \times 1000}{240} = 209$ mm</p>
+      <p>Max spacing = min($5d$, 450) = min(900, 450) = 450 mm</p>
+      <div class="result">Provide 8 mm dia bars @ <strong>200 mm c/c</strong> — $A_{dist,\text{prov}}$ = 251 mm²/m ✓</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 9 — Shear Check</div>
+      <p>$\tau_v = \dfrac{24840}{1000 \times 180} = \dfrac{24840}{180000}$</p>
+      <div class="result">$\tau_v$ = 0.138 MPa</div>
+      <p style="margin-top:0.4rem;">$p_t = \dfrac{100 \times 374}{1000 \times 180} = 0.208\%$</p>
+      <p>From IS 456 Table 19, M20, $p_t = 0.208\%$: $\tau_c \approx 0.33$ MPa</p>
+      <p>$k$ factor for $D = 200$ mm: $k = 1.15$ (IS 456 Cl. 40.2.1)</p>
+      <p>$k\tau_c = 1.15 \times 0.33 = 0.38$ MPa</p>
+      <div class="result">$k\tau_c$ (0.38 MPa) &gt; $\tau_v$ (0.138 MPa) ✓ — No shear reinforcement needed</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 10 — Deflection Check</div>
+      <p>$l/d = 3680/180 = 20.4 \approx 20$ ✓ (basic ratio for SS = 20; with slight overage acceptable at this low steel percentage since $M_f > 1.0$)</p>
+      <div class="result">Deflection OK ✓</div>
+    </div>
+
+    <div class="callout worked">
+      <div class="callout-title">Final Design Summary</div>
+      <ul>
+        <li><strong>Slab thickness $D$:</strong> 200 mm</li>
+        <li><strong>Effective depth $d$:</strong> 180 mm</li>
+        <li><strong>Main steel (short span):</strong> 10 mm dia @ 210 mm c/c (Fe 415) — 374 mm²/m</li>
+        <li><strong>Distribution steel (long span):</strong> 8 mm dia @ 200 mm c/c (Fe 415) — 251 mm²/m</li>
+        <li><strong>Clear cover:</strong> 15 mm (mild exposure)</li>
+        <li><strong>Cranked bars:</strong> 50% of main bars bent up at $l/7$ from face of support</li>
+        <li>All IS 456 checks satisfied ✓</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="prev-btn" href="flanged-beams.html">← Flanged Beams</a>
+    <a class="next-btn" href="#">Next: Two-Way Slabs →</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Structural Design IS 456 · Reference: IS 456:2000, Plain and Reinforced Concrete — Code of Practice (4th Revision)</p>
+  <p style="margin-top:0.4rem;">Content is for educational purposes. Always refer to the latest BIS codes for professional use.</p>
+</footer>
+
+</body>
+</html>

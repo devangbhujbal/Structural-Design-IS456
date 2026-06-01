@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Singly Reinforced Beams | Structural Design IS 456</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [
+      {left:'$$',right:'$$',display:true},
+      {left:'$',right:'$',display:false}
+    ]});"></script>
+  <style>
+    :root {
+      --bg: #f5f2eb;
+      --surface: #fffef9;
+      --border: #d9d0bc;
+      --accent: #b5451b;
+      --accent-light: #f0ddd6;
+      --text: #1e1b16;
+      --text-muted: #6b6256;
+      --heading-font: 'Merriweather', Georgia, serif;
+      --body-font: 'Source Sans 3', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body-font);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    header {
+      background: var(--text);
+      color: #fff;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 62px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .site-title { font-family: var(--heading-font); font-size: 1rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .site-title span { color: var(--accent); }
+
+    nav a { color: #ccc; text-decoration: none; margin-left: 1.5rem; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: #fff; }
+
+    .hero { background: var(--text); color: #fff; padding: 3.5rem 2rem 3rem; border-bottom: 4px solid var(--accent); }
+    .hero-inner { max-width: 820px; margin: 0 auto; }
+
+    .breadcrumb { font-size: 0.8rem; color: #999; margin-bottom: 1rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .breadcrumb a { color: #aaa; text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+
+    .hero h1 { font-family: var(--heading-font); font-size: 2.6rem; line-height: 1.25; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--accent); }
+    .hero-meta { font-size: 0.88rem; color: #aaa; }
+
+    .tag { display: inline-block; background: var(--accent); color: #fff; padding: 2px 10px; border-radius: 2px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-right: 0.5rem; }
+
+    .page-body { max-width: 820px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+
+    .toc { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 1.25rem 1.5rem; margin-bottom: 3rem; border-radius: 0 4px 4px 0; }
+    .toc h3 { font-family: var(--heading-font); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .toc ol { padding-left: 1.2rem; }
+    .toc ol li { margin-bottom: 0.25rem; }
+    .toc a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+    .toc a:hover { text-decoration: underline; }
+
+    .section { margin-bottom: 3rem; }
+
+    h2 { font-family: var(--heading-font); font-size: 1.5rem; color: var(--text); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+    h3 { font-family: var(--heading-font); font-size: 1.1rem; color: var(--text); margin: 1.5rem 0 0.5rem; }
+
+    p { margin-bottom: 1rem; }
+    ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.35rem; }
+
+    .callout { padding: 1.25rem 1.5rem; border-radius: 4px; margin: 1.5rem 0; border: 1px solid transparent; }
+    .callout.definition { background: #eef4ff; border-color: #bed3f5; border-left: 4px solid #3a7bd5; }
+    .callout.code-ref { background: var(--accent-light); border-color: #e4bfb2; border-left: 4px solid var(--accent); }
+    .callout.note { background: #f0f8f0; border-color: #b8ddb8; border-left: 4px solid #4a9e4a; }
+    .callout.warning { background: #fffbe6; border-color: #ffe58f; border-left: 4px solid #d4a017; }
+    .callout.worked { background: #1e1b16; border-left: 4px solid var(--accent); color: #f0ebe0; }
+
+    .callout-title { font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+    .callout.definition .callout-title { color: #3a7bd5; }
+    .callout.code-ref .callout-title { color: var(--accent); }
+    .callout.note .callout-title { color: #4a9e4a; }
+    .callout.warning .callout-title { color: #d4a017; }
+    .callout.worked .callout-title { color: var(--accent); }
+    .callout.worked p, .callout.worked li { color: #c8c0b0; }
+    .callout.worked strong { color: #f0ebe0; }
+
+    .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: var(--surface); }
+    thead tr { background: var(--text); color: #fff; }
+    thead th { font-family: var(--heading-font); font-size: 0.85rem; padding: 0.75rem 1rem; text-align: left; font-weight: 700; }
+    tbody tr:nth-child(even) { background: #f5f0e8; }
+    tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+    .formula-block { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; text-align: center; font-size: 1.05rem; }
+    .formula-caption { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+    .diagram-wrap { margin: 1.5rem 0; text-align: center; }
+    .diagram-caption { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic; }
+
+    /* Design procedure steps */
+    .proc-steps { list-style: none; padding: 0; margin: 1.5rem 0; counter-reset: proc; }
+    .proc-steps > li {
+      counter-increment: proc;
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem 1.25rem 1rem 0;
+      align-items: start;
+    }
+    .proc-steps > li::before {
+      content: counter(proc);
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0 4px 4px 0;
+      flex-shrink: 0;
+      margin-left: -1px;
+    }
+    .proc-step-content strong { display: block; font-size: 1rem; margin-bottom: 0.3rem; color: var(--text); }
+    .proc-step-content { font-size: 0.93rem; color: var(--text-muted); }
+    .proc-step-content .formula-block { text-align: left; font-size: 0.95rem; }
+
+    /* Worked example sub-steps */
+    .ex-step { background: #2a2620; border-radius: 4px; padding: 1rem 1.25rem; margin: 0.75rem 0; }
+    .ex-step-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); font-weight: 700; margin-bottom: 0.4rem; }
+    .ex-step p { color: #c8c0b0; margin-bottom: 0.5rem; font-size: 0.93rem; }
+    .ex-step .result { color: #fff; font-weight: 700; font-size: 0.97rem; margin-top: 0.25rem; }
+
+    .nav-footer { margin-top: 3rem; border-top: 2px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .prev-btn, .next-btn { padding: 0.75rem 1.5rem; border-radius: 3px; text-decoration: none; font-weight: 600; font-size: 0.92rem; transition: background 0.2s; }
+    .prev-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .prev-btn:hover { background: var(--bg); }
+    .next-btn { background: var(--accent); color: #fff; }
+    .next-btn:hover { background: #922f0f; }
+
+    footer { background: var(--text); color: #888; text-align: center; padding: 1.5rem; font-size: 0.85rem; border-top: 3px solid var(--accent); }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="site-title" href="index.html">Structural Design <span>IS 456</span></a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="what-is-rcc.html">RCC Basics</a>
+    <a href="limit-state-method.html">LSM</a>
+    <a href="#">Columns</a>
+    <a href="#">Slabs</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a> › <a href="limit-state-method.html">LSM</a> › Singly Reinforced Beams</div>
+    <h1>Singly Reinforced <span>Beams</span></h1>
+    <div class="hero-meta">
+      <span class="tag">IS 456 : 2000</span>
+      <span class="tag">Cl. 38</span>
+      <span class="tag">Flexure Design</span>
+      Design of rectangular beams with tension reinforcement only
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#assumptions">Assumptions in LSM Flexure Design</a></li>
+      <li><a href="#section">Beam Cross-Section and Notation</a></li>
+      <li><a href="#neutral-axis">Neutral Axis Depth</a></li>
+      <li><a href="#limiting">Limiting (Maximum) Neutral Axis Depth</a></li>
+      <li><a href="#moment-resistance">Moment of Resistance</a></li>
+      <li><a href="#beam-types">Under-Reinforced, Over-Reinforced, and Balanced</a></li>
+      <li><a href="#steel-limits">Minimum and Maximum Steel</a></li>
+      <li><a href="#effective-depth">Effective Depth and Cover</a></li>
+      <li><a href="#shear">Shear Design</a></li>
+      <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
+      <li><a href="#example">Worked Example</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. INTRO -->
+  <div class="section" id="intro">
+    <h2>1. Introduction</h2>
+    <div class="callout definition">
+      <div class="callout-title">Definition</div>
+      A <strong>singly reinforced beam</strong> is a rectangular RCC beam in which steel reinforcement is provided <em>only in the tension zone</em> (bottom of the beam for a simply supported span). No compression steel is provided. It is the simplest and most common type of beam in building construction.
+    </div>
+    <p>
+      When a beam bends under load, the top portion is in compression (concrete resists) and the bottom portion is in tension (steel resists). In a singly reinforced section, we rely entirely on the concrete to carry all compression and on the tension steel bars to carry all tension.
+    </p>
+    <p>
+      The design is governed by <strong>IS 456 : 2000, Clause 38</strong> — Limit State of Collapse in Flexure.
+    </p>
+  </div>
+
+  <!-- 2. ASSUMPTIONS -->
+  <div class="section" id="assumptions">
+    <h2>2. Assumptions in LSM Flexure Design</h2>
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 38.1</div>
+      The following assumptions are made for the Limit State of Collapse in flexure:
+    </div>
+    <ol>
+      <li><strong>Plane sections remain plane</strong> after bending — strain varies linearly across the depth.</li>
+      <li>The <strong>maximum compressive strain in concrete</strong> at the outermost fibre is taken as <strong>0.0035</strong>.</li>
+      <li>The <strong>tensile strength of concrete is ignored</strong> — only steel carries tension.</li>
+      <li>The stress in reinforcement is derived from the <strong>representative stress-strain curve</strong> for the type of steel.</li>
+      <li>The compressive stress distribution in concrete is represented by the <strong>IS 456 parabolic-rectangular stress block</strong> (see Limit State Method page).</li>
+      <li>The <strong>maximum strain in tension steel</strong> at the Limit State shall not be less than:
+        $$\varepsilon_{su} = \frac{f_y}{1.15 \times E_s} + 0.002 = \frac{0.87 f_y}{E_s} + 0.002$$
+      </li>
+    </ol>
+  </div>
+
+  <!-- 3. NOTATION -->
+  <div class="section" id="section">
+    <h2>3. Beam Cross-Section and Notation</h2>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;width:100%;font-family:'Source Sans 3',sans-serif;">
+        <rect width="680" height="320" fill="#fffef9"/>
+        <text x="340" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e1b16">Singly Reinforced Beam — Cross-Section and Notation</text>
+
+        <!-- CROSS SECTION -->
+        <text x="150" y="46" text-anchor="middle" font-size="11" fill="#6b6256" font-style="italic">Cross-Section</text>
+        <!-- Beam outline -->
+        <rect x="80" y="55" width="140" height="220" fill="#e8e2d8" stroke="#9a9080" stroke-width="1.5"/>
+        <!-- Compression zone -->
+        <rect x="80" y="55" width="140" height="105" fill="#c8daf0" opacity="0.7"/>
+        <!-- Neutral axis -->
+        <line x1="70" x2="232" y1="160" y2="160" stroke="#555" stroke-width="1.3" stroke-dasharray="6,4"/>
+        <text x="65" y="163" text-anchor="end" font-size="10" fill="#555">N.A.</text>
+        <!-- Steel bars -->
+        <circle cx="110" cy="258" r="7" fill="#b5451b" stroke="#7a2e10" stroke-width="1.5"/>
+        <circle cx="150" cy="258" r="7" fill="#b5451b" stroke="#7a2e10" stroke-width="1.5"/>
+        <circle cx="190" cy="258" r="7" fill="#b5451b" stroke="#7a2e10" stroke-width="1.5"/>
+        <!-- Cover indication -->
+        <line x1="80" x2="80" y1="265" y2="275" stroke="#555" stroke-width="1"/>
+        <line x1="110" x2="110" y1="265" y2="275" stroke="#555" stroke-width="1"/>
+        <line x1="80" x2="110" y1="270" y2="270" stroke="#555" stroke-width="1"/>
+        <text x="95" y="285" text-anchor="middle" font-size="9.5" fill="#555">cover</text>
+        <!-- b dimension -->
+        <line x1="80" x2="80" y1="290" y2="300" stroke="#333" stroke-width="1"/>
+        <line x1="220" x2="220" y1="290" y2="300" stroke="#333" stroke-width="1"/>
+        <line x1="80" x2="220" y1="295" y2="295" stroke="#333" stroke-width="1"/>
+        <text x="150" y="310" text-anchor="middle" font-size="11" fill="#333" font-weight="600">b (width)</text>
+
+        <!-- DIMENSIONS RIGHT SIDE -->
+        <!-- D overall -->
+        <line x1="235" x2="245" y1="55" y2="55" stroke="#333" stroke-width="1"/>
+        <line x1="235" x2="245" y1="275" y2="275" stroke="#333" stroke-width="1"/>
+        <line x1="240" x2="240" y1="55" y2="275" stroke="#333" stroke-width="1"/>
+        <text x="255" y="170" font-size="11" fill="#333" font-weight="600">D</text>
+        <text x="255" y="183" font-size="10" fill="#6b6256">(overall</text>
+        <text x="255" y="196" font-size="10" fill="#6b6256">depth)</text>
+
+        <!-- d effective -->
+        <line x1="62" x2="72" y1="55" y2="55" stroke="#b5451b" stroke-width="1"/>
+        <line x1="62" x2="72" y1="258" y2="258" stroke="#b5451b" stroke-width="1"/>
+        <line x1="67" x2="67" y1="55" y2="258" stroke="#b5451b" stroke-width="1.5"/>
+        <text x="57" y="162" font-size="11" fill="#b5451b" font-weight="700" text-anchor="middle">d</text>
+
+        <!-- xu -->
+        <line x1="232" x2="242" y1="55" y2="55" stroke="#2558a8" stroke-width="1"/>
+        <line x1="232" x2="242" y1="160" y2="160" stroke="#2558a8" stroke-width="1"/>
+        <line x1="237" x2="237" y1="55" y2="160" stroke="#2558a8" stroke-width="1.5"/>
+        <text x="252" y="113" font-size="11" fill="#2558a8" font-weight="700">x$_u$</text>
+
+        <!-- STRAIN DIAGRAM -->
+        <text x="390" y="46" text-anchor="middle" font-size="11" fill="#6b6256" font-style="italic">Strain Diagram</text>
+        <line x1="340" x2="340" y1="55" y2="275" stroke="#aaa" stroke-width="1.5"/>
+        <line x1="340" x2="440" y1="55" y2="55" stroke="#aaa" stroke-width="1"/>
+        <line x1="340" x2="440" y1="275" y2="275" stroke="#aaa" stroke-width="1"/>
+        <line x1="340" x2="340" y1="160" y2="160" stroke="#888" stroke-width="1" stroke-dasharray="5,4"/>
+        <line x1="330" x2="450" y1="160" y2="160" stroke="#888" stroke-width="1" stroke-dasharray="5,4"/>
+        <!-- Strain line -->
+        <line x1="340" x2="430" y1="55" y2="55" stroke="#2558a8" stroke-width="2.2"/>
+        <line x1="340" x2="340" y1="55" y2="160" stroke="#2558a8" stroke-width="2.2"/>
+        <line x1="340" x2="460" y1="160" y2="275" stroke="#b5451b" stroke-width="2.2"/>
+        <!-- Labels -->
+        <text x="435" y="59" font-size="10.5" fill="#2558a8" font-weight="600">0.0035</text>
+        <text x="462" y="279" font-size="10.5" fill="#b5451b" font-weight="600">ε$_s$ ≥ 0.002 + 0.87f$_y$/E$_s$</text>
+
+        <!-- STRESS DIAGRAM -->
+        <text x="580" y="46" text-anchor="middle" font-size="11" fill="#6b6256" font-style="italic">Stress Block</text>
+        <line x1="530" x2="530" y1="55" y2="275" stroke="#aaa" stroke-width="1.5"/>
+        <!-- Parabolic-rect block -->
+        <path d="M530,160 Q560,140 600,85 L600,55 L530,55 Z" fill="#c8daf0" stroke="#2558a8" stroke-width="1.5"/>
+        <rect x="530" y="85" width="70" height="75" fill="#c8daf0" opacity="0.5" stroke="#2558a8" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Labels -->
+        <text x="605" y="89" font-size="10" fill="#2558a8" font-weight="600">0.446f$_{ck}$</text>
+        <line x1="520" x2="530" y1="85" y2="85" stroke="#555" stroke-width="1"/>
+        <text x="518" y="89" text-anchor="end" font-size="9.5" fill="#555">3x$_u$/7</text>
+        <line x1="520" x2="530" y1="160" y2="160" stroke="#888" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Resultant -->
+        <circle cx="564" cy="140" r="4" fill="#b5451b"/>
+        <text x="610" y="144" font-size="10" fill="#b5451b" font-weight="600">C$_u$ = 0.36f$_{ck}$bx$_u$</text>
+        <text x="610" y="157" font-size="10" fill="#b5451b">at 0.42x$_u$ from top</text>
+        <!-- Tension -->
+        <line x1="530" x2="590" y1="258" y2="258" stroke="#7a2e10" stroke-width="2"/>
+        <text x="595" y="262" font-size="10" fill="#7a2e10" font-weight="600">T$_u$ = 0.87f$_y$A$_{st}$</text>
+      </svg>
+      <div class="diagram-caption">Fig. 1 — Singly reinforced beam: cross-section, strain diagram, and IS 456 stress block</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Symbol</th><th>Meaning</th><th>Units</th></tr></thead>
+        <tbody>
+          <tr><td>$b$</td><td>Width of beam</td><td>mm</td></tr>
+          <tr><td>$D$</td><td>Overall depth of beam</td><td>mm</td></tr>
+          <tr><td>$d$</td><td>Effective depth = $D$ − cover − $\phi/2$</td><td>mm</td></tr>
+          <tr><td>$d'$</td><td>Effective cover (centre of bar to extreme tension fibre)</td><td>mm</td></tr>
+          <tr><td>$x_u$</td><td>Actual neutral axis depth from compression face</td><td>mm</td></tr>
+          <tr><td>$x_{u,\max}$</td><td>Limiting (maximum) neutral axis depth</td><td>mm</td></tr>
+          <tr><td>$A_{st}$</td><td>Area of tension steel reinforcement</td><td>mm²</td></tr>
+          <tr><td>$f_{ck}$</td><td>Characteristic compressive strength of concrete</td><td>MPa</td></tr>
+          <tr><td>$f_y$</td><td>Characteristic yield strength of steel</td><td>MPa</td></tr>
+          <tr><td>$M_u$</td><td>Factored bending moment (design moment)</td><td>kN·m</td></tr>
+          <tr><td>$M_{u,\lim}$</td><td>Limiting moment of resistance of the section</td><td>kN·m</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. NEUTRAL AXIS -->
+  <div class="section" id="neutral-axis">
+    <h2>4. Neutral Axis Depth</h2>
+    <p>
+      The neutral axis (N.A.) is the line where bending stress is zero — above it the concrete is in compression; below it the steel carries tension. By equating the compression and tension forces (force equilibrium):
+    </p>
+    <div class="formula-block">
+      $$C_u = T_u$$
+      $$0.36 \, f_{ck} \cdot b \cdot x_u = 0.87 \, f_y \cdot A_{st}$$
+      $$\boxed{x_u = \frac{0.87 \, f_y \cdot A_{st}}{0.36 \, f_{ck} \cdot b}}$$
+      <div class="formula-caption">Actual neutral axis depth — IS 456:2000, Cl. 38.1</div>
+    </div>
+    <p>This is used to find the neutral axis depth when $A_{st}$ is known (analysis problem). In a design problem, $A_{st}$ is the unknown we solve for.</p>
+  </div>
+
+  <!-- 5. LIMITING NEUTRAL AXIS -->
+  <div class="section" id="limiting">
+    <h2>5. Limiting (Maximum) Neutral Axis Depth</h2>
+    <p>
+      IS 456 imposes a maximum neutral axis depth $x_{u,\max}$ to ensure the beam fails in a <strong>ductile manner</strong> — i.e., the steel yields first (giving warning) before the concrete crushes. This is achieved by limiting the strain in steel at failure to a minimum value.
+    </p>
+    <p>
+      From the strain diagram using similar triangles, with concrete strain = 0.0035 and minimum steel strain $= 0.87f_y/E_s + 0.002$:
+    </p>
+    <div class="formula-block">
+      $$\frac{x_{u,\max}}{d} = \frac{0.0035}{0.0035 + \left(\dfrac{0.87 f_y}{E_s} + 0.002\right)}$$
+      <div class="formula-caption">Limiting neutral axis ratio — IS 456:2000, Cl. 38.1, Table G of SP 16</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Grade of Steel</th><th>$f_y$ (MPa)</th><th>$x_{u,\max}/d$</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Fe 250 (Mild Steel)</td><td>250</td><td>0.531</td></tr>
+          <tr><td><strong>Fe 415 (HYSD)</strong></td><td>415</td><td><strong>0.479</strong></td></tr>
+          <tr><td><strong>Fe 500 (HYSD)</strong></td><td>500</td><td><strong>0.456</strong></td></tr>
+          <tr><td>Fe 550</td><td>550</td><td>0.438</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title">Critical Rule</div>
+      The design must ensure $x_u \leq x_{u,\max}$. If the required $x_u$ exceeds $x_{u,\max}$, the section is <strong>over-reinforced</strong> and will fail by sudden concrete crushing — this is not permitted. The solution is to either increase the beam size or provide compression steel (doubly reinforced beam).
+    </div>
+  </div>
+
+  <!-- 6. MOMENT OF RESISTANCE -->
+  <div class="section" id="moment-resistance">
+    <h2>6. Moment of Resistance</h2>
+    <p>
+      The moment of resistance $M_u$ is the couple formed by the compression force $C_u$ and tension force $T_u$ separated by the lever arm $z$.
+    </p>
+
+    <h3>Taking moment about the tension steel:</h3>
+    <div class="formula-block">
+      $$M_u = C_u \times z = 0.36 \, f_{ck} \cdot b \cdot x_u \times (d - 0.42 \, x_u)$$
+      <div class="formula-caption">Moment of resistance — compression side</div>
+    </div>
+
+    <h3>Taking moment about the compression resultant:</h3>
+    <div class="formula-block">
+      $$M_u = T_u \times z = 0.87 \, f_y \cdot A_{st} \times (d - 0.42 \, x_u)$$
+      <div class="formula-caption">Moment of resistance — tension side (IS 456 Cl. 38.1)</div>
+    </div>
+
+    <h3>Limiting Moment of Resistance</h3>
+    <p>When $x_u = x_{u,\max}$, the moment of resistance is maximum for a singly reinforced section:</p>
+    <div class="formula-block">
+      $$M_{u,\lim} = 0.36 \, \frac{x_{u,\max}}{d} \left(1 - 0.42 \, \frac{x_{u,\max}}{d}\right) f_{ck} \cdot b \cdot d^2$$
+      <div class="formula-caption">Limiting moment of resistance — singly reinforced section</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Steel Grade</th><th>$x_{u,\max}/d$</th><th>$M_{u,\lim}$ coefficient $R_{u,\lim}$</th><th>$M_{u,\lim} = R_{u,\lim} \cdot f_{ck} \cdot b \cdot d^2$</th></tr></thead>
+        <tbody>
+          <tr><td>Fe 250</td><td>0.531</td><td>0.149</td><td>$0.149 \, f_{ck} b d^2$</td></tr>
+          <tr><td><strong>Fe 415</strong></td><td>0.479</td><td><strong>0.138</strong></td><td>$0.138 \, f_{ck} b d^2$</td></tr>
+          <tr><td><strong>Fe 500</strong></td><td>0.456</td><td><strong>0.133</strong></td><td>$0.133 \, f_{ck} b d^2$</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Design Tip</div>
+      In a design problem, first check if $M_u \leq M_{u,\lim}$. If yes, a singly reinforced section is sufficient. If $M_u > M_{u,\lim}$, you need a doubly reinforced beam.
+    </div>
+  </div>
+
+  <!-- 7. BEAM TYPES -->
+  <div class="section" id="beam-types">
+    <h2>7. Under-Reinforced, Over-Reinforced, and Balanced Sections</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Section Type</th><th>Condition</th><th>Failure Mode</th><th>Allowed by IS 456?</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Under-Reinforced</strong></td>
+            <td>$x_u < x_{u,\max}$</td>
+            <td>Steel yields first → large deflection and cracking gives warning before collapse. Ductile failure.</td>
+            <td>✅ Yes — preferred in design</td>
+          </tr>
+          <tr>
+            <td><strong>Balanced</strong></td>
+            <td>$x_u = x_{u,\max}$</td>
+            <td>Steel and concrete reach limiting strain simultaneously. Maximum efficiency.</td>
+            <td>✅ Yes — maximum singly reinforced capacity</td>
+          </tr>
+          <tr>
+            <td><strong>Over-Reinforced</strong></td>
+            <td>$x_u > x_{u,\max}$</td>
+            <td>Concrete crushes suddenly before steel yields. Brittle failure — no warning.</td>
+            <td>❌ No — not permitted</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 8. STEEL LIMITS -->
+  <div class="section" id="steel-limits">
+    <h2>8. Minimum and Maximum Steel</h2>
+
+    <h3>Minimum Tension Steel</h3>
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 26.5.1.1</div>
+      Minimum area of tension steel in a beam:
+    </div>
+    <div class="formula-block">
+      $$\frac{A_{st,\min}}{b \cdot d} = \frac{0.85}{f_y}$$
+      <div class="formula-caption">Minimum steel to prevent sudden brittle failure of concrete on cracking</div>
+    </div>
+    <p>For Fe 415: $A_{st,\min} = \dfrac{0.85}{415} \times b \times d = 0.00205 \, b \cdot d$</p>
+    <p>For Fe 500: $A_{st,\min} = \dfrac{0.85}{500} \times b \times d = 0.00170 \, b \cdot d$</p>
+
+    <h3>Maximum Tension Steel</h3>
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 26.5.1.1</div>
+      Maximum area of tension or compression steel shall not exceed:
+    </div>
+    <div class="formula-block">
+      $$A_{st,\max} = 0.04 \times b \times D$$
+      <div class="formula-caption">Maximum steel — 4% of gross cross-sectional area. $D$ = overall depth.</div>
+    </div>
+  </div>
+
+  <!-- 9. EFFECTIVE DEPTH -->
+  <div class="section" id="effective-depth">
+    <h2>9. Effective Depth and Cover</h2>
+    <p>
+      The <strong>effective depth</strong> $d$ is measured from the extreme compression fibre to the centroid of the tension reinforcement.
+    </p>
+    <div class="formula-block">
+      $$d = D - d'$$
+      $$d' = \text{clear cover} + \text{stirrup diameter} + \frac{\phi_{main}}{2}$$
+      <div class="formula-caption">Effective depth calculation. $\phi_{main}$ = diameter of main tension bars.</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Exposure Condition</th><th>Minimum Clear Cover (mm)</th><th>IS 456 Clause</th></tr></thead>
+        <tbody>
+          <tr><td>Mild</td><td>20 mm</td><td>Cl. 26.4.1</td></tr>
+          <tr><td>Moderate</td><td>30 mm</td><td>Cl. 26.4.1</td></tr>
+          <tr><td>Severe</td><td>45 mm</td><td>Cl. 26.4.1</td></tr>
+          <tr><td>Very Severe</td><td>50 mm</td><td>Cl. 26.4.1</td></tr>
+          <tr><td>Extreme</td><td>75 mm</td><td>Cl. 26.4.1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Thumb Rule for Preliminary Sizing</div>
+      As a starting point, assume effective depth:
+      $$d \approx \frac{\text{Span}}{10} \text{ to } \frac{\text{Span}}{12} \quad \text{(for simply supported beams)}$$
+      And width: $b \approx d/2$ to $d/3$. These are starting estimates — always verify by calculation.
+    </div>
+
+    <h3>Span-to-Effective Depth Ratio (Deflection Check)</h3>
+    <p>IS 456 Cl. 23.2.1 provides basic span/depth ratios to control deflection without calculation:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Support Condition</th><th>Basic $l/d$ Ratio</th></tr></thead>
+        <tbody>
+          <tr><td>Simply supported</td><td>20</td></tr>
+          <tr><td>Continuous</td><td>26</td></tr>
+          <tr><td>Cantilever</td><td>7</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.9rem; color:var(--text-muted);">These values are modified by factors for tension steel percentage, compression steel, and flanged sections as per IS 456 Cl. 23.2.1(b), (c), (d).</p>
+  </div>
+
+  <!-- 10. SHEAR -->
+  <div class="section" id="shear">
+    <h2>10. Shear Design</h2>
+    <p>Shear design is performed in addition to flexure design. The key checks are:</p>
+
+    <h3>Nominal Shear Stress</h3>
+    <div class="formula-block">
+      $$\tau_v = \frac{V_u}{b \cdot d}$$
+      <div class="formula-caption">$V_u$ = factored shear force at the section (IS 456 Cl. 40.1)</div>
+    </div>
+
+    <h3>Design Shear Strength of Concrete $\tau_c$</h3>
+    <p>$\tau_c$ depends on the percentage of tension steel $p_t = \dfrac{100 A_{st}}{bd}$ and the grade of concrete. Values are given in <strong>IS 456 Table 19</strong>.</p>
+
+    <h3>Shear Reinforcement</h3>
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 40.4</div>
+      Shear reinforcement (stirrups) is designed for the excess shear:
+    </div>
+    <div class="formula-block">
+      $$V_{us} = V_u - \tau_c \cdot b \cdot d$$
+      $$\frac{A_{sv}}{s_v} = \frac{V_{us}}{0.87 \, f_y \, d}$$
+      <div class="formula-caption">$A_{sv}$ = area of stirrup legs; $s_v$ = stirrup spacing; use 2-legged vertical stirrups</div>
+    </div>
+
+    <h3>Minimum Shear Reinforcement (IS 456 Cl. 26.5.1.6)</h3>
+    <div class="formula-block">
+      $$\frac{A_{sv}}{b \cdot s_v} \geq \frac{0.4}{0.87 \, f_y}$$
+      <div class="formula-caption">Minimum stirrup requirement even when $\tau_v < \tau_c$</div>
+    </div>
+  </div>
+
+  <!-- 11. PROCEDURE -->
+  <div class="section" id="procedure">
+    <h2>11. Step-by-Step Design Procedure</h2>
+    <p><em>For a simply supported singly reinforced rectangular beam under a given factored load.</em></p>
+
+    <ul class="proc-steps">
+      <li>
+        <div class="proc-step-content">
+          <strong>Given Data</strong>
+          Note down: span $l$, dead load $w_{DL}$, live load $w_{LL}$, grade of concrete $f_{ck}$, grade of steel $f_y$, exposure condition.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Calculate Factored Load and Design Moment</strong>
+          <div class="formula-block" style="text-align:left;">
+            $w_u = 1.5(w_{DL} + w_{LL})$ kN/m
+            <br/>$M_u = \dfrac{w_u \, l^2}{8}$ (for simply supported beam with UDL)
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Assume b and d; Check $M_{u,\lim}$</strong>
+          Assume $b$ (typically 230 mm or 300 mm). Assume $d$ using thumb rule. Calculate $M_{u,\lim} = R_{u,\lim} \cdot f_{ck} \cdot b \cdot d^2$. Verify $M_u \leq M_{u,\lim}$ — if not, increase $d$ or use doubly reinforced section.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Find Neutral Axis Depth $x_u$</strong>
+          Solving $M_u = 0.87 \, f_y \cdot A_{st} \cdot (d - 0.42 \, x_u)$ and $x_u = \dfrac{0.87 f_y A_{st}}{0.36 f_{ck} b}$ simultaneously gives:
+          <div class="formula-block" style="text-align:left;">
+            $A_{st} = \dfrac{0.36 \, f_{ck} \, b \, x_u}{0.87 \, f_y}$ where $x_u$ is found from the quadratic in $M_u$
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Solve for $A_{st}$ Directly</strong>
+          The standard design formula (derived from the above equations):
+          <div class="formula-block" style="text-align:left;">
+            $A_{st} = \dfrac{0.5 \, f_{ck}}{f_y} \left[1 - \sqrt{1 - \dfrac{4.6 \, M_u}{f_{ck} \, b \, d^2}}\right] b \, d$
+          </div>
+          This is from IS 456 Annex G / SP 16.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Check Minimum and Maximum Steel</strong>
+          Verify: $A_{st,\min} \leq A_{st} \leq A_{st,\max}$
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Select Bar Diameter and Number</strong>
+          Choose bar diameter $\phi$ and number of bars $n$ such that $n \times \dfrac{\pi \phi^2}{4} \geq A_{st}$. Check bar spacing and fit within width $b$.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Check Effective Depth</strong>
+          Calculate actual $d = D - \text{cover} - \phi_{stirrup} - \phi_{main}/2$. Ensure it matches assumed $d$.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Check Span-to-Depth Ratio (Deflection)</strong>
+          Verify $l/d \leq$ permissible value from IS 456 Cl. 23.2.1.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Shear Design — Find $V_u$, calculate $\tau_v$ and $\tau_c$, design stirrups</strong>
+          $V_u = w_u \times l/2$ (for UDL on SS beam). Find $\tau_c$ from IS 456 Table 19. Design stirrups if needed.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Draw Reinforcement Detailing Sketch</strong>
+          Show cross-section with bar positions, cover, stirrup size and spacing, and overall dimensions.
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 12. WORKED EXAMPLE -->
+  <div class="section" id="example">
+    <h2>12. Worked Example</h2>
+
+    <div class="callout worked">
+      <div class="callout-title">Problem Statement</div>
+      <p>
+        Design a simply supported singly reinforced rectangular beam for the following data:
+      </p>
+      <ul>
+        <li>Clear span = <strong>5.0 m</strong></li>
+        <li>Dead load (excluding self-weight) = <strong>15 kN/m</strong></li>
+        <li>Live load = <strong>20 kN/m</strong></li>
+        <li>Grade of concrete: <strong>M25</strong> ($f_{ck}$ = 25 MPa)</li>
+        <li>Grade of steel: <strong>Fe 415</strong> ($f_y$ = 415 MPa)</li>
+        <li>Exposure condition: Mild</li>
+        <li>Width of beam: <strong>b = 300 mm</strong> (assumed)</li>
+      </ul>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 1 — Effective Span</div>
+      <p>Assume overall depth $D$ ≈ 550 mm, width $b$ = 300 mm.</p>
+      <p>Effective span $l$ = clear span + $d$ (lesser of support width and $d$) ≈ 5.0 + 0.5 = <strong>5.0 m</strong> (taken as clear span for simplicity in preliminary design).</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 2 — Self Weight and Factored Load</div>
+      <p>Assume $D$ = 550 mm, $b$ = 300 mm.</p>
+      <p>Self weight of beam = $0.30 \times 0.55 \times 25$ = 4.125 kN/m ≈ <strong>4.13 kN/m</strong></p>
+      <p>Total dead load $w_{DL}$ = 15 + 4.13 = <strong>19.13 kN/m</strong></p>
+      <p>Live load $w_{LL}$ = <strong>20 kN/m</strong></p>
+      <p>Factored load: $w_u = 1.5 \times (19.13 + 20.0) = 1.5 \times 39.13$</p>
+      <div class="result">$w_u$ = 58.70 kN/m</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 3 — Factored Bending Moment and Shear</div>
+      <p>For simply supported beam with UDL:</p>
+      <p>$M_u = \dfrac{w_u \cdot l^2}{8} = \dfrac{58.70 \times 5.0^2}{8} = \dfrac{58.70 \times 25}{8}$</p>
+      <div class="result">$M_u$ = 183.44 kN·m</div>
+      <p style="margin-top:0.5rem;">$V_u = \dfrac{w_u \cdot l}{2} = \dfrac{58.70 \times 5.0}{2}$</p>
+      <div class="result">$V_u$ = 146.75 kN</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 4 — Effective Depth and Limiting Moment Check</div>
+      <p>Clear cover (mild exposure) = 20 mm. Assume stirrups = 8 mm, main bars = 20 mm.</p>
+      <p>Effective cover $d'$ = 20 + 8 + 20/2 = <strong>38 mm</strong></p>
+      <p>Effective depth $d$ = 550 − 38 = <strong>512 mm</strong></p>
+      <p>For Fe 415: $x_{u,\max}/d$ = 0.479, so $R_{u,\lim}$ = 0.138</p>
+      <p>$M_{u,\lim} = 0.138 \times f_{ck} \times b \times d^2 = 0.138 \times 25 \times 300 \times 512^2$</p>
+      <p>$= 0.138 \times 25 \times 300 \times 262{,}144$</p>
+      <div class="result">$M_{u,\lim}$ = 271.9 kN·m</div>
+      <p style="margin-top:0.5rem; color:#aaa;">Since $M_u$ (183.44 kN·m) $\leq$ $M_{u,\lim}$ (271.9 kN·m) ✓ — singly reinforced section is sufficient.</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 5 — Area of Tension Steel $A_{st}$</div>
+      <p>Using the direct design formula:</p>
+      <p>$A_{st} = \dfrac{0.5 \times 25}{415} \left[1 - \sqrt{1 - \dfrac{4.6 \times 183.44 \times 10^6}{25 \times 300 \times 512^2}}\right] \times 300 \times 512$</p>
+      <p>Inner term: $\dfrac{4.6 \times 183.44 \times 10^6}{25 \times 300 \times 262144} = \dfrac{843.8 \times 10^6}{1966.1 \times 10^6} = 0.4293$</p>
+      <p>$\sqrt{1 - 0.4293} = \sqrt{0.5707} = 0.7555$</p>
+      <p>$A_{st} = \dfrac{0.5 \times 25}{415} \times (1 - 0.7555) \times 300 \times 512$</p>
+      <p>$= 0.03012 \times 0.2445 \times 153{,}600 = 0.03012 \times 37{,}555$</p>
+      <div class="result">$A_{st}$ = 1131 mm²</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 6 — Check Minimum Steel</div>
+      <p>$A_{st,\min} = \dfrac{0.85}{415} \times 300 \times 512 = 0.002048 \times 153{,}600$</p>
+      <div class="result">$A_{st,\min}$ = 314 mm²</div>
+      <p style="color:#aaa;">$A_{st}$ (1131 mm²) $>$ $A_{st,\min}$ (314 mm²) ✓</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 7 — Select Bars</div>
+      <p>Try <strong>4 bars of 20 mm diameter</strong>:</p>
+      <p>$A_{st,\text{provided}} = 4 \times \dfrac{\pi \times 20^2}{4} = 4 \times 314.16$</p>
+      <div class="result">$A_{st,\text{provided}}$ = 1257 mm² > 1131 mm² ✓</div>
+      <p style="margin-top:0.5rem; color:#aaa;">Check bar fit: $b = 300$ mm. Min spacing = max(bar dia, 25 mm) = 25 mm. Space used = $4 \times 20 + 3 \times 25 + 2 \times 20 = 80 + 75 + 40 = 195$ mm $<$ 300 mm ✓</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 8 — Deflection Check (Span/Depth Ratio)</div>
+      <p>Basic $l/d$ for simply supported beam = 20</p>
+      <p>Actual $l/d = \dfrac{5000}{512} = 9.77$</p>
+      <div class="result">9.77 &lt; 20 ✓ — Deflection is OK</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 9 — Shear Design</div>
+      <p>$\tau_v = \dfrac{V_u}{b \cdot d} = \dfrac{146.75 \times 10^3}{300 \times 512} = \dfrac{146750}{153600}$</p>
+      <div class="result">$\tau_v$ = 0.956 MPa</div>
+      <p style="margin-top:0.5rem;">$p_t = \dfrac{100 \times 1257}{300 \times 512} = \dfrac{125700}{153600} = 0.819\%$</p>
+      <p>From IS 456 Table 19, for M25 and $p_t$ ≈ 0.82%: $\tau_c$ ≈ <strong>0.57 MPa</strong></p>
+      <p>Max shear $\tau_{c,\max}$ for M25 = <strong>3.1 MPa</strong> (IS 456 Table 20) — section is OK.</p>
+      <p>Excess shear: $V_{us} = V_u - \tau_c \cdot b \cdot d = 146750 - 0.57 \times 300 \times 512 = 146750 - 87552$</p>
+      <p>$V_{us}$ = 59,198 N</p>
+      <p>Using <strong>2-legged 8 mm stirrups</strong> ($A_{sv} = 2 \times 50.27 = 100.5$ mm²):</p>
+      <p>$s_v = \dfrac{0.87 \times 415 \times 100.5 \times 512}{59198} = \dfrac{18{,}774{,}355}{59198}$</p>
+      <div class="result">$s_v$ = 317 mm — Provide 8 mm 2-legged stirrups @ 300 mm c/c</div>
+      <p style="color:#aaa; margin-top:0.4rem;">Max stirrup spacing = min(0.75d, 300 mm) = min(384, 300) = 300 mm ✓ (IS 456 Cl. 26.5.1.5)</p>
+    </div>
+
+    <div class="callout worked">
+      <div class="callout-title">Final Design Summary</div>
+      <ul>
+        <li><strong>Size:</strong> 300 mm × 550 mm (b × D)</li>
+        <li><strong>Effective depth:</strong> 512 mm</li>
+        <li><strong>Tension reinforcement:</strong> 4 bars of 20 mm dia (Fe 415) — $A_{st}$ = 1257 mm²</li>
+        <li><strong>Stirrups:</strong> 8 mm dia, 2-legged, @ 300 mm c/c (Fe 415)</li>
+        <li><strong>Clear cover:</strong> 20 mm (mild exposure)</li>
+        <li>All IS 456 checks satisfied ✓</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="prev-btn" href="limit-state-method.html">← Limit State Method</a>
+    <a class="next-btn" href="#">Next: Doubly Reinforced Beams →</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Structural Design IS 456 · Reference: IS 456:2000, Plain and Reinforced Concrete — Code of Practice (4th Revision)</p>
+  <p style="margin-top:0.4rem;">Content is for educational purposes. Always refer to the latest BIS codes for professional use.</p>
+</footer>
+
+</body>
+</html>

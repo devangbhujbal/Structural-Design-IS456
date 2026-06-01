@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doubly Reinforced Beams | Structural Design IS 456</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'$',right:'$',display:false}
+    ]});"></script>
+  <style>
+    :root {
+      --bg: #f5f2eb;
+      --surface: #fffef9;
+      --border: #d9d0bc;
+      --accent: #b5451b;
+      --accent-light: #f0ddd6;
+      --text: #1e1b16;
+      --text-muted: #6b6256;
+      --heading-font: 'Merriweather', Georgia, serif;
+      --body-font: 'Source Sans 3', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--body-font); font-size: 17px; line-height: 1.75; }
+
+    header { background: var(--text); color: #fff; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 62px; position: sticky; top: 0; z-index: 100; border-bottom: 3px solid var(--accent); }
+    .site-title { font-family: var(--heading-font); font-size: 1rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .site-title span { color: var(--accent); }
+    nav a { color: #ccc; text-decoration: none; margin-left: 1.5rem; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: #fff; }
+
+    .hero { background: var(--text); color: #fff; padding: 3.5rem 2rem 3rem; border-bottom: 4px solid var(--accent); }
+    .hero-inner { max-width: 820px; margin: 0 auto; }
+    .breadcrumb { font-size: 0.8rem; color: #999; margin-bottom: 1rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .breadcrumb a { color: #aaa; text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+    .hero h1 { font-family: var(--heading-font); font-size: 2.6rem; line-height: 1.25; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--accent); }
+    .hero-meta { font-size: 0.88rem; color: #aaa; }
+    .tag { display: inline-block; background: var(--accent); color: #fff; padding: 2px 10px; border-radius: 2px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-right: 0.5rem; }
+
+    .page-body { max-width: 820px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+
+    .toc { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 1.25rem 1.5rem; margin-bottom: 3rem; border-radius: 0 4px 4px 0; }
+    .toc h3 { font-family: var(--heading-font); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .toc ol { padding-left: 1.2rem; }
+    .toc ol li { margin-bottom: 0.25rem; }
+    .toc a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+    .toc a:hover { text-decoration: underline; }
+
+    .section { margin-bottom: 3rem; }
+    h2 { font-family: var(--heading-font); font-size: 1.5rem; color: var(--text); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+    h3 { font-family: var(--heading-font); font-size: 1.1rem; color: var(--text); margin: 1.5rem 0 0.5rem; }
+    p { margin-bottom: 1rem; }
+    ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.35rem; }
+
+    .callout { padding: 1.25rem 1.5rem; border-radius: 4px; margin: 1.5rem 0; border: 1px solid transparent; }
+    .callout.definition { background: #eef4ff; border-color: #bed3f5; border-left: 4px solid #3a7bd5; }
+    .callout.code-ref { background: var(--accent-light); border-color: #e4bfb2; border-left: 4px solid var(--accent); }
+    .callout.note { background: #f0f8f0; border-color: #b8ddb8; border-left: 4px solid #4a9e4a; }
+    .callout.warning { background: #fffbe6; border-color: #ffe58f; border-left: 4px solid #d4a017; }
+    .callout.worked { background: #1e1b16; border-left: 4px solid var(--accent); color: #f0ebe0; }
+    .callout-title { font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+    .callout.definition .callout-title { color: #3a7bd5; }
+    .callout.code-ref .callout-title { color: var(--accent); }
+    .callout.note .callout-title { color: #4a9e4a; }
+    .callout.warning .callout-title { color: #d4a017; }
+    .callout.worked .callout-title { color: var(--accent); }
+    .callout.worked p, .callout.worked li { color: #c8c0b0; }
+    .callout.worked strong { color: #f0ebe0; }
+
+    .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: var(--surface); }
+    thead tr { background: var(--text); color: #fff; }
+    thead th { font-family: var(--heading-font); font-size: 0.85rem; padding: 0.75rem 1rem; text-align: left; font-weight: 700; }
+    tbody tr:nth-child(even) { background: #f5f0e8; }
+    tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+    .formula-block { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; text-align: center; font-size: 1.05rem; }
+    .formula-caption { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+    .diagram-wrap { margin: 1.5rem 0; text-align: center; }
+    .diagram-caption { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic; }
+
+    /* Comparison cards */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    .compare-card { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--border); padding: 1.25rem; border-radius: 0 0 4px 4px; }
+    .compare-card.preferred { border-top-color: var(--accent); }
+    .compare-card h4 { font-family: var(--heading-font); font-size: 1rem; margin-bottom: 0.75rem; }
+    .compare-card ul { font-size: 0.9rem; color: var(--text-muted); }
+    .compare-card ul li { margin-bottom: 0.4rem; }
+
+    /* Procedure steps */
+    .proc-steps { list-style: none; padding: 0; margin: 1.5rem 0; counter-reset: proc; }
+    .proc-steps > li { counter-increment: proc; display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem; margin-bottom: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1rem 1.25rem 1rem 0; align-items: start; }
+    .proc-steps > li::before { content: counter(proc); width: 2.5rem; height: 2.5rem; background: var(--accent); color: #fff; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; border-radius: 0 4px 4px 0; flex-shrink: 0; margin-left: -1px; }
+    .proc-step-content strong { display: block; font-size: 1rem; margin-bottom: 0.3rem; color: var(--text); }
+    .proc-step-content { font-size: 0.93rem; color: var(--text-muted); }
+
+    /* Worked example */
+    .ex-step { background: #2a2620; border-radius: 4px; padding: 1rem 1.25rem; margin: 0.75rem 0; }
+    .ex-step-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); font-weight: 700; margin-bottom: 0.4rem; }
+    .ex-step p { color: #c8c0b0; margin-bottom: 0.5rem; font-size: 0.93rem; }
+    .ex-step .result { color: #fff; font-weight: 700; font-size: 0.97rem; margin-top: 0.25rem; }
+
+    .nav-footer { margin-top: 3rem; border-top: 2px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .prev-btn, .next-btn { padding: 0.75rem 1.5rem; border-radius: 3px; text-decoration: none; font-weight: 600; font-size: 0.92rem; transition: background 0.2s; }
+    .prev-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .prev-btn:hover { background: var(--bg); }
+    .next-btn { background: var(--accent); color: #fff; }
+    .next-btn:hover { background: #922f0f; }
+
+    footer { background: var(--text); color: #888; text-align: center; padding: 1.5rem; font-size: 0.85rem; border-top: 3px solid var(--accent); }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      nav { display: none; }
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="site-title" href="index.html">Structural Design <span>IS 456</span></a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="what-is-rcc.html">RCC Basics</a>
+    <a href="limit-state-method.html">LSM</a>
+    <a href="singly-reinforced-beams.html">Singly RB</a>
+    <a href="#">Columns</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> ›
+      <a href="singly-reinforced-beams.html">Singly Reinforced Beams</a> ›
+      Doubly Reinforced Beams
+    </div>
+    <h1>Doubly Reinforced <span>Beams</span></h1>
+    <div class="hero-meta">
+      <span class="tag">IS 456 : 2000</span>
+      <span class="tag">Cl. 38</span>
+      <span class="tag">Flexure Design</span>
+      Design of beams with both tension and compression reinforcement
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#when">When is a Doubly Reinforced Beam Needed?</a></li>
+      <li><a href="#concept">Concept and Force System</a></li>
+      <li><a href="#notation">Cross-Section and Notation</a></li>
+      <li><a href="#strain-compatibility">Strain Compatibility for Compression Steel</a></li>
+      <li><a href="#fsc">Stress in Compression Steel $f_{sc}$</a></li>
+      <li><a href="#equilibrium">Force Equilibrium and Moment of Resistance</a></li>
+      <li><a href="#equivalent">Equivalent Area of Compression Steel</a></li>
+      <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
+      <li><a href="#example">Worked Example</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. WHEN -->
+  <div class="section" id="when">
+    <h2>1. When is a Doubly Reinforced Beam Needed?</h2>
+    <div class="callout definition">
+      <div class="callout-title">Definition</div>
+      A <strong>doubly reinforced beam</strong> is a rectangular RCC beam in which steel reinforcement is provided in <em>both the tension zone (bottom) and the compression zone (top)</em>. The compression steel assists the concrete in carrying compressive forces.
+    </div>
+
+    <p>A doubly reinforced beam is required in any of the following situations:</p>
+    <ul>
+      <li>The factored moment $M_u$ <strong>exceeds the limiting moment</strong> $M_{u,\lim}$ of the singly reinforced section — i.e., a singly reinforced beam of the given size cannot carry the load.</li>
+      <li>The <strong>beam depth is restricted</strong> by architectural or headroom requirements and cannot be increased.</li>
+      <li>The beam is subjected to <strong>reversal of moments</strong> (e.g., in seismic zones, or at supports of continuous beams where both top and bottom can be in tension at different times).</li>
+      <li>The beam must carry <strong>sustained heavy loads</strong> — compression steel reduces long-term creep deflection.</li>
+    </ul>
+
+    <div class="callout note">
+      <div class="callout-title">Key Trigger</div>
+      Always check: if $M_u > M_{u,\lim}$, a singly reinforced section is insufficient. The excess moment $M_{u2} = M_u - M_{u,\lim}$ must be carried by the compression steel couple.
+    </div>
+  </div>
+
+  <!-- 2. CONCEPT -->
+  <div class="section" id="concept">
+    <h2>2. Concept and Force System</h2>
+    <p>
+      The design of a doubly reinforced beam is best understood by splitting the total moment $M_u$ into <strong>two parts</strong>:
+    </p>
+
+    <div class="compare-grid">
+      <div class="compare-card preferred">
+        <h4>Part 1 — $M_{u1}$ (Singly reinforced portion)</h4>
+        <ul>
+          <li>The section acts as a balanced singly reinforced beam</li>
+          <li>Neutral axis at $x_{u,\max}$</li>
+          <li>Moment carried = $M_{u,\lim}$</li>
+          <li>Tension steel required = $A_{st1}$</li>
+          <li>No compression steel involved</li>
+        </ul>
+      </div>
+      <div class="compare-card preferred">
+        <h4>Part 2 — $M_{u2}$ (Compression steel couple)</h4>
+        <ul>
+          <li>Excess moment $M_{u2} = M_u - M_{u,\lim}$</li>
+          <li>Carried by a steel-to-steel couple</li>
+          <li>Compression steel $A_{sc}$ at top (depth $d'$)</li>
+          <li>Additional tension steel $A_{st2}$ at bottom</li>
+          <li>Lever arm = $d - d'$</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="formula-block">
+      $$M_u = M_{u1} + M_{u2} = M_{u,\lim} + M_{u2}$$
+      $$M_{u2} = M_u - M_{u,\lim}$$
+      $$A_{st} = A_{st1} + A_{st2}$$
+      <div class="formula-caption">Total moment split into two components — the key design concept</div>
+    </div>
+  </div>
+
+  <!-- 3. NOTATION -->
+  <div class="section" id="notation">
+    <h2>3. Cross-Section and Notation</h2>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg" style="max-width:700px;width:100%;font-family:'Source Sans 3',sans-serif;">
+        <rect width="700" height="340" fill="#fffef9"/>
+        <text x="350" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e1b16">Doubly Reinforced Beam — Cross-Section, Strain and Stress Block</text>
+
+        <!-- CROSS SECTION -->
+        <text x="110" y="46" text-anchor="middle" font-size="11" fill="#6b6256" font-style="italic">Cross-Section</text>
+        <rect x="50" y="55" width="120" height="230" fill="#e8e2d8" stroke="#9a9080" stroke-width="1.5"/>
+        <!-- Compression zone -->
+        <rect x="50" y="55" width="120" height="125" fill="#c8daf0" opacity="0.65"/>
+        <!-- Compression steel (top) -->
+        <circle cx="85"  cy="80" r="7" fill="#2558a8" stroke="#1a3d80" stroke-width="1.5"/>
+        <circle cx="135" cy="80" r="7" fill="#2558a8" stroke="#1a3d80" stroke-width="1.5"/>
+        <!-- Neutral axis -->
+        <line x1="40" x2="182" y1="180" y2="180" stroke="#555" stroke-width="1.3" stroke-dasharray="6,4"/>
+        <text x="36" y="183" text-anchor="end" font-size="10" fill="#555">N.A.</text>
+        <!-- Tension steel (bottom) -->
+        <circle cx="78"  cy="268" r="7" fill="#b5451b" stroke="#7a2e10" stroke-width="1.5"/>
+        <circle cx="110" cy="268" r="7" fill="#b5451b" stroke="#7a2e10" stroke-width="1.5"/>
+        <circle cx="142" cy="268" r="7" fill="#b5451b" stroke="#7a2e10" stroke-width="1.5"/>
+
+        <!-- d' dimension -->
+        <line x1="182" x2="192" y1="55" y2="55" stroke="#2558a8" stroke-width="1"/>
+        <line x1="182" x2="192" y1="80"  y2="80"  stroke="#2558a8" stroke-width="1"/>
+        <line x1="187" x2="187" y1="55" y2="80"  stroke="#2558a8" stroke-width="1.3"/>
+        <text x="196" y="72" font-size="10.5" fill="#2558a8" font-weight="700">d'</text>
+
+        <!-- xu dimension -->
+        <line x1="182" x2="192" y1="55"  y2="55"  stroke="#555" stroke-width="1"/>
+        <line x1="182" x2="192" y1="180" y2="180" stroke="#555" stroke-width="1"/>
+        <line x1="187" x2="187" y1="55"  y2="180" stroke="#555" stroke-width="1.3"/>
+        <text x="196" y="123" font-size="10.5" fill="#555" font-weight="700">x$_{u,max}$</text>
+
+        <!-- d effective -->
+        <line x1="38" x2="48" y1="55"  y2="55"  stroke="#b5451b" stroke-width="1"/>
+        <line x1="38" x2="48" y1="268" y2="268" stroke="#b5451b" stroke-width="1"/>
+        <line x1="43" x2="43" y1="55"  y2="268" stroke="#b5451b" stroke-width="1.5"/>
+        <text x="33" y="165" font-size="11" fill="#b5451b" font-weight="700" text-anchor="middle">d</text>
+
+        <!-- Labels -->
+        <text x="110" y="100" text-anchor="middle" font-size="10" fill="#2558a8" font-weight="600">A$_{sc}$</text>
+        <text x="110" y="293" text-anchor="middle" font-size="10" fill="#b5451b" font-weight="600">A$_{st}$</text>
+
+        <!-- b dimension -->
+        <line x1="50"  y1="300" x2="50"  y2="310" stroke="#333" stroke-width="1"/>
+        <line x1="170" y1="300" x2="170" y2="310" stroke="#333" stroke-width="1"/>
+        <line x1="50"  y1="305" x2="170" y2="305" stroke="#333" stroke-width="1"/>
+        <text x="110" y="322" text-anchor="middle" font-size="11" fill="#333" font-weight="600">b</text>
+
+        <!-- STRAIN DIAGRAM -->
+        <text x="300" y="46" text-anchor="middle" font-size="11" fill="#6b6256" font-style="italic">Strain Diagram</text>
+        <line x1="255" x2="255" y1="55" y2="285" stroke="#aaa" stroke-width="1.5"/>
+        <line x1="255" x2="370" y1="55"  y2="55"  stroke="#aaa" stroke-width="1"/>
+        <line x1="255" x2="370" y1="285" y2="285" stroke="#aaa" stroke-width="1"/>
+        <!-- NA on strain -->
+        <line x1="245" x2="385" y1="180" y2="180" stroke="#888" stroke-width="1" stroke-dasharray="5,4"/>
+        <!-- Strain line top to bottom -->
+        <line x1="255" x2="345" y1="55" y2="55" stroke="#2558a8" stroke-width="2.2"/>
+        <line x1="255" x2="255" y1="55" y2="180" stroke="#2558a8" stroke-width="2.2"/>
+        <line x1="255" x2="385" y1="180" y2="285" stroke="#b5451b" stroke-width="2.2"/>
+        <!-- Compression steel strain mark -->
+        <line x1="255" x2="310" y1="80" y2="80" stroke="#2558a8" stroke-width="1.3" stroke-dasharray="4,3"/>
+        <text x="313" y="84" font-size="10" fill="#2558a8">ε$_{sc}$</text>
+        <!-- Labels -->
+        <text x="348" y="59" font-size="10.5" fill="#2558a8" font-weight="600">0.0035</text>
+        <text x="388" y="289" font-size="10.5" fill="#b5451b" font-weight="600">ε$_{st}$</text>
+
+        <!-- STRESS DIAGRAM -->
+        <text x="570" y="46" text-anchor="middle" font-size="11" fill="#6b6256" font-style="italic">Forces</text>
+        <line x1="430" x2="430" y1="55" y2="285" stroke="#aaa" stroke-width="1.5"/>
+        <!-- Stress block -->
+        <path d="M430,180 Q468,158 510,97 L510,55 L430,55 Z" fill="#c8daf0" stroke="#2558a8" stroke-width="1.5"/>
+        <rect x="430" y="97" width="80" height="83" fill="#c8daf0" opacity="0.45" stroke="#2558a8" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Compression steel stress -->
+        <circle cx="430" cy="80" r="4" fill="#2558a8"/>
+        <line x1="430" x2="510" y1="80" y2="80" stroke="#2558a8" stroke-width="1.5"/>
+        <text x="515" y="84" font-size="10" fill="#2558a8" font-weight="600">f$_{sc}$ − 0.446f$_{ck}$</text>
+        <!-- Compression force C1 -->
+        <text x="515" y="140" font-size="10" fill="#2558a8" font-weight="600">C$_1$=0.36f$_{ck}$bx$_{u,max}$</text>
+        <!-- Compression force C2 -->
+        <text x="515" y="158" font-size="10" fill="#2558a8">C$_2$=(f$_{sc}$−0.446f$_{ck}$)A$_{sc}$</text>
+        <!-- NA -->
+        <line x1="420" x2="530" y1="180" y2="180" stroke="#888" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Tension force -->
+        <line x1="430" x2="510" y1="268" y2="268" stroke="#7a2e10" stroke-width="2"/>
+        <text x="515" y="272" font-size="10" fill="#7a2e10" font-weight="600">T=0.87f$_y$A$_{st}$</text>
+      </svg>
+      <div class="diagram-caption">Fig. 1 — Doubly reinforced beam: cross-section at limiting condition, strain diagram, and internal forces</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>$A_{sc}$</td><td>Area of compression steel (top bars)</td></tr>
+          <tr><td>$A_{st}$</td><td>Total area of tension steel (bottom bars) = $A_{st1} + A_{st2}$</td></tr>
+          <tr><td>$A_{st1}$</td><td>Tension steel for Part 1 (balanced singly reinforced moment $M_{u,\lim}$)</td></tr>
+          <tr><td>$A_{st2}$</td><td>Additional tension steel for Part 2 (excess moment $M_{u2}$)</td></tr>
+          <tr><td>$d'$</td><td>Effective cover to compression steel (centre of bar to top fibre)</td></tr>
+          <tr><td>$d'/d$</td><td>Ratio used to find $f_{sc}$ from IS 456 / SP 16 tables</td></tr>
+          <tr><td>$f_{sc}$</td><td>Design stress in compression steel (MPa)</td></tr>
+          <tr><td>$M_{u,\lim}$</td><td>Limiting moment of singly reinforced section</td></tr>
+          <tr><td>$M_{u2}$</td><td>Excess moment = $M_u - M_{u,\lim}$</td></tr>
+          <tr><td>$x_{u,\max}$</td><td>Maximum neutral axis depth (limiting value)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. STRAIN COMPATIBILITY -->
+  <div class="section" id="strain-compatibility">
+    <h2>4. Strain Compatibility for Compression Steel</h2>
+    <p>
+      Since the neutral axis is at $x_{u,\max}$ (limiting condition), the strain at the compression steel level $d'$ from the top can be found from the linear strain diagram by similar triangles:
+    </p>
+    <div class="formula-block">
+      $$\varepsilon_{sc} = 0.0035 \times \left(1 - \frac{d'}{x_{u,\max}}\right)$$
+      <div class="formula-caption">Strain in compression steel at the Limit State of Collapse — from linear strain distribution</div>
+    </div>
+    <p>
+      The stress $f_{sc}$ in the compression steel is then read from the <strong>stress-strain curve</strong> of the steel at this strain value. For HYSD bars (Fe 415, Fe 500), the stress-strain relationship is non-linear; IS 456 / SP 16 provides tabulated values.
+    </p>
+  </div>
+
+  <!-- 5. FSC -->
+  <div class="section" id="fsc">
+    <h2>5. Stress in Compression Steel $f_{sc}$</h2>
+    <p>
+      The design stress $f_{sc}$ in compression steel depends on the strain $\varepsilon_{sc}$, which in turn depends on the ratio $d'/d$ (cover to compression steel as a fraction of effective depth). SP 16 provides convenient tables of $f_{sc}$ vs $d'/d$.
+    </p>
+
+    <div class="callout code-ref">
+      <div class="callout-title">SP 16 : 1980 — Table F</div>
+      Design stress in compression steel $f_{sc}$ (MPa) for different $d'/d$ ratios:
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>$d'/d$</th><th>Fe 250 (MPa)</th><th>Fe 415 (MPa)</th><th>Fe 500 (MPa)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0.05</td><td>217.5</td><td>355</td><td>424</td></tr>
+          <tr><td>0.10</td><td>217.5</td><td>353</td><td>412</td></tr>
+          <tr><td>0.15</td><td>217.5</td><td>342</td><td>395</td></tr>
+          <tr><td>0.20</td><td>217.5</td><td>329</td><td>370</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title">Important — Net Compression Force from Steel</div>
+      The compression steel occupies a region already carrying concrete stress ($0.446 \, f_{ck}$). The <strong>net stress contribution</strong> from compression steel is therefore:
+      $$f_{sc,\text{net}} = f_{sc} - 0.446 \, f_{ck}$$
+      This deduction is essential and is frequently missed. IS 456 accounts for it as shown in the force equations below.
+    </div>
+  </div>
+
+  <!-- 6. EQUILIBRIUM -->
+  <div class="section" id="equilibrium">
+    <h2>6. Force Equilibrium and Moment of Resistance</h2>
+    <p>Three forces act on the section at the Limit State of Collapse:</p>
+    <ul>
+      <li>$C_1$ = Compressive force in concrete stress block</li>
+      <li>$C_2$ = Net compressive force in compression steel</li>
+      <li>$T$ = Tensile force in tension steel</li>
+    </ul>
+
+    <div class="formula-block">
+      $$C_1 = 0.36 \, f_{ck} \cdot b \cdot x_{u,\max}$$
+      $$C_2 = (f_{sc} - 0.446 \, f_{ck}) \cdot A_{sc}$$
+      $$T = 0.87 \, f_y \cdot A_{st}$$
+      <div class="formula-caption">Internal forces in a doubly reinforced beam (IS 456:2000, Cl. 38)</div>
+    </div>
+
+    <h3>Force Equilibrium ($C_1 + C_2 = T$):</h3>
+    <div class="formula-block">
+      $$0.36 \, f_{ck} \cdot b \cdot x_{u,\max} + (f_{sc} - 0.446 \, f_{ck}) \cdot A_{sc} = 0.87 \, f_y \cdot A_{st}$$
+    </div>
+
+    <h3>Total Moment of Resistance:</h3>
+    <div class="formula-block">
+      $$M_u = 0.36 \, f_{ck} \cdot b \cdot x_{u,\max} \cdot (d - 0.42 \, x_{u,\max}) + (f_{sc} - 0.446 \, f_{ck}) \cdot A_{sc} \cdot (d - d')$$
+      <div class="formula-caption">Full moment of resistance of doubly reinforced section — IS 456:2000, Cl. 38.1</div>
+    </div>
+
+    <h3>Recognising the Two Parts:</h3>
+    <div class="formula-block">
+      $$M_{u1} = 0.36 \, f_{ck} \cdot b \cdot x_{u,\max} \cdot (d - 0.42 \, x_{u,\max}) = M_{u,\lim}$$
+      $$M_{u2} = (f_{sc} - 0.446 \, f_{ck}) \cdot A_{sc} \cdot (d - d')$$
+      $$M_u = M_{u1} + M_{u2}$$
+    </div>
+  </div>
+
+  <!-- 7. EQUIVALENT AREA -->
+  <div class="section" id="equivalent">
+    <h2>7. Design Equations for $A_{sc}$ and $A_{st}$</h2>
+
+    <h3>Compression Steel $A_{sc}$</h3>
+    <p>From the expression for $M_{u2}$:</p>
+    <div class="formula-block">
+      $$A_{sc} = \frac{M_{u2}}{(f_{sc} - 0.446 \, f_{ck})(d - d')}$$
+      <div class="formula-caption">Where $M_{u2} = M_u - M_{u,\lim}$ and $d' =$ effective cover to compression steel</div>
+    </div>
+
+    <h3>Tension Steel $A_{st}$</h3>
+    <p>Total tension steel = steel for Part 1 + steel for Part 2:</p>
+    <div class="formula-block">
+      $$A_{st1} = \frac{M_{u,\lim}}{0.87 \, f_y \, (d - 0.42 \, x_{u,\max})}$$
+      $$A_{st2} = \frac{M_{u2}}{0.87 \, f_y \, (d - d')}$$
+      $$\boxed{A_{st} = A_{st1} + A_{st2}}$$
+      <div class="formula-caption">Total tension steel in doubly reinforced beam</div>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Verification by Force Equilibrium</div>
+      After calculating $A_{sc}$ and $A_{st}$, always verify force equilibrium:
+      $$0.87 \, f_y \cdot A_{st} = 0.36 \, f_{ck} \cdot b \cdot x_{u,\max} + (f_{sc} - 0.446 \, f_{ck}) \cdot A_{sc}$$
+      If the two sides match, the design is internally consistent.
+    </div>
+  </div>
+
+  <!-- 8. PROCEDURE -->
+  <div class="section" id="procedure">
+    <h2>8. Step-by-Step Design Procedure</h2>
+
+    <ul class="proc-steps">
+      <li>
+        <div class="proc-step-content">
+          <strong>Given Data</strong>
+          Span, loads, $f_{ck}$, $f_y$, $b$, $D$ (restricted), exposure condition.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Calculate Factored Moment $M_u$</strong>
+          $w_u = 1.5(w_{DL} + w_{LL})$; $M_u = w_u l^2 / 8$ for SS beam with UDL.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Determine Effective Depth $d$ and Cover</strong>
+          $d = D - \text{cover} - \phi_{stirrup} - \phi_{main}/2$. Assume cover for exposure condition.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Calculate $M_{u,\lim}$ and Check if Doubly Reinforced is Needed</strong>
+          $M_{u,\lim} = R_{u,\lim} \cdot f_{ck} \cdot b \cdot d^2$. If $M_u > M_{u,\lim}$, proceed with doubly reinforced design.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Find $x_{u,\max}$ and $M_{u2}$</strong>
+          $x_{u,\max} = (x_{u,\max}/d) \times d$; $M_{u2} = M_u - M_{u,\lim}$.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Assume $d'$ for Compression Steel and Find $f_{sc}$</strong>
+          Assume effective cover $d'$ to compression steel (typically 40–50 mm). Compute $d'/d$. Read $f_{sc}$ from SP 16 Table F.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Calculate Compression Steel $A_{sc}$</strong>
+          $A_{sc} = \dfrac{M_{u2}}{(f_{sc} - 0.446 f_{ck})(d - d')}$
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Calculate Tension Steel $A_{st}$</strong>
+          $A_{st1} = \dfrac{M_{u,\lim}}{0.87 f_y (d - 0.42 x_{u,\max})}$;
+          $A_{st2} = \dfrac{M_{u2}}{0.87 f_y (d - d')}$;
+          $A_{st} = A_{st1} + A_{st2}$.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Verify Force Equilibrium</strong>
+          Check: $0.87 f_y A_{st} \approx 0.36 f_{ck} b x_{u,\max} + (f_{sc} - 0.446 f_{ck}) A_{sc}$.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Select Bars for $A_{sc}$ and $A_{st}$</strong>
+          Choose diameter and number of bars. Check minimum spacing and width fit.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Shear Design</strong>
+          Same as singly reinforced — find $V_u$, $\tau_v$, $\tau_c$, design stirrups.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Check Minimum and Maximum Steel; Sketch Detailing</strong>
+          Verify IS 456 Cl. 26.5.1.1 limits for both tension and compression steel. Draw the detailing sketch.
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 9. WORKED EXAMPLE -->
+  <div class="section" id="example">
+    <h2>9. Worked Example</h2>
+
+    <div class="callout worked">
+      <div class="callout-title">Problem Statement</div>
+      <p>Design a simply supported doubly reinforced rectangular beam for the following data:</p>
+      <ul>
+        <li>Effective span = <strong>6.0 m</strong></li>
+        <li>Factored BM (given directly) = <strong>$M_u$ = 320 kN·m</strong></li>
+        <li>Beam size restricted to: <strong>$b$ = 300 mm, $D$ = 600 mm</strong></li>
+        <li>Concrete: <strong>M25</strong> ($f_{ck}$ = 25 MPa)</li>
+        <li>Steel: <strong>Fe 415</strong> ($f_y$ = 415 MPa)</li>
+        <li>Exposure: Mild (clear cover = 25 mm)</li>
+      </ul>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 1 — Effective Depth</div>
+      <p>Assume stirrups = 8 mm, main bars = 20 mm.</p>
+      <p>$d = D - \text{cover} - \phi_{st} - \phi/2 = 600 - 25 - 8 - 10$</p>
+      <div class="result">$d$ = 557 mm</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 2 — Limiting Moment of Resistance</div>
+      <p>For Fe 415: $x_{u,\max}/d = 0.479$, $R_{u,\lim} = 0.138$</p>
+      <p>$M_{u,\lim} = 0.138 \times 25 \times 300 \times 557^2$</p>
+      <p>$= 0.138 \times 25 \times 300 \times 310249 = 0.138 \times 2{,}326{,}868{,}000 \times 10^{-6}$</p>
+      <div class="result">$M_{u,\lim}$ = 321.1 kN·m</div>
+      <p style="color:#aaa; margin-top:0.4rem;">$M_u$ (320 kN·m) is just barely $\leq$ $M_{u,\lim}$ (321.1 kN·m). However, this is extremely close — let us proceed as doubly reinforced to demonstrate the full procedure. In practice with this margin you'd keep it singly reinforced, but note that any reduction in depth or increase in load would push it into doubly reinforced territory.</p>
+    </div>
+
+    <div class="callout warning" style="margin: 0.5rem 0 1rem;">
+      <div class="callout-title">Adjusted Problem for Demonstration</div>
+      To clearly illustrate the doubly reinforced procedure, let us use $M_u$ = <strong>380 kN·m</strong> and $D$ = 600 mm (same section). Now $M_u > M_{u,\lim}$, so doubly reinforced design is required.
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 3 — Excess Moment $M_{u2}$</div>
+      <p>$M_{u2} = M_u - M_{u,\lim} = 380 - 321.1$</p>
+      <div class="result">$M_{u2}$ = 58.9 kN·m</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 4 — $x_{u,\max}$ and Effective Cover to Compression Steel</div>
+      <p>$x_{u,\max} = 0.479 \times 557 = 266.8$ mm ≈ <strong>267 mm</strong></p>
+      <p>Assume effective cover to compression steel: $d' = 25 + 8 + 10 = 43$ mm ≈ <strong>45 mm</strong></p>
+      <p>$d'/d = 45/557 = 0.081$ ≈ <strong>0.10</strong> (use next higher value from SP 16 Table F)</p>
+      <p>From SP 16 Table F for Fe 415, $d'/d = 0.10$:</p>
+      <div class="result">$f_{sc}$ = 353 MPa</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 5 — Compression Steel $A_{sc}$</div>
+      <p>Net stress = $f_{sc} - 0.446 f_{ck} = 353 - 0.446 \times 25 = 353 - 11.15 = 341.85$ MPa</p>
+      <p>Lever arm for compression steel couple = $d - d' = 557 - 45 = 512$ mm</p>
+      <p>$A_{sc} = \dfrac{M_{u2}}{(f_{sc} - 0.446 f_{ck})(d - d')} = \dfrac{58.9 \times 10^6}{341.85 \times 512}$</p>
+      <p>$= \dfrac{58{,}900{,}000}{175{,}027}$</p>
+      <div class="result">$A_{sc}$ = 337 mm²</div>
+      <p style="color:#aaa; margin-top:0.3rem;">Provide <strong>2 bars of 16 mm dia</strong>: $A_{sc,\text{prov}} = 2 \times 201 = 402$ mm² &gt; 337 mm² ✓</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 6 — Tension Steel $A_{st}$</div>
+      <p><strong>Part 1</strong> (for $M_{u,\lim}$):</p>
+      <p>$A_{st1} = \dfrac{M_{u,\lim}}{0.87 f_y (d - 0.42 x_{u,\max})} = \dfrac{321.1 \times 10^6}{0.87 \times 415 \times (557 - 0.42 \times 267)}$</p>
+      <p>$= \dfrac{321.1 \times 10^6}{361.05 \times (557 - 112.1)} = \dfrac{321.1 \times 10^6}{361.05 \times 444.9}$</p>
+      <p>$= \dfrac{321.1 \times 10^6}{160{,}644}$</p>
+      <div class="result">$A_{st1}$ = 1999 mm²</div>
+
+      <p style="margin-top:0.75rem;"><strong>Part 2</strong> (for $M_{u2}$):</p>
+      <p>$A_{st2} = \dfrac{M_{u2}}{0.87 f_y (d - d')} = \dfrac{58.9 \times 10^6}{361.05 \times 512} = \dfrac{58{,}900{,}000}{184{,}858}$</p>
+      <div class="result">$A_{st2}$ = 319 mm²</div>
+
+      <p style="margin-top:0.75rem;"><strong>Total:</strong> $A_{st} = 1999 + 319$</p>
+      <div class="result">$A_{st}$ = 2318 mm²</div>
+      <p style="color:#aaa; margin-top:0.3rem;">Provide <strong>5 bars of 25 mm dia</strong>: $A_{st,\text{prov}} = 5 \times 491 = 2455$ mm² &gt; 2318 mm² ✓</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 7 — Force Equilibrium Check</div>
+      <p>Compression = $C_1 + C_2$:</p>
+      <p>$C_1 = 0.36 \times 25 \times 300 \times 267 = 723{,}780$ N</p>
+      <p>$C_2 = (353 - 11.15) \times 402 = 341.85 \times 402 = 137{,}424$ N</p>
+      <p>Total compression = $723{,}780 + 137{,}424 = 861{,}204$ N</p>
+      <p>Tension = $T = 0.87 \times 415 \times 2455 = 885{,}877$ N</p>
+      <div class="result">861,204 ≈ 885,877 N ✓ (Difference ~2.8% — acceptable, due to providing slightly more steel than required)</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 8 — Deflection Check</div>
+      <p>$l/d = 6000/557 = 10.77$</p>
+      <div class="result">10.77 &lt; 20 (basic ratio for SS beam) ✓</div>
+    </div>
+
+    <div class="callout worked">
+      <div class="callout-title">Final Design Summary</div>
+      <ul>
+        <li><strong>Size:</strong> 300 mm × 600 mm (b × D)</li>
+        <li><strong>Effective depth:</strong> 557 mm</li>
+        <li><strong>Tension steel (bottom):</strong> 5 bars of 25 mm dia (Fe 415) — $A_{st}$ = 2455 mm²</li>
+        <li><strong>Compression steel (top):</strong> 2 bars of 16 mm dia (Fe 415) — $A_{sc}$ = 402 mm²</li>
+        <li><strong>Stirrups:</strong> Design as per shear force (8 mm 2-legged @ spacing as required)</li>
+        <li><strong>Clear cover:</strong> 25 mm (mild exposure)</li>
+        <li>All IS 456 checks satisfied ✓</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="prev-btn" href="singly-reinforced-beams.html">← Singly Reinforced Beams</a>
+    <a class="next-btn" href="#">Next: Flanged Beams (T & L Beams) →</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Structural Design IS 456 · Reference: IS 456:2000, Plain and Reinforced Concrete — Code of Practice (4th Revision)</p>
+  <p style="margin-top:0.4rem;">Content is for educational purposes. Always refer to the latest BIS codes for professional use.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Short Columns | Structural Design IS 456</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'$',right:'$',display:false}
+    ]});"></script>
+  <style>
+    :root {
+      --bg: #f5f2eb;
+      --surface: #fffef9;
+      --border: #d9d0bc;
+      --accent: #b5451b;
+      --accent-light: #f0ddd6;
+      --text: #1e1b16;
+      --text-muted: #6b6256;
+      --heading-font: 'Merriweather', Georgia, serif;
+      --body-font: 'Source Sans 3', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--body-font); font-size: 17px; line-height: 1.75; }
+
+    header { background: var(--text); color: #fff; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 62px; position: sticky; top: 0; z-index: 100; border-bottom: 3px solid var(--accent); }
+    .site-title { font-family: var(--heading-font); font-size: 1rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .site-title span { color: var(--accent); }
+    nav a { color: #ccc; text-decoration: none; margin-left: 1.5rem; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: #fff; }
+
+    .hero { background: var(--text); color: #fff; padding: 3.5rem 2rem 3rem; border-bottom: 4px solid var(--accent); }
+    .hero-inner { max-width: 820px; margin: 0 auto; }
+    .breadcrumb { font-size: 0.8rem; color: #999; margin-bottom: 1rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .breadcrumb a { color: #aaa; text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+    .hero h1 { font-family: var(--heading-font); font-size: 2.6rem; line-height: 1.25; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--accent); }
+    .hero-meta { font-size: 0.88rem; color: #aaa; }
+    .tag { display: inline-block; background: var(--accent); color: #fff; padding: 2px 10px; border-radius: 2px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-right: 0.5rem; }
+
+    .page-body { max-width: 820px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+
+    .toc { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 1.25rem 1.5rem; margin-bottom: 3rem; border-radius: 0 4px 4px 0; }
+    .toc h3 { font-family: var(--heading-font); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .toc ol { padding-left: 1.2rem; }
+    .toc ol li { margin-bottom: 0.25rem; }
+    .toc a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+    .toc a:hover { text-decoration: underline; }
+
+    .section { margin-bottom: 3rem; }
+    h2 { font-family: var(--heading-font); font-size: 1.5rem; color: var(--text); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+    h3 { font-family: var(--heading-font); font-size: 1.1rem; color: var(--text); margin: 1.5rem 0 0.5rem; }
+    p { margin-bottom: 1rem; }
+    ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.35rem; }
+
+    .callout { padding: 1.25rem 1.5rem; border-radius: 4px; margin: 1.5rem 0; border: 1px solid transparent; }
+    .callout.definition { background: #eef4ff; border-color: #bed3f5; border-left: 4px solid #3a7bd5; }
+    .callout.code-ref { background: var(--accent-light); border-color: #e4bfb2; border-left: 4px solid var(--accent); }
+    .callout.note { background: #f0f8f0; border-color: #b8ddb8; border-left: 4px solid #4a9e4a; }
+    .callout.warning { background: #fffbe6; border-color: #ffe58f; border-left: 4px solid #d4a017; }
+    .callout.worked { background: #1e1b16; border-left: 4px solid var(--accent); color: #f0ebe0; }
+    .callout-title { font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+    .callout.definition .callout-title { color: #3a7bd5; }
+    .callout.code-ref .callout-title { color: var(--accent); }
+    .callout.note .callout-title { color: #4a9e4a; }
+    .callout.warning .callout-title { color: #d4a017; }
+    .callout.worked .callout-title { color: var(--accent); }
+    .callout.worked p, .callout.worked li { color: #c8c0b0; }
+    .callout.worked strong { color: #f0ebe0; }
+
+    .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: var(--surface); }
+    thead tr { background: var(--text); color: #fff; }
+    thead th { font-family: var(--heading-font); font-size: 0.85rem; padding: 0.75rem 1rem; text-align: left; font-weight: 700; }
+    tbody tr:nth-child(even) { background: #f5f0e8; }
+    tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+    .formula-block { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; text-align: center; font-size: 1.05rem; }
+    .formula-caption { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+    .diagram-wrap { margin: 1.5rem 0; text-align: center; }
+    .diagram-caption { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; font-style: italic; }
+
+    /* Type cards */
+    .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    .type-card { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--accent); padding: 1.25rem; border-radius: 0 0 4px 4px; }
+    .type-card.blue { border-top-color: #3a7bd5; }
+    .type-card h4 { font-family: var(--heading-font); font-size: 0.95rem; margin-bottom: 0.6rem; }
+    .type-card p, .type-card li { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* Detailing cards */
+    .detail-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .detail-card { background: var(--surface); border: 1px solid var(--border); padding: 1rem 1.25rem; border-radius: 4px; }
+    .detail-card .label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .detail-card .value { font-family: var(--heading-font); font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .detail-card .sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    /* Procedure steps */
+    .proc-steps { list-style: none; padding: 0; margin: 1.5rem 0; counter-reset: proc; }
+    .proc-steps > li { counter-increment: proc; display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem; margin-bottom: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1rem 1.25rem 1rem 0; align-items: start; }
+    .proc-steps > li::before { content: counter(proc); width: 2.5rem; height: 2.5rem; background: var(--accent); color: #fff; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; border-radius: 0 4px 4px 0; flex-shrink: 0; margin-left: -1px; }
+    .proc-step-content strong { display: block; font-size: 1rem; margin-bottom: 0.3rem; color: var(--text); }
+    .proc-step-content { font-size: 0.93rem; color: var(--text-muted); }
+
+    /* Worked example */
+    .ex-step { background: #2a2620; border-radius: 4px; padding: 1rem 1.25rem; margin: 0.75rem 0; }
+    .ex-step-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); font-weight: 700; margin-bottom: 0.4rem; }
+    .ex-step p { color: #c8c0b0; margin-bottom: 0.5rem; font-size: 0.93rem; }
+    .ex-step .result { color: #fff; font-weight: 700; font-size: 0.97rem; margin-top: 0.25rem; }
+    .ex-step ul li { color: #c8c0b0; font-size: 0.93rem; }
+
+    .nav-footer { margin-top: 3rem; border-top: 2px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .prev-btn, .next-btn { padding: 0.75rem 1.5rem; border-radius: 3px; text-decoration: none; font-weight: 600; font-size: 0.92rem; transition: background 0.2s; }
+    .prev-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .prev-btn:hover { background: var(--bg); }
+    .next-btn { background: var(--accent); color: #fff; }
+    .next-btn:hover { background: #922f0f; }
+
+    footer { background: var(--text); color: #888; text-align: center; padding: 1.5rem; font-size: 0.85rem; border-top: 3px solid var(--accent); }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      nav { display: none; }
+      .type-grid { grid-template-columns: 1fr; }
+      .detail-cards { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="site-title" href="index.html">Structural Design <span>IS 456</span></a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="limit-state-method.html">LSM</a>
+    <a href="singly-reinforced-beams.html">Beams</a>
+    <a href="two-way-slabs.html">Slabs</a>
+    <a href="#">Footings</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> ›
+      <a href="two-way-slabs.html">Two-Way Slabs</a> ›
+      Short Columns
+    </div>
+    <h1>Short <span>Columns</span></h1>
+    <div class="hero-meta">
+      <span class="tag">IS 456 : 2000</span>
+      <span class="tag">Cl. 39</span>
+      <span class="tag">Cl. 25.1</span>
+      Axially loaded and eccentrically loaded short columns — tied and helically reinforced
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#intro">What is a Column?</a></li>
+      <li><a href="#short-long">Short vs Slender Columns</a></li>
+      <li><a href="#types">Types of Columns by Reinforcement</a></li>
+      <li><a href="#ecc">Minimum Eccentricity</a></li>
+      <li><a href="#axial">Axially Loaded Short Columns</a></li>
+      <li><a href="#eccentric">Eccentrically Loaded Short Columns</a></li>
+      <li><a href="#steel-limits">Steel Limits — IS 456 Cl. 26.5.3</a></li>
+      <li><a href="#lateral">Lateral Ties / Stirrups — IS 456 Cl. 26.5.3.2</a></li>
+      <li><a href="#helical">Helically Reinforced Columns</a></li>
+      <li><a href="#detailing">Detailing Summary</a></li>
+      <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
+      <li><a href="#example-axial">Worked Example 1 — Axially Loaded Column</a></li>
+      <li><a href="#example-ecc">Worked Example 2 — Column with Minimum Eccentricity</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. INTRO -->
+  <div class="section" id="intro">
+    <h2>1. What is a Column?</h2>
+    <div class="callout definition">
+      <div class="callout-title">IS 456 : 2000 — Clause 25.1</div>
+      A <strong>column</strong> is a compression member, the effective length of which exceeds three times the least lateral dimension. Members with an effective length less than three times the least lateral dimension are called <em>pedestals</em>.
+    </div>
+    <p>
+      Columns are vertical structural members that transfer loads from beams and slabs down to the foundations. They primarily carry <strong>axial compressive loads</strong>, often combined with <strong>bending moments</strong> due to frame action, eccentricity of load, or lateral forces (wind/seismic).
+    </p>
+    <p>
+      The design of columns is governed by <strong>IS 456 : 2000, Clause 39</strong> — Limit State of Collapse in Compression.
+    </p>
+  </div>
+
+  <!-- 2. SHORT VS SLENDER -->
+  <div class="section" id="short-long">
+    <h2>2. Short vs Slender Columns</h2>
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 25.1.2</div>
+      A column is classified as <strong>short</strong> when both the slenderness ratios about the two principal axes are less than 12:
+      $$\frac{l_{ex}}{D} < 12 \quad \text{and} \quad \frac{l_{ey}}{b} < 12$$
+      If either ratio exceeds 12, the column is <strong>slender (long)</strong>.
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Column Type</th><th>Condition</th><th>Additional Moment?</th><th>This Page Covers</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Short Column</strong></td>
+            <td>$l_e/D < 12$ and $l_e/b < 12$</td>
+            <td>No — second-order effects negligible</td>
+            <td>✅ Yes</td>
+          </tr>
+          <tr>
+            <td><strong>Slender Column</strong></td>
+            <td>$l_e/D \geq 12$ or $l_e/b \geq 12$</td>
+            <td>Yes — additional moment $M_{add}$ must be added (IS 456 Cl. 39.7)</td>
+            <td>Advanced topic</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Effective Length $l_e$</h3>
+    <p>The effective length depends on end conditions (fixed, pinned, free). IS 456 Table 28 gives effective length factors. For typical framed columns:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>End Condition</th><th>Effective Length $l_e$</th></tr></thead>
+        <tbody>
+          <tr><td>Both ends effectively held in position and restrained against rotation</td><td>$0.65 \, l$</td></tr>
+          <tr><td>Both ends effectively held in position, one restrained against rotation</td><td>$0.80 \, l$</td></tr>
+          <tr><td>Both ends held in position, neither restrained against rotation</td><td>$1.00 \, l$</td></tr>
+          <tr><td>One end held in position and restrained; other end free</td><td>$2.00 \, l$</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3. TYPES -->
+  <div class="section" id="types">
+    <h2>3. Types of Columns by Reinforcement</h2>
+
+    <div class="type-grid">
+      <div class="type-card">
+        <h4>Tied Column (Rectangular / Square)</h4>
+        <ul>
+          <li>Longitudinal bars held in position by lateral ties (rectangular stirrups)</li>
+          <li>Most common type in building construction</li>
+          <li>Ties prevent buckling of longitudinal bars</li>
+          <li>IS 456 Cl. 26.5.3.2 governs tie spacing and dia</li>
+        </ul>
+      </div>
+      <div class="type-card blue">
+        <h4>Helically Reinforced Column (Circular)</h4>
+        <ul>
+          <li>Longitudinal bars enclosed by a closely wound helix (spiral)</li>
+          <li>Helix confines the concrete core — greatly increases ductility</li>
+          <li>Higher load capacity than tied column of same size</li>
+          <li>IS 456 allows 5% increase in load capacity (Cl. 39.4)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;width:100%;font-family:'Source Sans 3',sans-serif;">
+        <rect width="680" height="200" fill="#fffef9"/>
+        <text x="340" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#1e1b16">Column Cross-Sections — Tied and Helically Reinforced</text>
+
+        <!-- TIED RECTANGULAR -->
+        <text x="150" y="44" text-anchor="middle" font-size="11" fill="#6b6256" font-style="italic">Tied Column (Rectangular)</text>
+        <rect x="70" y="55" width="160" height="120" rx="4" fill="#e8e2d8" stroke="#9a9080" stroke-width="1.5"/>
+        <!-- Ties -->
+        <rect x="84" y="68" width="132" height="94" rx="2" fill="none" stroke="#b5451b" stroke-width="2"/>
+        <!-- Longitudinal bars -->
+        <circle cx="97"  cy="81"  r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <circle cx="163" cy="81"  r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <circle cx="230" cy="81"  r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <circle cx="97"  cy="148" r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <circle cx="163" cy="148" r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <circle cx="230" cy="148" r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <!-- Labels -->
+        <text x="150" y="185" text-anchor="middle" font-size="10" fill="#b5451b">Lateral tie</text>
+        <text x="150" y="197" text-anchor="middle" font-size="10" fill="#1e1b16">● Long. bars</text>
+
+        <!-- HELICAL CIRCULAR -->
+        <text x="530" y="44" text-anchor="middle" font-size="11" fill="#6b6256" font-style="italic">Helically Reinforced (Circular)</text>
+        <circle cx="530" cy="115" r="70" fill="#e8e2d8" stroke="#9a9080" stroke-width="1.5"/>
+        <!-- Helix (shown as circle) -->
+        <circle cx="530" cy="115" r="55" fill="none" stroke="#3a7bd5" stroke-width="2.2"/>
+        <!-- Longitudinal bars around perimeter -->
+        <circle cx="530" cy="62"  r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <circle cx="576" cy="88"  r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <circle cx="576" cy="142" r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <circle cx="530" cy="168" r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <circle cx="484" cy="142" r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <circle cx="484" cy="88"  r="7" fill="#1e1b16" stroke="#555" stroke-width="1"/>
+        <!-- Labels -->
+        <text x="530" y="185" text-anchor="middle" font-size="10" fill="#3a7bd5">Helix / Spiral</text>
+        <text x="530" y="197" text-anchor="middle" font-size="10" fill="#1e1b16">● Longitudinal bars (6 nos.)</text>
+      </svg>
+      <div class="diagram-caption">Fig. 1 — Cross-sections of tied rectangular column (left) and helically reinforced circular column (right)</div>
+    </div>
+  </div>
+
+  <!-- 4. ECCENTRICITY -->
+  <div class="section" id="ecc">
+    <h2>4. Minimum Eccentricity</h2>
+    <p>
+      In practice, a perfectly axially loaded column never exists — there are always small imperfections in construction, load application, and alignment. IS 456 therefore requires that every column be designed for a <strong>minimum eccentricity</strong>.
+    </p>
+
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 25.4</div>
+      All columns shall be designed for a minimum eccentricity equal to the unsupported length of the column divided by 500, plus the lateral dimension divided by 30, subject to a minimum of 20 mm:
+    </div>
+
+    <div class="formula-block">
+      $$e_{\min} = \frac{l}{500} + \frac{D}{30} \geq 20 \text{ mm}$$
+      <div class="formula-caption">$l$ = unsupported length of column (mm); $D$ = lateral dimension in the plane of bending (mm)</div>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">When IS 456 Cl. 39.3 Applies</div>
+      If the eccentricity $e_{\min}$ does not exceed $0.05D$, the simplified axial load formula (Cl. 39.3) may be used. If $e_{\min} > 0.05D$, the column must be designed as an eccentrically loaded member using interaction diagrams (SP 16).
+    </div>
+  </div>
+
+  <!-- 5. AXIAL LOAD -->
+  <div class="section" id="axial">
+    <h2>5. Axially Loaded Short Columns</h2>
+    <p>
+      For a short column with eccentricity not exceeding $0.05D$, IS 456 Cl. 39.3 gives the design load capacity:
+    </p>
+
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 39.3</div>
+      When the minimum eccentricity does not exceed 0.05 times the lateral dimension, the following formula applies:
+    </div>
+
+    <div class="formula-block">
+      $$P_u = 0.4 \, f_{ck} \cdot A_c + 0.67 \, f_y \cdot A_{sc}$$
+      <div class="formula-caption">Design axial load capacity of short column — IS 456:2000, Cl. 39.3</div>
+    </div>
+
+    <p>Where:</p>
+    <ul>
+      <li>$P_u$ = factored axial load (N)</li>
+      <li>$A_c$ = area of concrete = $A_g - A_{sc}$ (mm²)</li>
+      <li>$A_g$ = gross cross-sectional area of column (mm²)</li>
+      <li>$A_{sc}$ = total area of longitudinal steel (mm²)</li>
+      <li>$f_{ck}$ = characteristic compressive strength of concrete (MPa)</li>
+      <li>$f_y$ = yield strength of steel (MPa)</li>
+    </ul>
+
+    <div class="callout warning">
+      <div class="callout-title">Use $A_c = A_g - A_{sc}$, not $A_g$</div>
+      The area of concrete $A_c$ excludes the steel area. For a first trial, you may use $A_c \approx A_g$ (since $A_{sc}$ is typically 1–4% of $A_g$), then refine.
+    </div>
+
+    <h3>Rearranged for Design (finding $A_{sc}$):</h3>
+    <div class="formula-block">
+      $$A_{sc} = \frac{P_u - 0.4 \, f_{ck} \cdot A_g}{0.67 f_y - 0.4 f_{ck}}$$
+      <div class="formula-caption">Design formula to find required area of longitudinal steel. Assumes $A_c \approx A_g$ initially.</div>
+    </div>
+
+    <h3>For Helically Reinforced Columns (IS 456 Cl. 39.4):</h3>
+    <div class="formula-block">
+      $$P_u = 1.05 \times \left(0.4 \, f_{ck} \cdot A_c + 0.67 \, f_y \cdot A_{sc}\right)$$
+      <div class="formula-caption">5% increase in load capacity for helically reinforced columns — IS 456 Cl. 39.4</div>
+    </div>
+  </div>
+
+  <!-- 6. ECCENTRIC -->
+  <div class="section" id="eccentric">
+    <h2>6. Eccentrically Loaded Short Columns</h2>
+    <p>
+      When a column carries both axial load $P_u$ and bending moment $M_u$ (i.e., eccentricity $e = M_u/P_u > 0.05D$), it must be designed using the <strong>interaction diagram method</strong> from SP 16.
+    </p>
+    <p>
+      The interaction diagram (P-M diagram) defines the boundary of all combinations of $P_u$ and $M_u$ that the column can safely carry. Any point inside the diagram is safe; any point outside represents failure.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;width:100%;font-family:'Source Sans 3',sans-serif;">
+        <rect width="520" height="300" fill="#fffef9"/>
+        <text x="260" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e1b16">P-M Interaction Diagram (Concept)</text>
+        <!-- Axes -->
+        <line x1="60" y1="260" x2="460" y2="260" stroke="#333" stroke-width="1.5" marker-end="url(#arrowPM)"/>
+        <line x1="60" y1="260" x2="60"  y2="40"  stroke="#333" stroke-width="1.5" marker-end="url(#arrowPM2)"/>
+        <!-- Axis labels -->
+        <text x="460" y="278" text-anchor="middle" font-size="12" fill="#333" font-weight="600">M$_u$ (Moment)</text>
+        <text x="30"  y="150" text-anchor="middle" font-size="12" fill="#333" font-weight="600" transform="rotate(-90,30,150)">P$_u$ (Axial Load)</text>
+
+        <!-- Interaction curve -->
+        <path d="M60,70 Q100,68 140,80 Q220,110 320,190 Q380,230 420,260" fill="none" stroke="#b5451b" stroke-width="2.5"/>
+
+        <!-- Pure compression point -->
+        <circle cx="60" cy="70" r="5" fill="#b5451b"/>
+        <text x="68" y="68" font-size="10" fill="#b5451b">P$_{u0}$ (pure compression)</text>
+
+        <!-- Pure bending point -->
+        <circle cx="420" cy="260" r="5" fill="#b5451b"/>
+        <text x="390" y="253" font-size="10" fill="#b5451b">M$_{u0}$ (pure bending)</text>
+
+        <!-- Balance point -->
+        <circle cx="280" cy="160" r="5" fill="#2558a8"/>
+        <text x="288" y="157" font-size="10" fill="#2558a8">Balance point</text>
+
+        <!-- Safe region -->
+        <text x="120" y="180" font-size="11" fill="#4a9e4a" font-weight="600">SAFE</text>
+        <text x="120" y="195" font-size="10" fill="#4a9e4a">(inside curve)</text>
+
+        <!-- Unsafe region -->
+        <text x="360" y="160" font-size="11" fill="#b5451b" font-weight="600">UNSAFE</text>
+        <text x="360" y="175" font-size="10" fill="#b5451b">(outside curve)</text>
+
+        <!-- Design point -->
+        <circle cx="200" cy="150" r="6" fill="#333"/>
+        <line x1="200" y1="150" x2="200" y2="260" stroke="#333" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="60"  y1="150" x2="200" y2="150" stroke="#333" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="208" y="148" font-size="10" fill="#333">Design point (P$_u$, M$_u$)</text>
+
+        <defs>
+          <marker id="arrowPM" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#333"/></marker>
+          <marker id="arrowPM2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#333"/></marker>
+        </defs>
+      </svg>
+      <div class="diagram-caption">Fig. 2 — P-M interaction diagram. The design point ($P_u$, $M_u$) must lie inside (or on) the curve.</div>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Using SP 16 Charts for Eccentric Columns</div>
+      SP 16 (Design Aids for IS 456) provides non-dimensional interaction charts (Charts 27–62) for rectangular and circular sections. The procedure is:
+      <ol style="margin-top:0.5rem;">
+        <li>Compute $P_u/(f_{ck} \cdot b \cdot D)$ and $M_u/(f_{ck} \cdot b \cdot D^2)$</li>
+        <li>Assume $p/f_{ck}$ (steel percentage / $f_{ck}$), choose appropriate chart for $d'/D$</li>
+        <li>Read off $p$ from the chart; find $A_{sc} = p \times b \times D / 100$</li>
+      </ol>
+      This site covers the axially loaded case in full; eccentric column design using SP 16 will be covered in a dedicated advanced page.
+    </div>
+  </div>
+
+  <!-- 7. STEEL LIMITS -->
+  <div class="section" id="steel-limits">
+    <h2>7. Steel Limits — IS 456 Cl. 26.5.3</h2>
+
+    <h3>Minimum Longitudinal Steel</h3>
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Clause 26.5.3.1(a)</div>
+    </div>
+    <div class="formula-block">
+      $$A_{sc,\min} = 0.8\% \text{ of } A_g$$
+      <div class="formula-caption">Minimum longitudinal steel to resist unexpected eccentricity and handle creep/shrinkage</div>
+    </div>
+
+    <h3>Maximum Longitudinal Steel</h3>
+    <div class="formula-block">
+      $$A_{sc,\max} = 6\% \text{ of } A_g \quad \text{(at laps: } 4\%\text{)}$$
+      <div class="formula-caption">IS 456 Cl. 26.5.3.1(b). At splice locations, the limit is reduced to 4% to allow lapping.</div>
+    </div>
+
+    <h3>Minimum Number of Bars</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Column Shape</th><th>Minimum Bars</th></tr></thead>
+        <tbody>
+          <tr><td>Rectangular</td><td>4 bars (one at each corner)</td></tr>
+          <tr><td>Circular</td><td>6 bars</td></tr>
+          <tr><td>Polygonal (any shape)</td><td>One bar at each corner/vertex</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Minimum Bar Diameter</h3>
+    <div class="formula-block">
+      $$\phi_{\min} = 12 \text{ mm}$$
+      <div class="formula-caption">IS 456 Cl. 26.5.3.1(c) — minimum diameter of longitudinal bars in columns</div>
+    </div>
+  </div>
+
+  <!-- 8. TIES -->
+  <div class="section" id="lateral">
+    <h2>8. Lateral Ties / Stirrups — IS 456 Cl. 26.5.3.2</h2>
+    <p>Lateral ties prevent buckling of longitudinal bars and confine the concrete core. The diameter and spacing must satisfy:</p>
+
+    <h3>Diameter of Ties (IS 456 Cl. 26.5.3.2(b)):</h3>
+    <div class="formula-block">
+      $$\phi_{tie} \geq \max\left(\frac{\phi_{main}}{4},\; 6 \text{ mm}\right)$$
+      <div class="formula-caption">Tie diameter shall not be less than one-quarter of the largest longitudinal bar or 6 mm, whichever is greater</div>
+    </div>
+
+    <h3>Spacing of Ties (IS 456 Cl. 26.5.3.2(c)):</h3>
+    <div class="formula-block">
+      $$s_v \leq \min\left(b_{\text{least}},\; 16\,\phi_{\min,\text{long}},\; 300 \text{ mm}\right)$$
+      <div class="formula-caption">Pitch of lateral ties shall not exceed least lateral dimension, 16× smallest longitudinal bar dia, or 300 mm</div>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Practical Tie Arrangement</div>
+      <ul>
+        <li>Every alternate longitudinal bar shall have a tie passing around it (for columns with bars on all four faces)</li>
+        <li>No bar shall be farther than 150 mm from a restrained bar (IS 456 Cl. 26.5.3.2(d))</li>
+        <li>For bars in a circular arrangement, a single circular tie is sufficient</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9. HELICAL -->
+  <div class="section" id="helical">
+    <h2>9. Helically Reinforced Columns</h2>
+    <p>
+      The helix must be designed to provide adequate confinement. IS 456 Cl. 39.4.1 specifies the minimum ratio of volume of helical steel to volume of core concrete:
+    </p>
+
+    <div class="formula-block">
+      $$\frac{V_{hs}}{V_c} \geq 0.36 \left(\frac{A_g}{A_c} - 1\right) \frac{f_{ck}}{f_y}$$
+      <div class="formula-caption">Volumetric ratio of helix to core concrete — IS 456:2000, Cl. 39.4.1. $A_g$ = gross area, $A_c$ = core area.</div>
+    </div>
+
+    <h3>Pitch of Helix (IS 456 Cl. 26.5.3.2(a)):</h3>
+    <div class="formula-block">
+      $$s_h \leq \min\left(\frac{D_c}{6},\; 75 \text{ mm}\right) \quad \text{and} \quad s_h \geq 25 \text{ mm or } 3\phi_{helix}$$
+      <div class="formula-caption">$D_c$ = diameter of core (to outside of helix); $\phi_{helix}$ = diameter of helix bar</div>
+    </div>
+  </div>
+
+  <!-- 10. DETAILING -->
+  <div class="section" id="detailing">
+    <h2>10. Detailing Summary</h2>
+
+    <div class="detail-cards">
+      <div class="detail-card">
+        <div class="label">Min Longitudinal Steel</div>
+        <div class="value">0.8% of A$_g$</div>
+        <div class="sub">IS 456 Cl. 26.5.3.1(a)</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Max Longitudinal Steel</div>
+        <div class="value">6% of A$_g$</div>
+        <div class="sub">4% at laps — IS 456 Cl. 26.5.3.1(b)</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Min Bar Diameter</div>
+        <div class="value">12 mm</div>
+        <div class="sub">IS 456 Cl. 26.5.3.1(c)</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Min Bars (Rect.)</div>
+        <div class="value">4 bars</div>
+        <div class="sub">One at each corner</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Min Bars (Circular)</div>
+        <div class="value">6 bars</div>
+        <div class="sub">Equally spaced around perimeter</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Tie Diameter</div>
+        <div class="value">≥ ¼ φ$_{main}$ or 6 mm</div>
+        <div class="sub">IS 456 Cl. 26.5.3.2(b)</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Max Tie Spacing</div>
+        <div class="value">min(b, 16φ$_{min}$, 300 mm)</div>
+        <div class="sub">IS 456 Cl. 26.5.3.2(c)</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Clear Cover</div>
+        <div class="value">40 mm (mild)</div>
+        <div class="sub">IS 456 Cl. 26.4.1 — or as per exposure</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. PROCEDURE -->
+  <div class="section" id="procedure">
+    <h2>11. Step-by-Step Design Procedure</h2>
+    <p><em>For a short column with axial load only (or with $e_{\min} \leq 0.05D$).</em></p>
+
+    <ul class="proc-steps">
+      <li>
+        <div class="proc-step-content">
+          <strong>Given Data</strong>
+          Factored axial load $P_u$, unsupported length $l$, grade of concrete and steel, exposure condition.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Assume Column Size</strong>
+          Choose $b$ and $D$ (or diameter for circular). Check $l_e/D < 12$ to confirm it is a short column.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Check Minimum Eccentricity</strong>
+          $e_{\min} = l/500 + D/30 \geq 20$ mm. If $e_{\min} \leq 0.05D$, use Cl. 39.3 formula.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Find Required $A_{sc}$</strong>
+          $A_{sc} = \dfrac{P_u - 0.4 f_{ck} A_g}{0.67 f_y - 0.4 f_{ck}}$
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Check Min and Max Steel Limits</strong>
+          $0.8\% A_g \leq A_{sc} \leq 6\% A_g$. Adjust column size if needed.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Select Bars</strong>
+          Choose dia $\phi$ and number $n$ such that $n \cdot a_\phi \geq A_{sc}$. Min 4 bars (rect.) or 6 bars (circular). Min dia 12 mm.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Verify Load Capacity with Provided Steel</strong>
+          $P_{u,\text{prov}} = 0.4 f_{ck}(A_g - A_{sc,\text{prov}}) + 0.67 f_y \cdot A_{sc,\text{prov}} \geq P_u$ ✓
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Design Lateral Ties</strong>
+          Dia: $\max(\phi_{main}/4, 6$ mm$)$. Spacing: $\min(b, 16\phi_{min,long}, 300$ mm$)$.
+        </div>
+      </li>
+      <li>
+        <div class="proc-step-content">
+          <strong>Draw Detailing Sketch</strong>
+          Show cross-section: longitudinal bar positions, tie arrangement, cover, and dimensions.
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 12. WORKED EXAMPLE 1 -->
+  <div class="section" id="example-axial">
+    <h2>12. Worked Example 1 — Axially Loaded Column</h2>
+
+    <div class="callout worked">
+      <div class="callout-title">Problem Statement</div>
+      <p>Design a short rectangular column for the following data:</p>
+      <ul>
+        <li>Factored axial load $P_u$ = <strong>1500 kN</strong></li>
+        <li>Unsupported length $l$ = <strong>3.0 m</strong></li>
+        <li>Concrete: <strong>M25</strong> ($f_{ck}$ = 25 MPa)</li>
+        <li>Steel: <strong>Fe 415</strong> ($f_y$ = 415 MPa)</li>
+        <li>Exposure: Mild (clear cover = 40 mm)</li>
+        <li>Assume square section: $b = D$</li>
+      </ul>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 1 — Assume Column Size</div>
+      <p>Trial: assume 2% steel. $P_u = 0.4 f_{ck} A_g + (0.67 f_y - 0.4 f_{ck}) \times 0.02 A_g$</p>
+      <p>$1500 \times 10^3 = A_g [0.4 \times 25 + (0.67 \times 415 - 0.4 \times 25) \times 0.02]$</p>
+      <p>$= A_g [10 + (278.05 - 10) \times 0.02] = A_g [10 + 5.361] = 15.361 A_g$</p>
+      <p>$A_g = 1500000/15.361 = 97,650$ mm²</p>
+      <p>Side = $\sqrt{97650} = 312$ mm → round up to <strong>$b = D = 350$ mm</strong></p>
+      <div class="result">Try 350 mm × 350 mm column; $A_g$ = 122,500 mm²</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 2 — Check Short Column</div>
+      <p>Effective length $l_e = 0.65 \times 3000 = 1950$ mm (both ends fixed condition assumed)</p>
+      <p>$l_e/D = 1950/350 = 5.57 < 12$ ✓</p>
+      <div class="result">Short column confirmed ✓</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 3 — Minimum Eccentricity</div>
+      <p>$e_{\min} = \dfrac{l}{500} + \dfrac{D}{30} = \dfrac{3000}{500} + \dfrac{350}{30} = 6 + 11.67 = 17.67$ mm</p>
+      <p>But minimum = 20 mm → <strong>$e_{\min}$ = 20 mm</strong></p>
+      <p>$0.05D = 0.05 \times 350 = 17.5$ mm</p>
+      <div class="result">$e_{\min}$ (20 mm) &gt; 0.05D (17.5 mm) → technically needs eccentric design, but margin is very small. Proceed with Cl. 39.3 as a practical approximation and note this.</div>
+      <p style="color:#aaa; font-size:0.88rem; margin-top:0.3rem;">In practice for very small eccentricity beyond 0.05D, a slightly conservative column size is chosen. Here we increase to 375 mm × 375 mm.</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 3 (Revised) — 375 mm × 375 mm</div>
+      <p>$A_g = 375 \times 375 = 140,625$ mm²</p>
+      <p>$e_{\min} = 6 + 350/30 → $ use $D = 375$: $e_{\min} = 6 + 375/30 = 6 + 12.5 = 18.5$ mm → use 20 mm</p>
+      <p>$0.05D = 0.05 \times 375 = 18.75$ mm</p>
+      <div class="result">$e_{\min}$ (20 mm) &gt; 0.05D (18.75 mm) → still slightly above. Increase to <strong>400 mm × 400 mm</strong>.</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 3 (Final) — 400 mm × 400 mm</div>
+      <p>$A_g = 160,000$ mm²; $0.05D = 0.05 \times 400 = 20$ mm</p>
+      <p>$e_{\min} = 3000/500 + 400/30 = 6 + 13.33 = 19.33$ mm &lt; 20 mm → use 20 mm</p>
+      <div class="result">$e_{\min}$ = 20 mm = $0.05D$ = 20 mm ✓ — Cl. 39.3 applies exactly.</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 4 — Required Longitudinal Steel</div>
+      <p>$A_{sc} = \dfrac{P_u - 0.4 f_{ck} A_g}{0.67 f_y - 0.4 f_{ck}} = \dfrac{1500000 - 0.4 \times 25 \times 160000}{0.67 \times 415 - 0.4 \times 25}$</p>
+      <p>$= \dfrac{1500000 - 1600000}{278.05 - 10}$</p>
+      <p>Numerator is negative → column is oversized. $P_u$ &lt; $0.4 f_{ck} A_g$, which means concrete alone is nearly sufficient. Apply minimum steel.</p>
+      <p>$A_{sc,\min} = 0.8\% \times 160000 = 1280$ mm²</p>
+      <div class="result">Use minimum steel: $A_{sc}$ = 1280 mm²</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 5 — Verify Load Capacity</div>
+      <p>Provide <strong>4 bars of 20 mm dia</strong>: $A_{sc,\text{prov}} = 4 \times 314.16 = 1257$ mm²</p>
+      <p>Since 1257 &lt; 1280 mm², try <strong>4 bars of 20 mm + 2 bars of 12 mm</strong>:</p>
+      <p>$A_{sc,\text{prov}} = 4 \times 314.16 + 2 \times 113.1 = 1256.6 + 226.2 = 1483$ mm² &gt; 1280 ✓</p>
+      <p>$P_{u,\text{prov}} = 0.4 \times 25 \times (160000 - 1483) + 0.67 \times 415 \times 1483$</p>
+      <p>$= 0.4 \times 25 \times 158517 + 278.05 \times 1483$</p>
+      <p>$= 1585170 + 412388 = 1997558$ N</p>
+      <div class="result">$P_{u,\text{prov}}$ = 1997.6 kN &gt; $P_u$ (1500 kN) ✓</div>
+      <p style="color:#aaa; margin-top:0.3rem;">The column is comfortably over-designed — this is expected when minimum steel governs and the section was sized for eccentricity conditions. In practice, a slightly smaller section (350 mm × 350 mm) using proper eccentric design via SP 16 would be more economical.</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 6 — Lateral Ties</div>
+      <p>Main bar dia = 20 mm. Tie dia = max(20/4, 6) = max(5, 6) = <strong>6 mm</strong> → use <strong>8 mm</strong> (next standard size).</p>
+      <p>Spacing = min($b$, $16\phi_{min}$, 300) = min(400, 16×12, 300) = min(400, 192, 300)</p>
+      <div class="result">Tie spacing = <strong>190 mm c/c</strong> (round down from 192 mm). Provide 8 mm ties @ 190 mm c/c.</div>
+    </div>
+
+    <div class="callout worked">
+      <div class="callout-title">Final Design Summary — Example 1</div>
+      <ul>
+        <li><strong>Column size:</strong> 400 mm × 400 mm</li>
+        <li><strong>Longitudinal steel:</strong> 4 bars of 20 mm + 2 bars of 12 mm (Fe 415) — $A_{sc}$ = 1483 mm²</li>
+        <li><strong>Lateral ties:</strong> 8 mm dia @ 190 mm c/c</li>
+        <li><strong>Clear cover:</strong> 40 mm (mild exposure)</li>
+        <li><strong>Load capacity:</strong> 1997.6 kN &gt; 1500 kN ✓</li>
+        <li>All IS 456 checks satisfied ✓</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 13. WORKED EXAMPLE 2 -->
+  <div class="section" id="example-ecc">
+    <h2>13. Worked Example 2 — Given Section, Find Load Capacity</h2>
+
+    <div class="callout worked">
+      <div class="callout-title">Problem Statement</div>
+      <p>A 300 mm × 400 mm short column is reinforced with <strong>6 bars of 20 mm dia</strong> (Fe 415). Concrete grade M25. Find the safe load capacity $P_u$.</p>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 1 — Section Properties</div>
+      <p>$A_g = 300 \times 400 = 120,000$ mm²</p>
+      <p>$A_{sc} = 6 \times \dfrac{\pi \times 400}{4} = 6 \times 314.16 = 1885$ mm²</p>
+      <p>$A_c = 120000 - 1885 = 118,115$ mm²</p>
+      <div class="result">$A_{sc}$ = 1885 mm² = 1.57% of $A_g$ (between 0.8% and 6%) ✓</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 2 — Check Eccentricity (assume $l$ = 3 m, both ends fixed)</div>
+      <p>$l_e = 0.65 \times 3000 = 1950$ mm</p>
+      <p>$l_e/D = 1950/400 = 4.875 < 12$ ✓ — Short column</p>
+      <p>$e_{\min} = 3000/500 + 400/30 = 6 + 13.33 = 19.33$ mm → use 20 mm</p>
+      <p>$0.05D = 0.05 \times 400 = 20$ mm</p>
+      <div class="result">$e_{\min}$ (20 mm) $\leq$ $0.05D$ (20 mm) ✓ — IS 456 Cl. 39.3 applies</div>
+    </div>
+
+    <div class="ex-step">
+      <div class="ex-step-title">Step 3 — Load Capacity</div>
+      <p>$P_u = 0.4 f_{ck} \cdot A_c + 0.67 f_y \cdot A_{sc}$</p>
+      <p>$= 0.4 \times 25 \times 118115 + 0.67 \times 415 \times 1885$</p>
+      <p>$= 1{,}181{,}150 + 524{,}448$</p>
+      <div class="result">$P_u$ = 1,705,598 N = <strong>1705.6 kN</strong></div>
+    </div>
+
+    <div class="callout worked">
+      <div class="callout-title">Result — Example 2</div>
+      <p>A 300 mm × 400 mm column with 6–20 mm bars (Fe 415) in M25 concrete has a safe load capacity of <strong>1705.6 kN</strong> under axial loading with minimum eccentricity.</p>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="prev-btn" href="two-way-slabs.html">← Two-Way Slabs</a>
+    <a class="next-btn" href="#">Next: Isolated Footings →</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Structural Design IS 456 · Reference: IS 456:2000, Plain and Reinforced Concrete — Code of Practice (4th Revision)</p>
+  <p style="margin-top:0.4rem;">Content is for educational purposes. Always refer to the latest BIS codes for professional use.</p>
+</footer>
+
+</body>
+</html>
