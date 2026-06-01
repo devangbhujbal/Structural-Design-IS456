@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Limit State Method | Structural Design IS 456</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [
+      {left:'$$',right:'$$',display:true},
+      {left:'$',right:'$',display:false}
+    ]});"></script>
+  <style>
+    :root {
+      --bg: #f5f2eb;
+      --surface: #fffef9;
+      --border: #d9d0bc;
+      --accent: #b5451b;
+      --accent-light: #f0ddd6;
+      --text: #1e1b16;
+      --text-muted: #6b6256;
+      --heading-font: 'Merriweather', Georgia, serif;
+      --body-font: 'Source Sans 3', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body-font);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    header {
+      background: var(--text);
+      color: #fff;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 62px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .site-title {
+      font-family: var(--heading-font);
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .site-title span { color: var(--accent); }
+
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: #fff; }
+
+    .hero {
+      background: var(--text);
+      color: #fff;
+      padding: 3.5rem 2rem 3rem;
+      border-bottom: 4px solid var(--accent);
+    }
+
+    .hero-inner { max-width: 820px; margin: 0 auto; }
+
+    .breadcrumb {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .breadcrumb a { color: #aaa; text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+
+    .hero h1 {
+      font-family: var(--heading-font);
+      font-size: 2.6rem;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero-meta { font-size: 0.88rem; color: #aaa; }
+
+    .tag {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 2px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-right: 0.5rem;
+    }
+
+    .page-body {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 3rem;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .toc h3 {
+      font-family: var(--heading-font);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .toc ol { padding-left: 1.2rem; color: var(--accent); }
+    .toc ol li { margin-bottom: 0.25rem; }
+    .toc a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+    .toc a:hover { text-decoration: underline; }
+
+    .section { margin-bottom: 3rem; }
+
+    h2 {
+      font-family: var(--heading-font);
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    h3 {
+      font-family: var(--heading-font);
+      font-size: 1.1rem;
+      color: var(--text);
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; }
+
+    ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.35rem; }
+
+    .callout {
+      padding: 1.25rem 1.5rem;
+      border-radius: 4px;
+      margin: 1.5rem 0;
+      border: 1px solid transparent;
+    }
+
+    .callout.definition {
+      background: #eef4ff;
+      border-color: #bed3f5;
+      border-left: 4px solid #3a7bd5;
+    }
+
+    .callout.code-ref {
+      background: var(--accent-light);
+      border-color: #e4bfb2;
+      border-left: 4px solid var(--accent);
+    }
+
+    .callout.note {
+      background: #f0f8f0;
+      border-color: #b8ddb8;
+      border-left: 4px solid #4a9e4a;
+    }
+
+    .callout.warning {
+      background: #fffbe6;
+      border-color: #ffe58f;
+      border-left: 4px solid #d4a017;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.4rem;
+    }
+
+    .callout.definition .callout-title { color: #3a7bd5; }
+    .callout.code-ref .callout-title { color: var(--accent); }
+    .callout.note .callout-title { color: #4a9e4a; }
+    .callout.warning .callout-title { color: #d4a017; }
+
+    .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      background: var(--surface);
+    }
+
+    thead tr { background: var(--text); color: #fff; }
+    thead th {
+      font-family: var(--heading-font);
+      font-size: 0.85rem;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    tbody tr:nth-child(even) { background: #f5f0e8; }
+    tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+    .formula-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+      text-align: center;
+      font-size: 1.05rem;
+    }
+
+    .formula-caption {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* LSM vs WSM comparison cards */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .compare-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--border);
+      padding: 1.25rem;
+      border-radius: 0 0 4px 4px;
+    }
+
+    .compare-card.preferred { border-top-color: var(--accent); }
+
+    .compare-card h4 {
+      font-family: var(--heading-font);
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .compare-card ul { font-size: 0.9rem; color: var(--text-muted); }
+    .compare-card ul li { margin-bottom: 0.4rem; }
+
+    /* Limit state flow diagram */
+    .ls-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 1.5rem 0;
+    }
+
+    .ls-row {
+      display: flex;
+      gap: 0;
+    }
+
+    .ls-box {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    .ls-box.header-box {
+      background: var(--text);
+      color: #fff;
+      font-family: var(--heading-font);
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    .ls-box.collapse { border-left: 4px solid var(--accent); }
+    .ls-box.service { border-left: 4px solid #3a7bd5; }
+
+    .ls-box strong { display: block; margin-bottom: 0.25rem; font-size: 0.9rem; }
+
+    /* PSF cards */
+    .psf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .psf-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .psf-symbol {
+      font-family: var(--heading-font);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .psf-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0.25rem 0;
+    }
+
+    .psf-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Stress block diagram */
+    .diagram-wrap { margin: 1.5rem 0; text-align: center; }
+    .diagram-caption { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic; }
+
+    /* Step procedure */
+    .steps { counter-reset: step; list-style: none; padding: 0; margin: 1.5rem 0; }
+
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      border-radius: 4px;
+      align-items: flex-start;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      min-width: 2rem;
+      height: 2rem;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .step-content strong { display: block; margin-bottom: 0.25rem; }
+    .step-content { font-size: 0.93rem; color: var(--text-muted); }
+    .step-content strong { color: var(--text); }
+
+    .nav-footer {
+      margin-top: 3rem;
+      border-top: 2px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .prev-btn, .next-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 3px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: background 0.2s;
+    }
+
+    .prev-btn {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .prev-btn:hover { background: var(--bg); }
+
+    .next-btn {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .next-btn:hover { background: #922f0f; }
+
+    footer {
+      background: var(--text);
+      color: #888;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      border-top: 3px solid var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      nav { display: none; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .psf-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="site-title" href="index.html">Structural Design <span>IS 456</span></a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="what-is-rcc.html">RCC Basics</a>
+    <a href="#">Beams</a>
+    <a href="#">Columns</a>
+    <a href="#">Slabs</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a> › <a href="what-is-rcc.html">RCC Basics</a> › Limit State Method</div>
+    <h1>Limit State <span>Method</span></h1>
+    <div class="hero-meta">
+      <span class="tag">IS 456 : 2000</span>
+      <span class="tag">Cl. 18 & 36</span>
+      <span class="tag">LSM</span>
+      Design philosophy and partial safety factors for RCC design
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#philosophy">Design Philosophy</a></li>
+      <li><a href="#wsm-vs-lsm">WSM vs LSM</a></li>
+      <li><a href="#limit-states">Types of Limit States</a></li>
+      <li><a href="#lsc">Limit State of Collapse</a></li>
+      <li><a href="#lss">Limit State of Serviceability</a></li>
+      <li><a href="#psf-loads">Partial Safety Factors for Loads</a></li>
+      <li><a href="#psf-materials">Partial Safety Factors for Materials</a></li>
+      <li><a href="#stress-block">Stress Block Parameters</a></li>
+      <li><a href="#design-strengths">Design Strengths</a></li>
+      <li><a href="#characteristic">Characteristic Loads & Strengths</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. PHILOSOPHY -->
+  <div class="section" id="philosophy">
+    <h2>1. Design Philosophy</h2>
+    <div class="callout definition">
+      <div class="callout-title">Definition</div>
+      A structure or a structural element is said to have reached a <strong>Limit State</strong> when it becomes unfit for use — either because it has <em>collapsed</em> (safety) or because it has <em>deformed or cracked excessively</em> (serviceability).
+    </div>
+    <p>
+      The Limit State Method (LSM) is the modern design philosophy adopted by <strong>IS 456 : 2000</strong> for the design of reinforced concrete structures. It ensures that a structure remains fit for its intended purpose throughout its design life with an acceptable level of reliability.
+    </p>
+    <p>
+      The method accounts for the variability of both <strong>loads</strong> (using partial safety factors for loads, $\gamma_f$) and <strong>material strengths</strong> (using partial safety factors for materials, $\gamma_m$) in a rational and probabilistic manner.
+    </p>
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 Reference</div>
+      Clause 18 — Bases for Design; Clause 36 — Limit State Design; Annex B — Stress-Strain Relationship for Concrete and Steel.
+    </div>
+  </div>
+
+  <!-- 2. WSM vs LSM -->
+  <div class="section" id="wsm-vs-lsm">
+    <h2>2. Working Stress Method vs Limit State Method</h2>
+    <p>Before LSM, the older <strong>Working Stress Method (WSM)</strong> was used. Understanding the difference helps you appreciate why LSM was adopted.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <h4>Working Stress Method (WSM)</h4>
+        <ul>
+          <li>Stresses in materials kept below allowable (permissible) limits</li>
+          <li>Assumes linear elastic behaviour throughout</li>
+          <li>Uses a single factor of safety on material strength</li>
+          <li>Does not distinguish between dead load and live load variability</li>
+          <li>Conservative — leads to heavier, uneconomical sections</li>
+          <li>Governed by IS 456 (older editions) — rarely used now</li>
+        </ul>
+      </div>
+      <div class="compare-card preferred">
+        <h4>Limit State Method (LSM) ✓ Preferred</h4>
+        <ul>
+          <li>Designs against actual failure (collapse) and loss of serviceability</li>
+          <li>Uses non-linear stress-strain relationships — more realistic</li>
+          <li>Separate partial safety factors for loads and materials</li>
+          <li>Accounts for different variability of dead, live, and wind loads</li>
+          <li>More economical — optimised section sizes</li>
+          <li>Adopted in IS 456:2000 — current standard method</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. TYPES OF LIMIT STATES -->
+  <div class="section" id="limit-states">
+    <h2>3. Types of Limit States</h2>
+    <p>IS 456 : 2000, Clause 35 recognises two categories of limit states:</p>
+
+    <div class="ls-flow">
+      <div class="ls-row">
+        <div class="ls-box header-box" style="flex:1; border-right:2px solid #333;">Limit State of Collapse (LSC)</div>
+        <div class="ls-box header-box" style="flex:1;">Limit State of Serviceability (LSS)</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-box collapse" style="border-right:1px solid var(--border);">
+          <strong>Flexure</strong> Bending failure of beams, slabs
+        </div>
+        <div class="ls-box service">
+          <strong>Deflection</strong> Excessive sag of floor or roof
+        </div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-box collapse" style="border-right:1px solid var(--border);">
+          <strong>Compression</strong> Crushing of columns, walls
+        </div>
+        <div class="ls-box service">
+          <strong>Cracking</strong> Wide cracks affecting durability or appearance
+        </div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-box collapse" style="border-right:1px solid var(--border);">
+          <strong>Shear</strong> Diagonal tension failure
+        </div>
+        <div class="ls-box service">
+          <strong>Vibration</strong> Uncomfortable or damaging oscillation
+        </div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-box collapse" style="border-right:1px solid var(--border);">
+          <strong>Torsion</strong> Twisting failure
+        </div>
+        <div class="ls-box service">
+          <strong>Durability</strong> Corrosion of reinforcement
+        </div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-box collapse" style="border-right:1px solid var(--border);">
+          <strong>Bond / Anchorage</strong> Slip of bars from concrete
+        </div>
+        <div class="ls-box service">
+          <strong>Fire Resistance</strong> Loss of strength under fire
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. LSC -->
+  <div class="section" id="lsc">
+    <h2>4. Limit State of Collapse (LSC)</h2>
+    <p>
+      The Limit State of Collapse ensures that a structure has adequate <strong>strength and stability</strong> against collapse under the worst combination of loads during its service life. This is the primary limit state in structural design.
+    </p>
+    <p>
+      Design is carried out using <strong>factored loads</strong> (loads multiplied by partial safety factors $\gamma_f$) and <strong>design strengths</strong> (material strengths divided by partial safety factors $\gamma_m$).
+    </p>
+    <div class="formula-block">
+      $$\text{Design Strength} \geq \text{Design Load Effect (Factored)}$$
+      $$\frac{f_k}{\gamma_m} \geq \gamma_f \times F_k$$
+      <div class="formula-caption">The fundamental inequality of Limit State Design (IS 456:2000 Cl. 36.1)</div>
+    </div>
+    <p>Where:</p>
+    <ul>
+      <li>$f_k$ = characteristic strength of material</li>
+      <li>$\gamma_m$ = partial safety factor for material</li>
+      <li>$\gamma_f$ = partial safety factor for load</li>
+      <li>$F_k$ = characteristic load</li>
+    </ul>
+  </div>
+
+  <!-- 5. LSS -->
+  <div class="section" id="lss">
+    <h2>5. Limit State of Serviceability (LSS)</h2>
+    <p>
+      Even if a structure does not collapse, it may still be unfit for use if it deflects too much or cracks excessively. The Limit State of Serviceability checks are performed under <strong>service (unfactored) loads</strong>.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Check</th>
+            <th>Limit as per IS 456</th>
+            <th>Clause</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Maximum deflection (total)</td>
+            <td>Span / 250</td>
+            <td>Cl. 23.2(a)</td>
+          </tr>
+          <tr>
+            <td>Deflection after construction (affecting partitions/finishes)</td>
+            <td>Span / 350 or 20 mm (whichever is less)</td>
+            <td>Cl. 23.2(b)</td>
+          </tr>
+          <tr>
+            <td>Crack width (mild exposure)</td>
+            <td>0.3 mm</td>
+            <td>Cl. 35.3.2</td>
+          </tr>
+          <tr>
+            <td>Crack width (moderate/severe exposure)</td>
+            <td>0.2 mm</td>
+            <td>Cl. 35.3.2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Practical Note</div>
+      In most routine RCC design, deflection is controlled indirectly by limiting the <strong>span-to-effective depth ratio</strong> (IS 456 Cl. 23.2.1) rather than doing a full deflection calculation. This is the approach used in design examples on this site.
+    </div>
+  </div>
+
+  <!-- 6. PSF LOADS -->
+  <div class="section" id="psf-loads">
+    <h2>6. Partial Safety Factors for Loads ($\gamma_f$)</h2>
+    <p>
+      Different types of loads have different degrees of uncertainty. Dead loads are more predictable than live loads or wind loads. IS 456 specifies different $\gamma_f$ values for different load combinations.
+    </p>
+
+    <div class="callout code-ref">
+      <div class="callout-title">IS 456 : 2000 — Table 18 (Cl. 36.4.1)</div>
+      Partial safety factors for loads for Limit State of Collapse
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Load Combination</th>
+            <th>DL ($\gamma_{fDL}$)</th>
+            <th>LL ($\gamma_{fLL}$)</th>
+            <th>WL / EL ($\gamma_{fWL}$)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DL + LL</strong></td>
+            <td>1.5</td>
+            <td>1.5</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><strong>DL + WL/EL</strong></td>
+            <td>1.5 (or 0.9*)</td>
+            <td>—</td>
+            <td>1.5</td>
+          </tr>
+          <tr>
+            <td><strong>DL + LL + WL/EL</strong></td>
+            <td>1.2</td>
+            <td>1.2</td>
+            <td>1.2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.88rem; color:var(--text-muted);">* 0.9 is used when dead load contributes to stability against overturning or uplift.</p>
+    <p style="font-size:0.88rem; color:var(--text-muted);">DL = Dead Load, LL = Live Load, WL = Wind Load, EL = Earthquake Load</p>
+
+    <div class="callout note">
+      <div class="callout-title">Most Common Case</div>
+      For typical building floors and beams, the governing load combination is <strong>DL + LL with $\gamma_f = 1.5$</strong>. This is what we use in most beam and slab design examples.
+      $$w_u = 1.5 \times (w_{DL} + w_{LL})$$
+    </div>
+
+    <h3>For Limit State of Serviceability</h3>
+    <p>Serviceability checks use <strong>unfactored loads</strong> — i.e., $\gamma_f = 1.0$ for all load types.</p>
+  </div>
+
+  <!-- 7. PSF MATERIALS -->
+  <div class="section" id="psf-materials">
+    <h2>7. Partial Safety Factors for Materials ($\gamma_m$)</h2>
+    <p>
+      Material strengths are also uncertain — concrete strength varies with mixing, curing, and testing. Steel has tighter quality control. IS 456 assigns:
+    </p>
+
+    <div class="psf-grid">
+      <div class="psf-card">
+        <div class="psf-symbol">$\gamma_c$</div>
+        <div class="psf-value">1.5</div>
+        <div class="psf-label">For Concrete<br/>(IS 456 Cl. 36.4.2)</div>
+      </div>
+      <div class="psf-card">
+        <div class="psf-symbol">$\gamma_s$</div>
+        <div class="psf-value">1.15</div>
+        <div class="psf-label">For Steel<br/>(IS 456 Cl. 36.4.2)</div>
+      </div>
+    </div>
+
+    <p>These give the design strengths actually used in calculations:</p>
+
+    <div class="formula-block">
+      $$f_{cd} = \frac{0.67 \, f_{ck}}{\gamma_c} = \frac{0.67 \, f_{ck}}{1.5} = 0.446 \, f_{ck}$$
+      <div class="formula-caption">Design compressive strength of concrete. The factor 0.67 accounts for the difference between cube strength and cylinder (in-situ) strength.</div>
+    </div>
+
+    <div class="formula-block">
+      $$f_{yd} = \frac{f_y}{\gamma_s} = \frac{f_y}{1.15} = 0.87 \, f_y$$
+      <div class="formula-caption">Design tensile strength of steel (IS 456:2000 Cl. 36.4.2)</div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title">Remember These Two Values</div>
+      These are the two most used values in all RCC design calculations:
+      <ul style="margin-top:0.5rem;">
+        <li>Design strength of concrete = <strong>0.446 f<sub>ck</sub></strong></li>
+        <li>Design strength of steel = <strong>0.87 f<sub>y</sub></strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 8. STRESS BLOCK -->
+  <div class="section" id="stress-block">
+    <h2>8. Stress Block Parameters for Concrete</h2>
+    <p>
+      At the Limit State of Collapse in bending, the concrete in the compression zone does not behave linearly. IS 456 uses an idealized <strong>parabolic-rectangular stress block</strong> to model the compressive stress distribution.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" style="max-width:680px; width:100%; font-family:'Source Sans 3',sans-serif;">
+        <rect width="680" height="300" fill="#fffef9"/>
+        <text x="340" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e1b16">IS 456 Stress Block for Concrete in Bending (Cl. 38.1)</text>
+
+        <!-- BEAM CROSS SECTION -->
+        <text x="95" y="48" text-anchor="middle" font-size="11" fill="#6b6256">Cross Section</text>
+        <rect x="55" y="55" width="80" height="200" fill="none" stroke="#aaa09a" stroke-width="1.5"/>
+        <!-- Compression zone fill -->
+        <rect x="55" y="55" width="80" height="120" fill="#c8daf0" opacity="0.6"/>
+        <!-- Neutral axis -->
+        <line x1="45" x2="145" y1="175" y2="175" stroke="#888" stroke-width="1.2" stroke-dasharray="5,4"/>
+        <text x="40" y="179" font-size="10" fill="#888" text-anchor="end">N.A.</text>
+        <!-- xu label -->
+        <line x1="147" x2="147" y1="55" y2="175" stroke="#b5451b" stroke-width="1.2" marker-end="url(#arr1)" marker-start="url(#arr2)"/>
+        <text x="158" y="120" font-size="11" fill="#b5451b" font-weight="600">x$_u$</text>
+        <!-- d label -->
+        <line x1="38" x2="38" y1="55" y2="250" stroke="#333" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="28" y="158" font-size="11" fill="#333" text-anchor="middle">d</text>
+        <!-- Steel bar -->
+        <circle cx="95" cy="250" r="6" fill="#b5451b" stroke="#7a2e10" stroke-width="1.5"/>
+
+        <!-- STRAIN DIAGRAM -->
+        <text x="290" y="48" text-anchor="middle" font-size="11" fill="#6b6256">Strain Diagram</text>
+        <line x1="250" x2="330" y1="55" y2="55" stroke="#aaa" stroke-width="1"/>
+        <line x1="250" x2="250" y1="55" y2="255" stroke="#aaa" stroke-width="1.5"/>
+        <line x1="250" x2="330" y1="255" y2="255" stroke="#aaa" stroke-width="1"/>
+        <line x1="250" x2="175" y1="175" y2="175" stroke="#888" stroke-width="1" stroke-dasharray="5,4"/>
+        <!-- Strain lines -->
+        <line x1="250" x2="310" y1="55" y2="55" stroke="#2558a8" stroke-width="2"/>
+        <line x1="250" x2="310" y1="55" y2="175" stroke="#2558a8" stroke-width="2"/>
+        <line x1="250" x2="340" y1="175" y2="255" stroke="#b5451b" stroke-width="2"/>
+        <!-- Labels -->
+        <text x="318" y="59" font-size="10" fill="#2558a8">0.0035</text>
+        <text x="348" y="259" font-size="10" fill="#b5451b">ε$_s$</text>
+
+        <!-- STRESS DIAGRAM -->
+        <text x="490" y="48" text-anchor="middle" font-size="11" fill="#6b6256">Stress Block (IS 456)</text>
+        <line x1="440" x2="440" y1="55" y2="255" stroke="#aaa" stroke-width="1.5"/>
+        <line x1="440" x2="440" y1="255" y2="255" stroke="#aaa" stroke-width="1"/>
+        <!-- Parabolic-rectangular block (approximated as shape) -->
+        <path d="M440,175 Q480,155 530,90 L530,55 L440,55 Z" fill="#c8daf0" stroke="#2558a8" stroke-width="1.5"/>
+        <!-- Rectangular part -->
+        <rect x="440" y="90" width="90" height="85" fill="#c8daf0" opacity="0.5" stroke="#2558a8" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- 0.446 fck label -->
+        <line x1="530" x2="570" y1="90" y2="90" stroke="#2558a8" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="572" y="94" font-size="10" fill="#2558a8" font-weight="600">0.446 f$_{ck}$</text>
+        <!-- 3/7 xu -->
+        <line x1="430" x2="440" y1="90" y2="90" stroke="#555" stroke-width="1"/>
+        <text x="410" y="94" font-size="9.5" fill="#555" text-anchor="end">3x$_u$/7</text>
+        <!-- neutral axis -->
+        <line x1="430" x2="560" y1="175" y2="175" stroke="#888" stroke-width="1" stroke-dasharray="5,4"/>
+        <!-- Centroid label -->
+        <text x="490" y="195" text-anchor="middle" font-size="10" fill="#b5451b">C$_u$ at 0.42 x$_u$ from top</text>
+
+        <defs>
+          <marker id="arr1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#b5451b"/>
+          </marker>
+          <marker id="arr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#b5451b"/>
+          </marker>
+        </defs>
+      </svg>
+      <div class="diagram-caption">Fig. 1 — IS 456 parabolic-rectangular stress block at the Limit State of Collapse in flexure</div>
+    </div>
+
+    <h3>Key Parameters from the Stress Block (IS 456 Cl. 38.1)</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Parameter</th><th>Value</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Max compressive strain in concrete</td>
+            <td>0.0035</td>
+            <td>Strain at extreme fibre at failure</td>
+          </tr>
+          <tr>
+            <td>Max stress in concrete stress block</td>
+            <td>$0.446 \, f_{ck}$</td>
+            <td>Design compressive strength</td>
+          </tr>
+          <tr>
+            <td>Depth of parabolic portion</td>
+            <td>$3x_u / 7$</td>
+            <td>Upper parabolic zone</td>
+          </tr>
+          <tr>
+            <td>Depth of rectangular portion</td>
+            <td>$4x_u / 7$</td>
+            <td>Lower constant-stress zone</td>
+          </tr>
+          <tr>
+            <td>Total compressive force $C_u$</td>
+            <td>$0.36 \, f_{ck} \cdot b \cdot x_u$</td>
+            <td>Resultant of stress block</td>
+          </tr>
+          <tr>
+            <td>Depth of $C_u$ from top</td>
+            <td>$0.42 \, x_u$</td>
+            <td>Centroid of stress block</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="formula-block">
+      $$C_u = 0.36 \, f_{ck} \cdot b \cdot x_u$$
+      $$T_u = 0.87 \, f_y \cdot A_{st}$$
+      $$\text{For equilibrium: } C_u = T_u$$
+      <div class="formula-caption">Force equilibrium at Limit State of Collapse — used to find neutral axis depth $x_u$</div>
+    </div>
+  </div>
+
+  <!-- 9. DESIGN STRENGTHS -->
+  <div class="section" id="design-strengths">
+    <h2>9. Design Strengths — Summary</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Quantity</th><th>Formula</th><th>For M25 / Fe 415</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Design compressive strength of concrete</td>
+            <td>$0.446 \, f_{ck}$</td>
+            <td>$0.446 \times 25 = 11.15$ MPa</td>
+          </tr>
+          <tr>
+            <td>Design tensile strength of steel</td>
+            <td>$0.87 \, f_y$</td>
+            <td>$0.87 \times 415 = 361.1$ MPa</td>
+          </tr>
+          <tr>
+            <td>Total compression force</td>
+            <td>$0.36 \, f_{ck} \cdot b \cdot x_u$</td>
+            <td>$0.36 \times 25 \times b \times x_u = 9b \cdot x_u$</td>
+          </tr>
+          <tr>
+            <td>Moment of resistance</td>
+            <td>$M_u = 0.87 f_y A_{st}(d - 0.42 x_u)$</td>
+            <td>Used in beam design</td>
+          </tr>
+          <tr>
+            <td>Limiting $x_u / d$ for Fe 415</td>
+            <td>$x_{u,\max}/d = 0.479$</td>
+            <td>From IS 456 Table G (SP 16)</td>
+          </tr>
+          <tr>
+            <td>Limiting $x_u / d$ for Fe 500</td>
+            <td>$x_{u,\max}/d = 0.456$</td>
+            <td>From IS 456 Table G (SP 16)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 10. CHARACTERISTIC LOADS -->
+  <div class="section" id="characteristic">
+    <h2>10. Characteristic Loads and Strengths</h2>
+
+    <div class="callout definition">
+      <div class="callout-title">Definition — Characteristic Strength</div>
+      The <strong>characteristic strength</strong> $f_k$ is the value of strength below which not more than <strong>5% of test results</strong> are expected to fall. It is defined statistically as:
+      $$f_k = f_m - 1.65 \sigma$$
+      Where $f_m$ = mean strength, $\sigma$ = standard deviation of test results.
+    </div>
+
+    <div class="callout definition">
+      <div class="callout-title">Definition — Characteristic Load</div>
+      The <strong>characteristic load</strong> $F_k$ is the load which has a <strong>95% probability of not being exceeded</strong> during the life of the structure. In practice, loads from IS 875 (Dead, Live, Wind) and IS 1893 (Seismic) are taken as characteristic loads.
+    </div>
+
+    <div class="callout note">
+      <div class="callout-title">Quick Summary of LSM Design Flow</div>
+      <ol style="margin-top:0.5rem; padding-left:1.2rem;">
+        <li>Determine characteristic loads (IS 875)</li>
+        <li>Apply partial safety factors $\gamma_f$ → get <strong>factored (design) loads</strong></li>
+        <li>Calculate factored bending moment, shear, axial force</li>
+        <li>Use design strengths $0.446 f_{ck}$ and $0.87 f_y$</li>
+        <li>Ensure: Design Strength ≥ Factored Load Effect</li>
+        <li>Check serviceability (deflection, cracking)</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="nav-footer">
+    <a class="prev-btn" href="what-is-rcc.html">← What is RCC?</a>
+    <a class="next-btn" href="#">Next: Singly Reinforced Beams →</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Structural Design IS 456 · Reference: IS 456:2000, Plain and Reinforced Concrete — Code of Practice (4th Revision)</p>
+  <p style="margin-top:0.4rem;">Content is for educational purposes. Always refer to the latest BIS codes for professional use.</p>
+</footer>
+
+</body>
+</html>
