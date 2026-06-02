@@ -9,7 +9,6 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Live page -->
   <url>
     <loc>https://devangbhujbal.github.io/Structural-Design-IS456/what-is-rcc.html</loc>
     <lastmod>2026-06-02</lastmod>
@@ -17,7 +16,6 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- Coming soon pages — include now so Google indexes them when they go live -->
   <url>
     <loc>https://devangbhujbal.github.io/Structural-Design-IS456/limit-state-method.html</loc>
     <lastmod>2026-06-02</lastmod>
