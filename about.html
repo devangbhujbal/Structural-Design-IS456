@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | Structural Design IS 456</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0f0e0c;
+      --surface: #1a1814;
+      --surface2: #242018;
+      --border: #333028;
+      --accent: #c8873a;
+      --accent2: #e8a84e;
+      --text: #f0ebe0;
+      --text-muted: #9a9080;
+      --display: 'Playfair Display', Georgia, serif;
+      --body: 'Source Sans 3', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.75; overflow-x: hidden; }
+
+    /* HEADER */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 58px; background: rgba(15,14,12,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+    }
+    .logo { font-family: var(--display); font-size: 1.05rem; font-weight: 700; color: var(--text); text-decoration: none; }
+    .logo span { color: var(--accent); }
+    nav { display: flex; gap: 2rem; align-items: center; }
+    nav a { color: var(--text-muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; letter-spacing: 0.03em; transition: color 0.2s; }
+    nav a:hover, nav a.active { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      min-height: 55vh; display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 7rem 2.5rem 4rem;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(200,135,58,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,135,58,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: 0; left: 30%;
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(200,135,58,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 820px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem;
+    }
+    .hero-eyebrow::before { content: ''; display: block; width: 30px; height: 1px; background: var(--accent); }
+    .hero h1 {
+      font-family: var(--display); font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 900; line-height: 1.1; margin-bottom: 1.25rem;
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-desc { font-size: 1.1rem; color: var(--text-muted); max-width: 560px; line-height: 1.8; }
+
+    /* PAGE BODY */
+    .page-body { max-width: 900px; margin: 0 auto; padding: 5rem 2.5rem 6rem; }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem;
+    }
+
+    /* DIVIDER */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 4rem 0; }
+
+    /* ABOUT GRID */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 2rem; }
+    .about-text h2 { font-family: var(--display); font-size: 1.9rem; font-weight: 700; line-height: 1.2; margin-bottom: 1.25rem; color: var(--text); }
+    .about-text p { color: var(--text-muted); margin-bottom: 1rem; line-height: 1.8; font-size: 1rem; }
+    .about-text strong { color: var(--text); }
+    .about-text a { color: var(--accent); text-decoration: none; }
+    .about-text a:hover { text-decoration: underline; }
+
+    /* PROFILE CARD */
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: 0 0 6px 6px;
+      padding: 2rem;
+      position: sticky; top: 80px;
+    }
+    .profile-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--surface2);
+      border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.25rem;
+      font-family: var(--display); font-size: 2rem; font-weight: 900;
+      color: var(--accent);
+    }
+    .profile-name { font-family: var(--display); font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+    .profile-role { font-size: 0.85rem; color: var(--accent); font-weight: 600; letter-spacing: 0.04em; margin-bottom: 1rem; text-transform: uppercase; }
+    .profile-bio { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 1.5rem; }
+    .profile-links { display: flex; flex-direction: column; gap: 0.5rem; }
+    .profile-link {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.85rem; color: var(--text-muted); text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 3px; transition: border-color 0.2s, color 0.2s;
+    }
+    .profile-link:hover { border-color: var(--accent); color: var(--text); }
+    .profile-link svg { flex-shrink: 0; }
+
+    /* MISSION SECTION */
+    .mission-section { margin-top: 4rem; }
+    .mission-section h2 { font-family: var(--display); font-size: 1.9rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text); }
+    .mission-section p { color: var(--text-muted); margin-bottom: 1rem; line-height: 1.8; }
+
+    /* VALUES GRID */
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2.5rem; }
+    .value-card {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 1.5rem; border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+    .value-card:hover { border-color: var(--accent); }
+    .value-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
+    .value-title { font-family: var(--display); font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+    .value-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* WHAT'S COVERED */
+    .coverage-section { margin-top: 4rem; }
+    .coverage-section h2 { font-family: var(--display); font-size: 1.9rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text); }
+    .topic-list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 1.5rem; }
+    .topic-list li {
+      display: flex; align-items: center; gap: 0.75rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent); padding: 0.75rem 1rem;
+      font-size: 0.9rem; color: var(--text-muted); border-radius: 0 3px 3px 0;
+    }
+    .topic-list li::before { content: '✓'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+    /* CODE REFERENCES */
+    .codes-section { margin-top: 4rem; }
+    .codes-section h2 { font-family: var(--display); font-size: 1.9rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text); }
+    .code-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .code-card {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 1.25rem; border-radius: 4px;
+    }
+    .code-badge {
+      display: inline-block; background: var(--surface2); border: 1px solid var(--border);
+      color: var(--accent); font-size: 0.8rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 2px; font-family: 'Courier New', monospace;
+      margin-bottom: 0.6rem;
+    }
+    .code-title { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+    .code-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* DISCLAIMER */
+    .disclaimer {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 4px solid #d4a017;
+      padding: 1.25rem 1.5rem; border-radius: 0 4px 4px 0;
+      margin-top: 4rem;
+    }
+    .disclaimer-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: #d4a017; margin-bottom: 0.5rem; }
+    .disclaimer p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin: 0; }
+
+    /* CTA */
+    .cta-section { margin-top: 4rem; text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 3rem 2rem; }
+    .cta-section h2 { font-family: var(--display); font-size: 1.8rem; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; }
+    .cta-section p { color: var(--text-muted); margin-bottom: 1.75rem; font-size: 1rem; }
+    .btn-accent {
+      background: var(--accent); color: #0f0e0c;
+      padding: 0.85rem 2rem; border-radius: 3px; text-decoration: none;
+      font-weight: 700; font-size: 0.95rem; display: inline-block;
+      transition: background 0.2s;
+    }
+    .btn-accent:hover { background: var(--accent2); }
+
+    /* FOOTER */
+    footer {
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 2.5rem; text-align: center;
+    }
+    .footer-logo { font-family: var(--display); font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin: 0.75rem 0; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.85rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent); }
+    footer p { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; }
+
+    @media (max-width: 768px) {
+      header { padding: 0 1.25rem; }
+      nav { display: none; }
+      .page-body { padding: 3.5rem 1.25rem 5rem; }
+      .hero { padding: 6rem 1.25rem 3rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .profile-card { position: static; }
+      .values-grid { grid-template-columns: 1fr; }
+      .topic-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Structural Design <span>IS 456</span></a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#topics">Topics</a>
+    <a href="about.html" class="active">About</a>
+    <a href="what-is-rcc.html">Start Learning</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">About This Site</div>
+    <h1>Built for <em>Indian Engineers</em><br/>who want clarity</h1>
+    <p class="hero-desc">
+      A free, code-compliant reference for structural design calculations — written by a practising structural engineer, for students and professionals alike.
+    </p>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- ABOUT + PROFILE -->
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="section-label">The Story</div>
+      <h2>Why this site exists</h2>
+      <p>
+        Structural design calculations as per Indian Standard codes are scattered across textbooks, handwritten notes, and university materials — rarely presented in one clear, accessible place online. When students search for a step-by-step IS 456 design procedure, they usually land on PDFs, blurry scans, or content that skips the reasoning.
+      </p>
+      <p>
+        This site was built to fix that. Every topic follows the same structure: <strong>theory and code clauses first</strong>, then a <strong>step-by-step design procedure</strong>, then a <strong>fully solved numerical example</strong>. No skipping steps. No assumed knowledge. Every formula traced back to its IS 456 clause.
+      </p>
+      <p>
+        The content is written with both <strong>civil engineering students</strong> preparing for university exams and GATE, and <strong>practising structural engineers</strong> who want a quick, reliable reference, in mind.
+      </p>
+      <p>
+        This is a growing resource. New topics, advanced design cases, and worked example collections will be added over time. If you spot an error or want to suggest a topic, feel free to reach out.
+      </p>
+    </div>
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+      <div class="profile-avatar">DB</div>
+      <div class="profile-name">Devang Bhujbal</div>
+      <div class="profile-role">Structural Engineer</div>
+      <p class="profile-bio">
+        Practising structural engineer with expertise in RCC design as per Indian Standard codes. Created this site to make IS 456 design procedures freely accessible to students and engineers across India.
+      </p>
+      <div class="profile-links">
+        <a class="profile-link" href="https://devangbhujbal.com" target="_blank">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          devangbhujbal.com
+        </a>
+        <a class="profile-link" href="https://github.com/devangbhujbal" target="_blank">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          github.com/devangbhujbal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- MISSION -->
+  <div class="mission-section">
+    <div class="section-label">Mission</div>
+    <h2>What we stand for</h2>
+    <p>
+      Structural engineering knowledge should not be locked behind paywalls or buried in inaccessible formats. Every engineer — whether studying in Nagpur or practising in Mumbai — deserves access to clear, accurate, code-compliant design guidance.
+    </p>
+    <p>
+      This site will always be <strong>completely free</strong>. No subscription, no sign-up, no paywall.
+    </p>
+
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">📐</div>
+        <div class="value-title">Code-First</div>
+        <div class="value-desc">Every formula, every limit, every detailing rule is traced directly to its IS 456 clause. No paraphrasing without the source.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🔢</div>
+        <div class="value-title">Step by Step</div>
+        <div class="value-desc">Design procedures are laid out in numbered steps with every intermediate calculation shown — the way it would appear in a solution sheet.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🇮🇳</div>
+        <div class="value-title">Made for India</div>
+        <div class="value-desc">Designed specifically for the Indian context — IS codes, local material grades (Fe 415, Fe 500), and problems relevant to Indian practice.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- WHAT'S COVERED -->
+  <div class="coverage-section">
+    <div class="section-label">Content</div>
+    <h2>Topics currently covered</h2>
+    <p style="color: var(--text-muted);">Each topic includes IS code references, theory, step-by-step procedure, and a fully solved numerical example.</p>
+    <ul class="topic-list">
+      <li>What is RCC? — Materials and Properties</li>
+      <li>Limit State Method (LSM)</li>
+      <li>Singly Reinforced Beams</li>
+      <li>Doubly Reinforced Beams</li>
+      <li>Flanged Beams (T-Beams & L-Beams)</li>
+      <li>One-Way Slabs</li>
+      <li>Two-Way Slabs (IS 456 Annex D)</li>
+      <li>Short Columns — Axial & Eccentric</li>
+      <li>Isolated Footings</li>
+    </ul>
+    <p style="color: var(--text-muted); margin-top: 1.25rem; font-size: 0.93rem;">
+      More topics — including slender columns, combined footings, retaining walls, staircase design, and worked example collections — are planned for future updates.
+    </p>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- CODES -->
+  <div class="codes-section">
+    <div class="section-label">References</div>
+    <h2>Indian Standard codes used</h2>
+    <div class="code-grid">
+      <div class="code-card">
+        <div class="code-badge">IS 456 : 2000</div>
+        <div class="code-title">Plain and Reinforced Concrete</div>
+        <div class="code-desc">Code of Practice (4th Revision). Primary reference for all RCC design on this site.</div>
+      </div>
+      <div class="code-card">
+        <div class="code-badge">IS 875 : 1987</div>
+        <div class="code-title">Code for Design Loads</div>
+        <div class="code-desc">Part 1 (Dead loads) and Part 2 (Imposed loads) used for load calculations.</div>
+      </div>
+      <div class="code-card">
+        <div class="code-badge">IS 1786 : 2008</div>
+        <div class="code-title">High Strength Deformed Steel Bars</div>
+        <div class="code-desc">Governs properties of Fe 415, Fe 500, Fe 500D, and Fe 550 reinforcement bars.</div>
+      </div>
+      <div class="code-card">
+        <div class="code-badge">IS 1904 : 1986</div>
+        <div class="code-title">Design and Construction of Foundations</div>
+        <div class="code-desc">Referenced for safe bearing capacity and foundation depth recommendations.</div>
+      </div>
+      <div class="code-card">
+        <div class="code-badge">SP 16 : 1980</div>
+        <div class="code-title">Design Aids for IS 456</div>
+        <div class="code-desc">Charts and tables for doubly reinforced beams, column interaction diagrams, and development lengths.</div>
+      </div>
+      <div class="code-card">
+        <div class="code-badge">SP 34 : 1987</div>
+        <div class="code-title">Handbook on Detailing</div>
+        <div class="code-desc">Reinforcement detailing guidelines for beams, slabs, columns, and footings.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <div class="disclaimer-title">⚠ Educational Use Disclaimer</div>
+    <p>
+      All content on this site is provided for <strong>educational and reference purposes only</strong>. While every effort is made to ensure accuracy and alignment with Bureau of Indian Standards codes, this site does not constitute professional engineering advice. Always verify calculations independently and consult the latest BIS publications before using any design for construction. Structural designs for actual buildings must be prepared and checked by a qualified licensed structural engineer.
+    </p>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Ready to start learning?</h2>
+    <p>Begin with the fundamentals and work through each topic at your own pace.</p>
+    <a class="btn-accent" href="what-is-rcc.html">Start with What is RCC? →</a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Structural Design <span>IS 456</span></div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="what-is-rcc.html">What is RCC?</a>
+    <a href="limit-state-method.html">LSM</a>
+    <a href="index.html#topics">All Topics</a>
+  </div>
+  <p>All content references IS 456:2000 and related Bureau of Indian Standards codes.</p>
+  <p>For educational purposes only. Always verify designs with a qualified structural engineer.</p>
+</footer>
+
+</body>
+</html>
