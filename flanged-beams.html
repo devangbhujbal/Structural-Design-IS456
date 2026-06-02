@@ -132,6 +132,119 @@
       nav { display: none; }
       .case-grid { grid-template-columns: 1fr; }
     }
+
+        /* ── NAV ── */
+    nav {
+      display: flex;           /* THIS is the key fix */
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: #fff; }
+
+    /* ── NAV DROPDOWN ── */
+    .nav-dropdown { 
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-dropdown > a {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-dropdown > a::after {
+      content: '';
+      display: inline-block;
+      width: 0; height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid currentColor;
+      opacity: 0.7;
+      transition: transform 0.2s;
+    }
+
+    .nav-dropdown:hover > a::after,
+    .nav-dropdown:focus-within > a::after {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1814;
+      border: 1px solid #333028;
+      border-top: 3px solid #b5451b;
+      border-radius: 0 0 4px 4px;
+      min-width: 260px;
+      z-index: 999;
+      padding: 0.4rem 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.55rem 1.1rem;
+      font-size: 0.875rem;
+      color: #9a9080;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+      margin-left: 0;
+    }
+
+    .dropdown-menu a:hover {
+      background: #242018;
+      color: #f0ebe0;
+    }
+
+    .dropdown-menu .topic-num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #b5451b;
+      min-width: 20px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .dropdown-menu .dropdown-divider {
+      height: 1px;
+      background: #333028;
+      margin: 0.35rem 0;
+    }
+
+    .nav-dropdown::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: 12px;             /* covers the gap between button and menu */
+    }
   </style>
 </head>
 <body>
@@ -140,10 +253,46 @@
   <a class="site-title" href="index.html">Structural Design <span>IS 456</span></a>
   <nav>
     <a href="index.html">Home</a>
-    <a href="limit-state-method.html">LSM</a>
-    <a href="singly-reinforced-beams.html">Singly RB</a>
-    <a href="doubly-reinforced-beams.html">Doubly RB</a>
-    <a href="#">Slabs</a>
+
+        <!-- DROPDOWN -->
+    <div class="nav-dropdown">
+      <a href="what-is-rcc.html">Topics</a>
+      <div class="dropdown-menu">
+        <a href="what-is-rcc.html">
+          <span class="topic-num">01</span> What is RCC?
+        </a>
+        <a href="limit-state-method.html">
+          <span class="topic-num">02</span> Limit State Method
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="singly-reinforced-beams.html">
+          <span class="topic-num">03</span> Singly Reinforced Beams
+        </a>
+        <a href="doubly-reinforced-beams.html">
+          <span class="topic-num">04</span> Doubly Reinforced Beams
+        </a>
+        <a href="flanged-beams.html">
+          <span class="topic-num">05</span> Flanged Beams (T &amp; L)
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="one-way-slabs.html">
+          <span class="topic-num">06</span> One-Way Slabs
+        </a>
+        <a href="two-way-slabs.html">
+          <span class="topic-num">07</span> Two-Way Slabs
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="short-columns.html">
+          <span class="topic-num">08</span> Short Columns
+        </a>
+        <a href="isolated-footings.html">
+          <span class="topic-num">09</span> Isolated Footings
+        </a>
+      </div>
+    </div>
+
+    <a href="about-us.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
   </nav>
 </header>
 
