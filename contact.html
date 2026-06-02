@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact | Structural Design IS 456</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0f0e0c;
+      --surface: #1a1814;
+      --surface2: #242018;
+      --border: #333028;
+      --accent: #c8873a;
+      --accent2: #e8a84e;
+      --text: #f0ebe0;
+      --text-muted: #9a9080;
+      --display: 'Playfair Display', Georgia, serif;
+      --body: 'Source Sans 3', sans-serif;
+      --error: #e05555;
+      --success: #4a9e4a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.75; overflow-x: hidden; }
+
+    /* HEADER */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 58px; background: rgba(15,14,12,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+    }
+    .logo { font-family: var(--display); font-size: 1.05rem; font-weight: 700; color: var(--text); text-decoration: none; }
+    .logo span { color: var(--accent); }
+    nav { display: flex; gap: 2rem; align-items: center; }
+    nav a { color: var(--text-muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; letter-spacing: 0.03em; transition: color 0.2s; }
+    nav a:hover, nav a.active { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      min-height: 45vh; display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 7rem 2.5rem 4rem;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(200,135,58,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,135,58,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: 0; right: 20%;
+      width: 500px; height: 350px;
+      background: radial-gradient(ellipse, rgba(200,135,58,0.09) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 820px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem;
+    }
+    .hero-eyebrow::before { content: ''; display: block; width: 30px; height: 1px; background: var(--accent); }
+    .hero h1 { font-family: var(--display); font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.25rem; }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-desc { font-size: 1.1rem; color: var(--text-muted); max-width: 520px; line-height: 1.8; }
+
+    /* PAGE BODY */
+    .page-body { max-width: 960px; margin: 0 auto; padding: 5rem 2.5rem 6rem; }
+
+    /* SECTION LABEL */
+    .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+
+    /* MAIN GRID */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 4rem; align-items: start; }
+
+    /* LEFT SIDE — INFO */
+    .contact-info h2 { font-family: var(--display); font-size: 1.8rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; color: var(--text); }
+    .contact-info p { color: var(--text-muted); margin-bottom: 1rem; line-height: 1.8; font-size: 0.97rem; }
+
+    /* Contact method cards */
+    .contact-methods { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2rem; }
+    .contact-method {
+      display: flex; align-items: flex-start; gap: 1rem;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 1.1rem 1.25rem; border-radius: 4px;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+    .contact-method:hover { border-color: var(--accent); }
+    .method-icon {
+      width: 38px; height: 38px; border-radius: 3px;
+      background: var(--surface2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--accent);
+    }
+    .method-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 0.15rem; font-weight: 600; }
+    .method-value { font-size: 0.93rem; color: var(--text); font-weight: 500; }
+
+    /* Response time card */
+    .response-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 1rem 1.25rem; border-radius: 0 4px 4px 0;
+      margin-top: 1.5rem;
+    }
+    .response-card p { font-size: 0.88rem; color: var(--text-muted); margin: 0; }
+    .response-card strong { color: var(--text); }
+
+    /* FORM SIDE */
+    .form-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: 0 0 6px 6px; padding: 2.5rem;
+    }
+    .form-card h3 { font-family: var(--display); font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .form-card .form-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 2rem; }
+
+    /* Form elements */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block; font-size: 0.82rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--text-muted); margin-bottom: 0.5rem;
+    }
+    .form-group label .required { color: var(--accent); margin-left: 2px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); font-family: var(--body); font-size: 0.95rem;
+      padding: 0.75rem 1rem; border-radius: 3px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none; appearance: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #5a5248; }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(200,135,58,0.12);
+    }
+    .form-group input.error,
+    .form-group textarea.error { border-color: var(--error); }
+    .form-group .error-msg { font-size: 0.8rem; color: var(--error); margin-top: 0.3rem; display: none; }
+    .form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9080' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; cursor: pointer; }
+    .form-group select option { background: #1a1814; }
+    .form-group textarea { resize: vertical; min-height: 130px; line-height: 1.6; }
+
+    /* Character counter */
+    .char-counter { font-size: 0.78rem; color: var(--text-muted); text-align: right; margin-top: 0.3rem; }
+    .char-counter.warn { color: var(--accent); }
+    .char-counter.over { color: var(--error); }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%; background: var(--accent); color: #0f0e0c;
+      border: none; padding: 0.9rem 2rem; border-radius: 3px;
+      font-family: var(--body); font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: background 0.2s, transform 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .btn-submit:hover { background: var(--accent2); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* Success message */
+    .success-msg {
+      display: none; background: rgba(74,158,74,0.12);
+      border: 1px solid rgba(74,158,74,0.35);
+      border-left: 4px solid var(--success);
+      padding: 1.25rem 1.5rem; border-radius: 0 4px 4px 0;
+      margin-top: 1rem;
+    }
+    .success-msg.show { display: flex; align-items: flex-start; gap: 0.75rem; }
+    .success-msg p { font-size: 0.93rem; color: #a0d0a0; margin: 0; }
+    .success-msg strong { color: #c8e8c8; display: block; margin-bottom: 0.2rem; }
+
+    /* Spinner */
+    .spinner {
+      width: 18px; height: 18px; border: 2px solid rgba(15,14,12,0.3);
+      border-top-color: #0f0e0c; border-radius: 50%;
+      animation: spin 0.7s linear infinite; display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* FAQ section */
+    .faq-section { margin-top: 5rem; }
+    .faq-section h2 { font-family: var(--display); font-size: 1.8rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .faq-section .sub { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .faq-card { background: var(--surface); border: 1px solid var(--border); padding: 1.25rem 1.5rem; border-radius: 4px; }
+    .faq-q { font-weight: 700; font-size: 0.97rem; color: var(--text); margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.88rem; color: var(--text-muted); line-height: 1.65; }
+    .faq-a a { color: var(--accent); text-decoration: none; }
+    .faq-a a:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 2.5rem; text-align: center; }
+    .footer-logo { font-family: var(--display); font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin: 0.75rem 0; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.85rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent); }
+    footer p { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 4rem 0; }
+
+    @media (max-width: 768px) {
+      header { padding: 0 1.25rem; }
+      nav { display: none; }
+      .page-body { padding: 3.5rem 1.25rem 5rem; }
+      .hero { padding: 6rem 1.25rem 3rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Structural Design <span>IS 456</span></a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#topics">Topics</a>
+    <a href="about.html">About</a>
+    <a href="contact.html" class="active">Contact</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Get in Touch</div>
+    <h1>We'd love to<br/>hear from <em>you</em></h1>
+    <p class="hero-desc">
+      Found an error? Want to suggest a topic? Have a question about a design procedure? Send a message — every query gets a response.
+    </p>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="contact-grid">
+
+    <!-- LEFT — CONTACT INFO -->
+    <div class="contact-info">
+      <div class="section-label">Contact</div>
+      <h2>How to reach us</h2>
+      <p>
+        This site is maintained by a practising structural engineer. Whether you have a technical question, spotted a mistake, or want to contribute content — all messages are welcome.
+      </p>
+      <p>
+        For <strong>technical queries</strong> about design procedures or IS code interpretation, please include the relevant topic and clause number if possible — it helps give a more precise answer.
+      </p>
+
+      <div class="contact-methods">
+        <a class="contact-method" href="mailto:contact@devangbhujbal.com">
+          <div class="method-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <div>
+            <div class="method-label">Email</div>
+            <div class="method-value">contact@devangbhujbal.com</div>
+          </div>
+        </a>
+
+        <a class="contact-method" href="https://github.com/devangbhujbal/Structural-Design-IS456/issues" target="_blank">
+          <div class="method-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+            </svg>
+          </div>
+          <div>
+            <div class="method-label">GitHub Issues</div>
+            <div class="method-value">Report errors or suggest topics</div>
+          </div>
+        </a>
+
+        <a class="contact-method" href="https://devangbhujbal.com" target="_blank">
+          <div class="method-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="method-label">Website</div>
+            <div class="method-value">devangbhujbal.com</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="response-card">
+        <p><strong>Typical response time:</strong> 2–5 working days. Technical queries may take a little longer to answer accurately.</p>
+      </div>
+    </div>
+
+    <!-- RIGHT — FORM -->
+    <div class="form-card">
+      <h3>Send a Message</h3>
+      <p class="form-subtitle">Fill in the form below and I'll get back to you as soon as possible.</p>
+
+      <form id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name <span class="required">*</span></label>
+            <input type="text" id="firstName" name="firstName" placeholder="Rahul" autocomplete="given-name"/>
+            <div class="error-msg" id="firstNameErr">Please enter your first name.</div>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Sharma" autocomplete="family-name"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address <span class="required">*</span></label>
+          <input type="email" id="email" name="email" placeholder="rahul@example.com" autocomplete="email"/>
+          <div class="error-msg" id="emailErr">Please enter a valid email address.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Subject <span class="required">*</span></label>
+          <select id="subject" name="subject">
+            <option value="" disabled selected>Select a topic…</option>
+            <option value="error">Report an Error / Correction</option>
+            <option value="topic">Suggest a New Topic</option>
+            <option value="technical">Technical / Design Question</option>
+            <option value="feedback">General Feedback</option>
+            <option value="collab">Collaboration / Contribution</option>
+            <option value="other">Other</option>
+          </select>
+          <div class="error-msg" id="subjectErr">Please select a subject.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message <span class="required">*</span></label>
+          <textarea id="message" name="message" placeholder="Write your message here. For technical queries, mention the relevant topic and IS 456 clause if applicable…" maxlength="1000"></textarea>
+          <div class="char-counter" id="charCount">0 / 1000</div>
+          <div class="error-msg" id="messageErr">Please enter a message (minimum 20 characters).</div>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Your Role <span style="color:var(--text-muted); font-weight:400; text-transform: none; letter-spacing:0;">(optional)</span></label>
+          <select id="role" name="role">
+            <option value="" disabled selected>I am a…</option>
+            <option value="student">Engineering Student</option>
+            <option value="graduate">Recent Graduate</option>
+            <option value="engineer">Practising Structural Engineer</option>
+            <option value="faculty">Faculty / Professor</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span id="btnText">Send Message</span>
+          <div class="spinner" id="spinner"></div>
+          <svg id="btnIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+
+        <div class="success-msg" id="successMsg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4a9e4a" stroke-width="2.5" stroke-linecap="round" flex-shrink="0">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <p><strong>Message sent successfully!</strong> Thank you for getting in touch. I'll reply to your email within 2–5 working days.</p>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <div class="section-label">FAQ</div>
+    <h2>Frequently Asked Questions</h2>
+    <p class="sub">Quick answers to common questions before you write in.</p>
+
+    <div class="faq-grid">
+      <div class="faq-card">
+        <div class="faq-q">Is the content on this site free?</div>
+        <div class="faq-a">Yes — completely and permanently free. No sign-up, no subscription, no paywall. All design procedures and worked examples are openly accessible.</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-q">Which edition of IS 456 does this site follow?</div>
+        <div class="faq-a">All content follows <strong>IS 456 : 2000</strong> (4th Revision), which is the current edition published by the Bureau of Indian Standards (BIS). Always cross-check against the latest BIS publication.</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-q">I found a calculation error. How do I report it?</div>
+        <div class="faq-a">Please use the contact form above and select "Report an Error / Correction". Mention the page title, the specific step number, and the correct value. Errors are fixed promptly. You can also open a <a href="https://github.com/devangbhujbal/Structural-Design-IS456/issues" target="_blank">GitHub issue</a>.</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-q">Can I use this content for my study notes or teaching?</div>
+        <div class="faq-a">Yes — for personal study and educational use, you are welcome to reference or print the content. Please do not republish it as your own or use it commercially without permission.</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-q">Will slender columns, retaining walls, or other topics be added?</div>
+        <div class="faq-a">Yes. Slender columns, combined footings, retaining walls, staircase design, and pre-stressed concrete are planned. Use the contact form to vote for which topic to add next.</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-q">Can I contribute a worked example or topic?</div>
+        <div class="faq-a">Absolutely. If you'd like to contribute a well-checked design example or a topic write-up, reach out via the form or open a pull request on the <a href="https://github.com/devangbhujbal/Structural-Design-IS456" target="_blank">GitHub repository</a>.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Structural Design <span>IS 456</span></div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="what-is-rcc.html">What is RCC?</a>
+    <a href="index.html#topics">All Topics</a>
+  </div>
+  <p>All content references IS 456:2000 and related Bureau of Indian Standards codes.</p>
+  <p>For educational purposes only. Always verify designs with a qualified structural engineer.</p>
+</footer>
+
+<script>
+  // Character counter
+  const msgField = document.getElementById('message');
+  const charCount = document.getElementById('charCount');
+  msgField.addEventListener('input', () => {
+    const len = msgField.value.length;
+    charCount.textContent = `${len} / 1000`;
+    charCount.className = 'char-counter' + (len > 950 ? ' over' : len > 800 ? ' warn' : '');
+  });
+
+  // Form validation and submission
+  const form = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const spinner = document.getElementById('spinner');
+  const btnText = document.getElementById('btnText');
+  const btnIcon = document.getElementById('btnIcon');
+  const successMsg = document.getElementById('successMsg');
+
+  function showError(fieldId, errId, show) {
+    const field = document.getElementById(fieldId);
+    const err = document.getElementById(errId);
+    if (show) {
+      field.classList.add('error');
+      err.style.display = 'block';
+    } else {
+      field.classList.remove('error');
+      err.style.display = 'none';
+    }
+  }
+
+  function validateForm() {
+    let valid = true;
+    const firstName = document.getElementById('firstName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value.trim();
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    showError('firstName', 'firstNameErr', !firstName);
+    if (!firstName) valid = false;
+
+    showError('email', 'emailErr', !emailRe.test(email));
+    if (!emailRe.test(email)) valid = false;
+
+    showError('subject', 'subjectErr', !subject);
+    if (!subject) valid = false;
+
+    showError('message', 'messageErr', message.length < 20);
+    if (message.length < 20) valid = false;
+
+    return valid;
+  }
+
+  // Clear error on input
+  ['firstName', 'email', 'message'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      document.getElementById(id).classList.remove('error');
+      const errMap = { firstName: 'firstNameErr', email: 'emailErr', message: 'messageErr' };
+      document.getElementById(errMap[id]).style.display = 'none';
+    });
+  });
+  document.getElementById('subject').addEventListener('change', () => {
+    document.getElementById('subject').classList.remove('error');
+    document.getElementById('subjectErr').style.display = 'none';
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    // Show loading state
+    submitBtn.disabled = true;
+    btnText.textContent = 'Sending…';
+    spinner.style.display = 'block';
+    btnIcon.style.display = 'none';
+
+    // Simulate a short delay (replace with real form submission if using Formspree/Netlify)
+    await new Promise(r => setTimeout(r, 1800));
+
+    // Show success
+    submitBtn.style.display = 'none';
+    successMsg.classList.add('show');
+    form.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true);
+  });
+</script>
+
+</body>
+</html>
