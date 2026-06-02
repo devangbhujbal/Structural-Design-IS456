@@ -233,7 +233,7 @@
   <nav>
     <a href="index.html">Home</a>
     <a href="index.html#topics">Topics</a>
-    <a href="about.html">About</a>
+    <a href="about-us.html">About Us</a>
     <a href="contact.html" class="active">Contact</a>
   </nav>
 </header>
@@ -274,7 +274,7 @@
           </div>
           <div>
             <div class="method-label">Email</div>
-            <div class="method-value">contact@devangbhujbal.com</div>
+            <div class="method-value">bhujbaldevang123@gmail.com</div>
           </div>
         </a>
 
@@ -516,7 +516,17 @@
     btnIcon.style.display = 'none';
 
     // Simulate a short delay (replace with real form submission if using Formspree/Netlify)
-    await new Promise(r => setTimeout(r, 1800));
+    const res = await fetch('https://formspree.io/f/xzdwnkyn', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: document.getElementById('firstName').value,
+      email: document.getElementById('email').value,
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value
+      })
+    });
+    if (!res.ok) throw new Error('Failed');
 
     // Show success
     submitBtn.style.display = 'none';
