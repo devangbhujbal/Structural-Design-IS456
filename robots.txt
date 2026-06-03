@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://devangbhujbal.com/sitemap.txt
+Sitemap: https://devangbhujbal.com/sitemap.xml
