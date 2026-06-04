@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DP111VJT0Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DP111VJT0Q');
+</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construction Material Estimator | Structural Design IS 456</title>
+  <meta name="description" content="Free construction material calculator with city-wise pricing — estimate concrete, PCC, brickwork, blockwork, plaster, putty, paint, tiles, waterproofing, shuttering and steel quantities and cost as per Indian Standards." />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f5f2eb;
+      --surface: #fffef9;
+      --surface2: #f5f0e8;
+      --border: #d9d0bc;
+      --accent: #b5451b;
+      --accent-light: #f0ddd6;
+      --text: #1e1b16;
+      --text-muted: #6b6256;
+      --heading-font: 'Merriweather', Georgia, serif;
+      --body-font: 'Source Sans 3', sans-serif;
+      --ok: #4a9e4a;
+      --warn: #d4a017;
+      --fail: #c0392b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body-font);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    /* ── HEADER (matches calculator pages) ── */
+    header {
+      background: var(--text); color: #fff; padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 62px; position: sticky; top: 0; z-index: 100;
+      border-bottom: 3px solid var(--accent);
+    }
+    .site-title { font-family: var(--heading-font); font-size: 1rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .site-title span { color: var(--accent); }
+    nav { display: flex; align-items: center; }
+    nav a { color: #ccc; text-decoration: none; margin-left: 1.5rem; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: #fff; }
+    nav a.active { color: var(--accent); }
+
+    .nav-dropdown { position: relative; display: flex; align-items: center; margin-left: 1.5rem; }
+    .nav-dropdown > a {
+      display: inline-flex; align-items: center; gap: 4px; color: #ccc;
+      text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; margin-left: 0;
+    }
+    .nav-dropdown > a::after {
+      content: ''; display: inline-block; width: 0; height: 0;
+      border-left: 4px solid transparent; border-right: 4px solid transparent;
+      border-top: 5px solid currentColor; opacity: 0.7; transition: transform 0.2s;
+    }
+    .nav-dropdown:hover > a::after, .nav-dropdown:focus-within > a::after { transform: rotate(180deg); }
+    .dropdown-menu {
+      display: none; position: absolute; top: calc(100% + 4px); left: 50%;
+      transform: translateX(-50%); background: #1a1814; border: 1px solid #333028;
+      border-top: 3px solid #b5451b; border-radius: 0 0 4px 4px; min-width: 260px;
+      z-index: 999; padding: 0.4rem 0; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .nav-dropdown:hover .dropdown-menu, .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-menu a {
+      display: flex; align-items: center; gap: 10px; padding: 0.55rem 1.1rem;
+      font-size: 0.875rem; color: #9a9080; text-decoration: none;
+      transition: background 0.15s, color 0.15s; white-space: nowrap; margin-left: 0;
+    }
+    .dropdown-menu a:hover { background: #242018; color: #f0ebe0; }
+    .dropdown-menu .topic-num { font-size: 0.72rem; font-weight: 700; color: #b5451b; min-width: 20px; font-family: 'Courier New', monospace; }
+    .dropdown-menu .dropdown-divider { height: 1px; background: #333028; margin: 0.35rem 0; }
+    .nav-dropdown::after { content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 12px; }
+
+    /* ── HERO ── */
+    .hero { background: var(--text); color: #fff; padding: 3rem 2rem 2.5rem; border-bottom: 4px solid var(--accent); }
+    .hero-inner { max-width: 1080px; margin: 0 auto; }
+    .breadcrumb { font-size: 0.8rem; color: #999; margin-bottom: 1rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .breadcrumb a { color: #aaa; text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+    .hero h1 { font-family: var(--heading-font); font-size: 2.4rem; line-height: 1.25; margin-bottom: 0.75rem; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { color: #b8b0a2; font-size: 1rem; max-width: 720px; }
+    .hero-badges { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .hero-badge { font-size: 0.78rem; background: rgba(181,69,27,0.18); color: #e6a583; border: 1px solid rgba(181,69,27,0.4); padding: 3px 10px; border-radius: 3px; font-weight: 600; }
+
+    .page-body { max-width: 1080px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer { background: #fffbe6; border: 1px solid #ffe58f; border-left: 4px solid var(--warn);
+      padding: 1rem 1.4rem; border-radius: 0 4px 4px 0; margin-bottom: 2.5rem; font-size: 0.92rem; color: #6b5d1f; }
+    .disclaimer strong { color: #8a7300; }
+
+    /* ── PANELS ── */
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 2rem; overflow: hidden; }
+    .panel-head {
+      background: var(--surface2); border-bottom: 1px solid var(--border);
+      padding: 0.9rem 1.4rem; display: flex; align-items: center; gap: 0.6rem;
+      font-family: var(--heading-font); font-weight: 700; font-size: 1.05rem;
+    }
+    .panel-head .code-tag { margin-left: auto; font-family: 'Courier New', monospace; font-size: 0.72rem;
+      background: var(--accent-light); color: var(--accent); border: 1px solid #e4bfb2; padding: 2px 8px; border-radius: 2px; font-weight: 700; }
+    .panel-body { padding: 1.4rem; }
+
+    /* ── FORM GRID ── */
+    .field-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem 1.25rem; }
+    .field { display: flex; flex-direction: column; gap: 0.3rem; }
+    .field label { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .field .hint { font-size: 0.74rem; color: var(--text-muted); }
+    .field input, .field select {
+      font-family: var(--body-font); font-size: 0.95rem; padding: 0.5rem 0.65rem;
+      border: 1px solid var(--border); border-radius: 4px; background: #fff; color: var(--text); width: 100%;
+    }
+    .field input:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(181,69,27,0.15); }
+    .field input[readonly] { background: var(--surface2); color: var(--text-muted); cursor: not-allowed; }
+
+    .ctx-sub { font-family: var(--heading-font); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--accent); margin: 1.4rem 0 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+    .ctx-sub:first-child { margin-top: 0; }
+
+    /* ── RATE CHIPS ── */
+    .rate-strip { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.4rem; }
+    .rate-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px;
+      padding: 0.45rem 0.8rem; font-size: 0.82rem; }
+    .rate-chip b { color: var(--accent); font-weight: 700; }
+    .rate-chip small { display: block; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+    /* ── MATERIAL PICKER ── */
+    .picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.85rem; }
+    .member-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.05rem 0.8rem;
+      cursor: pointer; text-align: center; transition: all 0.18s; border-top: 3px solid var(--border);
+    }
+    .member-card:hover { border-color: var(--accent); border-top-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+    .member-card.active { border-color: var(--accent); border-top-color: var(--accent); background: var(--accent-light); }
+    .member-card .ico { font-size: 1.8rem; line-height: 1; }
+    .member-card .mc-title { font-weight: 700; font-size: 0.92rem; margin: 0.5rem 0 0.2rem; }
+    .member-card .mc-sub { font-size: 0.72rem; color: var(--text-muted); }
+
+    .btn {
+      font-family: var(--body-font); font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      background: var(--accent); color: #fff; border: none; padding: 0.7rem 1.8rem; border-radius: 4px; transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn-row { margin-top: 1.4rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+
+    /* ── RESULTS ── */
+    .results { margin-top: 1.6rem; display: none; }
+    .results.show { display: block; }
+
+    .step { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; padding: 0.85rem 1.1rem; margin-bottom: 0.75rem; }
+    .step-title { font-weight: 700; font-size: 0.9rem; display: flex; align-items: baseline; gap: 0.5rem; }
+    .step-title .clause { font-family: 'Courier New', monospace; font-size: 0.7rem; color: var(--accent); background: var(--accent-light); padding: 1px 7px; border-radius: 2px; margin-left: auto; }
+    .step-body { font-size: 0.92rem; color: var(--text); margin-top: 0.35rem; }
+    .step-body .calc { font-family: 'Courier New', monospace; font-size: 0.86rem; background: var(--surface2); padding: 0.5rem 0.7rem; border-radius: 3px; margin: 0.4rem 0; overflow-x: auto; white-space: pre-wrap; }
+    .step-body .out { font-weight: 700; color: var(--accent); }
+
+    .result-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 0.75rem; margin: 1.25rem 0; }
+    .rc { background: var(--text); color: #f0ebe0; border-radius: 5px; padding: 0.9rem 1rem; border-left: 3px solid var(--accent); }
+    .rc .rc-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #b0a896; }
+    .rc .rc-value { font-family: var(--heading-font); font-size: 1.25rem; font-weight: 700; color: #fff; margin-top: 0.15rem; line-height: 1.25; }
+    .rc .rc-sub { font-size: 0.76rem; color: #9a9080; margin-top: 0.1rem; }
+
+    /* ── COST TABLE ── */
+    .cost-tbl { width: 100%; border-collapse: collapse; margin: 1rem 0 0.5rem; font-size: 0.9rem; }
+    .cost-tbl th, .cost-tbl td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); }
+    .cost-tbl th { background: var(--surface2); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+    .cost-tbl td:nth-child(2), .cost-tbl td:nth-child(3), .cost-tbl td:nth-child(4),
+    .cost-tbl th:nth-child(2), .cost-tbl th:nth-child(3), .cost-tbl th:nth-child(4) { text-align: right; }
+    .cost-tbl tr.tot td { font-weight: 700; font-size: 1rem; color: var(--accent); border-top: 2px solid var(--accent); border-bottom: none; }
+    .cost-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.4rem; }
+
+    .err-msg { color: var(--fail); font-size: 0.9rem; font-weight: 600; margin-top: 1rem; }
+
+    .nav-footer { margin-top: 3rem; border-top: 2px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .nav-footer a { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .nav-footer a:hover { text-decoration: underline; }
+
+    footer { background: var(--text); color: #888; text-align: center; padding: 1.5rem; font-size: 0.85rem; border-top: 3px solid var(--accent); }
+
+    @media (max-width: 600px) {
+      header { padding: 0 1rem; } nav a, .nav-dropdown { margin-left: 0.9rem; }
+      .hero h1 { font-size: 1.8rem; } .page-body { padding: 1.5rem 1rem 3rem; }
+      .site-title { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="site-title" href="index.html">Structural Design <span>IS 456</span></a>
+  <nav>
+    <a href="index.html">Home</a>
+    <div class="nav-dropdown">
+      <a href="what-is-rcc.html">Topics</a>
+      <div class="dropdown-menu">
+        <a href="what-is-rcc.html"><span class="topic-num">01</span> What is RCC?</a>
+        <a href="limit-state-method.html"><span class="topic-num">02</span> Limit State Method</a>
+        <div class="dropdown-divider"></div>
+        <a href="singly-reinforced-beams.html"><span class="topic-num">03</span> Singly Reinforced Beams</a>
+        <a href="doubly-reinforced-beams.html"><span class="topic-num">04</span> Doubly Reinforced Beams</a>
+        <a href="flanged-beams.html"><span class="topic-num">05</span> Flanged Beams (T &amp; L)</a>
+        <div class="dropdown-divider"></div>
+        <a href="one-way-slabs.html"><span class="topic-num">06</span> One-Way Slabs</a>
+        <a href="two-way-slabs.html"><span class="topic-num">07</span> Two-Way Slabs</a>
+        <div class="dropdown-divider"></div>
+        <a href="short-columns.html"><span class="topic-num">08</span> Short Columns</a>
+        <a href="slender-columns.html"><span class="topic-num">09</span> Slender Columns</a>
+        <a href="isolated-footings.html"><span class="topic-num">10</span> Isolated Footings</a>
+      </div>
+    </div>
+    <a href="rcc-design-calculator.html">RCC Design Calc</a>
+    <a href="about-us.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Construction Material Estimator</div>
+    <h1>Construction Material <span>Estimator</span></h1>
+    <p>Estimate quantities and cost for the main building works — concrete, PCC, brickwork, blockwork, plaster, putty, paint, tiles, waterproofing, shuttering and steel. Pick your city to apply local market rates, enter the dimensions, and get a quantity take-off with an indicative cost. Calculations follow standard IS-code volumetric rules of thumb.
+      <br>
+      <span class="hero-badge">IS 456 / 10262 mixes</span>
+      <span class="hero-badge">City-wise rates</span>
+      <span class="hero-badge">Quantity + Cost</span>
+      <span class="hero-badge">Free to Use</span>
+    </div>
+  </div>
+</section>
+
+<div class="page-body">
+
+  <div class="disclaimer">
+    <strong>Indicative estimate only.</strong> Quantities use standard volumetric rules of thumb (dry-volume factor 1.54 for concrete, ~500 bricks/m³, etc.) and the <strong>city rates are 2026 market averages</strong> — they move weekly and vary by brand, supplier and quality. Use this for BOQ cross-checks, material ordering and budgeting, not as a substitute for a measured bill of quantities. Verify rates locally before purchase.
+  </div>
+
+  <!-- ════════ PROJECT / PRICING CONTEXT ════════ -->
+  <div class="panel">
+    <div class="panel-head">📍 Project &amp; Pricing <span class="code-tag">sets city rates</span></div>
+    <div class="panel-body">
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="mProject">Project name</label>
+          <input type="text" id="mProject" placeholder="e.g. G+2 Bungalow, Pune" />
+          <span class="hint">For your reference only</span>
+        </div>
+        <div class="field">
+          <label for="mCity">City (market rates)</label>
+          <select id="mCity" onchange="onCityChange()"></select>
+          <span class="hint">Sets cement, sand, aggregate, brick &amp; steel rates</span>
+        </div>
+        <div class="field">
+          <label for="mWastage">Default wastage (%)</label>
+          <input type="number" id="mWastage" value="5" step="1" min="0" />
+          <span class="hint">Pre-fills each estimator (editable)</span>
+        </div>
+      </div>
+
+      <div class="ctx-sub">Rate card &mdash; selected city</div>
+      <div class="rate-strip" id="rateStrip"></div>
+      <p class="cost-note">Finishing items (putty, paint, adhesive, tiles, waterproofing, plywood) use 2026 national base rates scaled by a regional cost index. Rates last reviewed: early 2026.</p>
+    </div>
+  </div>
+
+  <!-- ════════ MATERIAL PICKER ════════ -->
+  <div class="panel">
+    <div class="panel-head">🧰 Pick what to estimate</div>
+    <div class="panel-body">
+      <div class="picker-grid" id="picker">
+        <div class="member-card" data-m="concrete" onclick="selectItem('concrete')"><div class="ico">🧱</div><div class="mc-title">Concrete</div><div class="mc-sub">RCC nominal mix</div></div>
+        <div class="member-card" data-m="pcc" onclick="selectItem('pcc')"><div class="ico">🪨</div><div class="mc-title">PCC</div><div class="mc-sub">Lean / bedding</div></div>
+        <div class="member-card" data-m="brick" onclick="selectItem('brick')"><div class="ico">🧱</div><div class="mc-title">Brickwork</div><div class="mc-sub">Bricks + mortar</div></div>
+        <div class="member-card" data-m="block" onclick="selectItem('block')"><div class="ico">⬜</div><div class="mc-title">Blockwork</div><div class="mc-sub">AAC / concrete</div></div>
+        <div class="member-card" data-m="plaster" onclick="selectItem('plaster')"><div class="ico">🧴</div><div class="mc-title">Plaster</div><div class="mc-sub">Cement + sand</div></div>
+        <div class="member-card" data-m="putty" onclick="selectItem('putty')"><div class="ico">🪣</div><div class="mc-title">Wall Putty</div><div class="mc-sub">Coverage-based</div></div>
+        <div class="member-card" data-m="paint" onclick="selectItem('paint')"><div class="ico">🎨</div><div class="mc-title">Paint</div><div class="mc-sub">Primer + paint</div></div>
+        <div class="member-card" data-m="tiles" onclick="selectItem('tiles')"><div class="ico">🔳</div><div class="mc-title">Tiles</div><div class="mc-sub">Count + adhesive</div></div>
+        <div class="member-card" data-m="wproof" onclick="selectItem('wproof')"><div class="ico">💧</div><div class="mc-title">Waterproofing</div><div class="mc-sub">Chemical coats</div></div>
+        <div class="member-card" data-m="shutter" onclick="selectItem('shutter')"><div class="ico">🪵</div><div class="mc-title">Shuttering</div><div class="mc-sub">Formwork</div></div>
+        <div class="member-card" data-m="steel" onclick="selectItem('steel')"><div class="ico">➿</div><div class="mc-title">Steel</div><div class="mc-sub">Reinforcement</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ ESTIMATOR PANEL (dynamic) ════════ -->
+  <div class="panel" id="estPanel" style="display:none;">
+    <div class="panel-head"><span id="estTitle">Estimator</span> <span class="code-tag" id="estCode"></span></div>
+    <div class="panel-body">
+      <div class="field-grid" id="estInputs"></div>
+      <div class="btn-row">
+        <button class="btn" id="calcBtn">Calculate</button>
+        <span class="hint" id="ctxEcho"></span>
+      </div>
+      <div class="results" id="results"></div>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a href="rcc-design-calculator.html">← RCC Design Calculator</a>
+    <a href="contact.html">Found a wrong rate? Tell us →</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Structural Design IS 456 · Material quantities use standard volumetric take-off rules; rates are indicative 2026 market averages.</p>
+  <p style="margin-top:0.4rem;">For estimating and budgeting use only. Always confirm quantities and local rates before ordering.</p>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   CITY RATE CARD  (2026 indicative averages — easy to edit)
+   [ cement ₹/bag(50kg), sand ₹/cft, aggregate ₹/cft, red brick ₹/pc,
+     steel TMT ₹/kg, finishing cost index (×national base) ]
+   ════════════════════════════════════════════════════════════════ */
+const CITY_RATES = {
+  // ── North ──
+  "Delhi NCR":                  [395, 52, 50,  9, 60, 1.00],
+  "Noida, Uttar Pradesh":       [395, 52, 50,  9, 60, 1.00],
+  "Gurgaon, Haryana":           [400, 55, 52,  9, 61, 1.03],
+  "Chandigarh":                 [400, 50, 50,  9, 60, 1.00],
+  "Jaipur, Rajasthan":          [390, 48, 48,  8, 60, 0.98],
+  "Jodhpur, Rajasthan":         [390, 50, 50,  8, 60, 0.97],
+  "Udaipur, Rajasthan":         [395, 52, 50,  8, 60, 0.98],
+  "Lucknow, Uttar Pradesh":     [385, 55, 52,  8, 59, 0.98],
+  "Kanpur, Uttar Pradesh":      [385, 55, 52,  8, 59, 0.98],
+  "Agra, Uttar Pradesh":        [385, 54, 52,  8, 59, 0.98],
+  "Varanasi, Uttar Pradesh":    [385, 55, 53,  8, 59, 0.98],
+  "Ludhiana, Punjab":           [395, 52, 50,  9, 60, 1.00],
+  "Amritsar, Punjab":           [395, 52, 50,  9, 60, 1.00],
+  "Dehradun, Uttarakhand":      [400, 58, 55,  9, 61, 1.02],
+  "Shimla, Himachal Pradesh":   [415, 65, 62, 10, 63, 1.08],
+  "Jammu, J&K":                 [410, 60, 58, 10, 62, 1.05],
+  "Srinagar, J&K":              [420, 65, 62, 11, 64, 1.10],
+  // ── West ──
+  "Mumbai, Maharashtra":        [415, 95, 70, 11, 64, 1.10],
+  "Pune, Maharashtra":          [405, 80, 62, 10, 62, 1.05],
+  "Nashik, Maharashtra":        [400, 78, 60, 10, 61, 1.03],
+  "Nagpur, Maharashtra":        [395, 65, 55,  9, 60, 1.00],
+  "Aurangabad, Maharashtra":    [398, 70, 58,  9, 60, 1.01],
+  "Ahmedabad, Gujarat":         [400, 68, 58,  9, 61, 1.02],
+  "Surat, Gujarat":             [402, 70, 60,  9, 61, 1.02],
+  "Vadodara, Gujarat":          [400, 68, 58,  9, 61, 1.01],
+  "Rajkot, Gujarat":            [398, 68, 58,  9, 60, 1.01],
+  "Bhuj, Gujarat":              [405, 72, 62, 10, 62, 1.03],
+  "Indore, Madhya Pradesh":     [390, 60, 55,  8, 60, 0.99],
+  "Bhopal, Madhya Pradesh":     [390, 60, 55,  8, 60, 0.99],
+  "Raipur, Chhattisgarh":       [385, 58, 52,  8, 58, 0.98],
+  "Goa (Panaji)":               [410, 85, 68, 11, 63, 1.08],
+  // ── South ──
+  "Bangalore, Karnataka":       [420, 95, 62, 11, 62, 1.06],
+  "Mysore, Karnataka":          [415, 90, 60, 11, 61, 1.04],
+  "Mangalore, Karnataka":       [418,100, 65, 11, 62, 1.06],
+  "Hyderabad, Telangana":       [400, 80, 58,  9, 60, 1.02],
+  "Chennai, Tamil Nadu":        [420,105, 65, 12, 62, 1.07],
+  "Coimbatore, Tamil Nadu":     [415,100, 62, 11, 61, 1.05],
+  "Madurai, Tamil Nadu":        [412, 98, 62, 11, 61, 1.04],
+  "Tiruchirappalli, Tamil Nadu":[412, 98, 62, 11, 61, 1.04],
+  "Kochi, Kerala":              [430,115, 70, 12, 64, 1.10],
+  "Thiruvananthapuram, Kerala": [430,118, 72, 12, 64, 1.10],
+  "Vijayawada, Andhra Pradesh": [405, 85, 60, 10, 61, 1.02],
+  "Visakhapatnam, Andhra Pradesh":[405,82, 60, 10, 61, 1.02],
+  // ── East / NE ──
+  "Kolkata, West Bengal":       [400, 62, 55,  8, 61, 1.02],
+  "Siliguri, West Bengal":      [405, 65, 58,  8, 61, 1.03],
+  "Patna, Bihar":               [395, 58, 55,  7, 60, 1.00],
+  "Ranchi, Jharkhand":          [390, 58, 54,  8, 59, 0.99],
+  "Bhubaneswar, Odisha":        [395, 60, 55,  8, 60, 1.00],
+  "Guwahati, Assam":            [410, 62, 58,  8, 62, 1.05]
+};
+
+// National finishing/base rates (₹) — scaled by city finishing index
+const FIN = {
+  flyashBrick: 7,        // ₹/piece
+  aac: {100:55, 150:80, 200:105, 230:120}, // ₹/block 600×200×t
+  aacAdhesive: 8,        // ₹/kg (thin-bed)
+  putty: 30,             // ₹/kg
+  primer: 130,           // ₹/litre
+  emulInt: 230,          // ₹/litre
+  emulExt: 330,          // ₹/litre
+  enamel: 280,           // ₹/litre
+  tileAdhesive: 24,      // ₹/kg
+  grout: 95,             // ₹/kg
+  ply: 1150,             // ₹/sheet 8'×4' film-faced 12 mm
+  batten: 320,           // ₹/cft shuttering timber
+  shutterOil: 95,        // ₹/litre
+  nails: 80,             // ₹/kg
+  bindingWire: 80,       // ₹/kg
+  water: 35              // ₹/kilolitre
+};
+
+const CFT = 35.3147;     // 1 m³ = 35.3147 cft
+const CEMENT_DENS = 1440;// kg/m³
+const BAG = 50;          // kg/bag
+
+/* ════════════════════════════════════════════════════════════════
+   HELPERS
+   ════════════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+function num(id){ const v=parseFloat($(id).value); return isNaN(v)?0:v; }
+function val(id){ return $(id).value; }
+function r(x,n=2){ if(!isFinite(x)) return '0'; return (Math.round(x*10**n)/10**n).toLocaleString('en-IN'); }
+function money(x){ return '₹'+Math.round(x).toLocaleString('en-IN'); }
+
+function getRates(){
+  const city = $("mCity").value;
+  const c = CITY_RATES[city] || CITY_RATES["Delhi NCR"];
+  return { city, cement:c[0], sand:c[1], agg:c[2], brick:c[3], steel:c[4], idx:c[5] };
+}
+function fin(key){ return FIN[key] * getRates().idx; }
+function wst(){ return Math.max(0, num('mWastage'))/100; }
+
+/* ════════════════════════════════════════════════════════════════
+   CONTEXT WIRING
+   ════════════════════════════════════════════════════════════════ */
+function initCity(){
+  const sel = $("mCity");
+  Object.keys(CITY_RATES).forEach(name=>{
+    const o=document.createElement('option'); o.value=name; o.textContent=name;
+    if(name.startsWith("Mumbai")) o.selected=true;
+    sel.appendChild(o);
+  });
+  onCityChange();
+}
+function onCityChange(){
+  const rt=getRates();
+  $("rateStrip").innerHTML = [
+    ['Cement', '₹'+rt.cement, 'per 50 kg bag'],
+    ['Sand', '₹'+rt.sand, 'per cft'],
+    ['Aggregate', '₹'+rt.agg, 'per cft'],
+    ['Red brick', '₹'+rt.brick, 'per piece'],
+    ['TMT steel', '₹'+rt.steel, 'per kg'],
+    ['Cost index', '×'+rt.idx.toFixed(2), 'finishing items']
+  ].map(c=>`<div class="rate-chip"><small>${c[0]}</small><b>${c[1]}</b> ${c[2]}</div>`).join('');
+  if(activeItem){ $("ctxEcho").textContent = echo(); }
+}
+function echo(){ const rt=getRates(); return `Rates: ${rt.city} · cement ₹${rt.cement}/bag · sand ₹${rt.sand}/cft · steel ₹${rt.steel}/kg`; }
+
+/* ════════════════════════════════════════════════════════════════
+   FIELD BUILDERS
+   ════════════════════════════════════════════════════════════════ */
+function fld(id,label,v,hint,type='number',step='any'){
+  return `<div class="field"><label for="${id}">${label}</label>
+    <input type="${type}" id="${id}" value="${v}" step="${step}"/>
+    ${hint?`<span class="hint">${hint}</span>`:''}</div>`;
+}
+function sel(id,label,opts,hint,onchange=''){
+  return `<div class="field"><label for="${id}">${label}</label>
+    <select id="${id}" ${onchange?`onchange="${onchange}"`:''}>${opts}</select>
+    ${hint?`<span class="hint">${hint}</span>`:''}</div>`;
+}
+function wstFld(){ return fld('e_wst','Wastage (%)', num('mWastage'), 'order extra for cutting/spill','number','1'); }
+
+// result builders
+function step(title, clause, body){ return `<div class="step"><div class="step-title">${title}${clause?`<span class="clause">${clause}</span>`:''}</div><div class="step-body">${body}</div></div>`; }
+function calcLine(s){ return `<div class="calc">${s}</div>`; }
+function cards(arr){ return `<div class="result-cards">`+arr.map(c=>`<div class="rc"><div class="rc-label">${c[0]}</div><div class="rc-value">${c[1]}</div>${c[2]?`<div class="rc-sub">${c[2]}</div>`:''}</div>`).join('')+`</div>`; }
+function costTable(rows){
+  const total = rows.reduce((a,b)=>a+b.amt,0);
+  return `<table class="cost-tbl"><thead><tr><th>Item</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>`
+    + rows.map(x=>`<tr><td>${x.item}</td><td>${x.qty}</td><td>${x.rate}</td><td>${money(x.amt)}</td></tr>`).join('')
+    + `<tr class="tot"><td colspan="3">Estimated material cost — ${getRates().city}</td><td>${money(total)}</td></tr>`
+    + `</tbody></table><p class="cost-note">Material only — excludes labour, scaffolding, tools, taxes and transport unless noted. Rounded to whole purchase units where applicable.</p>`;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   DATA
+   ════════════════════════════════════════════════════════════════ */
+const CONC_MIX = { 'M5':[1,5,10], 'M7.5':[1,4,8], 'M10':[1,3,6], 'M15':[1,2,4], 'M20':[1,1.5,3], 'M25':[1,1,2] };
+const BRICK = {
+  modular: {l:0.190, w:0.090, h:0.090, label:'Modular 190×90×90'},
+  trad:    {l:0.230, w:0.114, h:0.076, label:'Traditional 230×114×76'}
+};
+const PAINT = {
+  interior: {label:'Interior emulsion', perCoat:0.077, rateKey:'emulInt'}, // ~13 m²/L/coat
+  exterior: {label:'Exterior emulsion', perCoat:0.083, rateKey:'emulExt'}, // ~12 m²/L/coat
+  enamel:   {label:'Enamel (wood/metal)', perCoat:0.062, rateKey:'enamel'} // ~16 m²/L/coat
+};
+const WP = {
+  acrylic:     {label:'Acrylic liquid coating', cons:1.2, rate:220, unit:'kg'},
+  cementitious:{label:'Cementitious 2K coating', cons:1.5, rate:90,  unit:'kg'},
+  crystalline: {label:'Crystalline slurry',      cons:1.0, rate:180, unit:'kg'},
+  membrane:    {label:'APP torch membrane (4 mm)', cons:1.15, rate:190, unit:'m²', perArea:true}
+};
+const STEEL_RULE = { slab:80, beam:160, column:220, footing:75, stair:110, lintel:120, general:100 };
+
+/* ════════════════════════════════════════════════════════════════
+   ESTIMATOR DEFINITIONS
+   ════════════════════════════════════════════════════════════════ */
+const ITEMS = {
+  concrete: {
+    title:"Concrete Estimator", code:"IS 456 nominal mix · DV ×1.54",
+    inputs:()=>`
+      ${sel('c_mode','Input by',`<option value="dim">Length × Width × Depth</option><option value="vol">Volume directly</option>`,'','toggleConcMode()')}
+      ${fld('c_l','Length (m)',5)}
+      ${fld('c_w','Width (m)',4)}
+      ${fld('c_d','Depth / thickness (m)',0.15)}
+      ${fld('c_vol','Volume (m³)',3,'used when "Volume directly"')}
+      ${sel('c_grade','Concrete grade',Object.keys(CONC_MIX).map(g=>`<option value="${g}" ${g==='M20'?'selected':''}>${g} (${CONC_MIX[g].join(':')})</option>`).join(''))}
+      ${fld('c_wc','Water–cement ratio',0.5,'litres = w/c × cement kg','number','0.01')}
+      ${wstFld()}`,
+    calc: calcConcrete
+  },
+  pcc: {
+    title:"PCC Estimator (lean / bedding)", code:"nominal lean mix · DV ×1.52",
+    inputs:()=>`
+      ${fld('p_l','Length (m)',5)}
+      ${fld('p_w','Width (m)',4)}
+      ${fld('p_t','Thickness (mm)',75,'typical 75–100 mm bedding')}
+      ${sel('p_grade','Mix',`<option value="M5">M5 (1:5:10)</option><option value="M7.5" selected>M7.5 (1:4:8)</option><option value="M10">M10 (1:3:6)</option>`)}
+      ${wstFld()}`,
+    calc: calcPCC
+  },
+  brick: {
+    title:"Brickwork Estimator", code:"IS 1077 · ~500 bricks/m³",
+    inputs:()=>`
+      ${fld('br_l','Wall length (m)',4)}
+      ${fld('br_h','Wall height (m)',3)}
+      ${sel('br_t','Wall thickness',`<option value="0.115">Half brick (115 mm)</option><option value="0.230" selected>Full brick (230 mm)</option><option value="0.345">1½ brick (345 mm)</option>`)}
+      ${sel('br_type','Brick size',Object.keys(BRICK).map(k=>`<option value="${k}">${BRICK[k].label}</option>`).join(''))}
+      ${sel('br_mix','Mortar mix',`<option value="4">1:4</option><option value="5">1:5</option><option value="6" selected>1:6</option>`,'cement : sand')}
+      ${fld('br_open','Openings deduction (%)',15,'doors/windows')}
+      ${wstFld()}`,
+    calc: calcBrick
+  },
+  block: {
+    title:"Blockwork Estimator (AAC)", code:"IS 2185 · 600×200 face",
+    inputs:()=>`
+      ${fld('bl_l','Wall length (m)',4)}
+      ${fld('bl_h','Wall height (m)',3)}
+      ${sel('bl_t','Block thickness',`<option value="100">100 mm</option><option value="150">150 mm</option><option value="200" selected>200 mm</option><option value="230">230 mm</option>`)}
+      ${sel('bl_join','Jointing',`<option value="thin" selected>Thin-bed adhesive (3 mm)</option><option value="mortar">Cement mortar (10 mm)</option>`,'','')}
+      ${fld('bl_open','Openings deduction (%)',15)}
+      ${wstFld()}`,
+    calc: calcBlock
+  },
+  plaster: {
+    title:"Plaster Estimator", code:"IS 1542 · DV ×1.30",
+    inputs:()=>`
+      ${fld('pl_area','Plaster area (m²)',50,'net wall/ceiling area')}
+      ${sel('pl_thk','Thickness',`<option value="12" selected>12 mm — internal</option><option value="15">15 mm — external</option><option value="20">20 mm — rough/external</option>`)}
+      ${sel('pl_mix','Mortar mix',`<option value="4">1:4</option><option value="5">1:5</option><option value="6" selected>1:6</option>`,'cement : sand')}
+      ${wstFld()}`,
+    calc: calcPlaster
+  },
+  putty: {
+    title:"Wall Putty Estimator", code:"coverage-based",
+    inputs:()=>`
+      ${fld('pu_area','Area (m²)',50)}
+      ${fld('pu_coats','No. of coats',2)}
+      ${fld('pu_cov','Coverage (kg/m² per coat)',0.5,'≈ 13–15 sqft/kg for 2 coats','number','0.05')}
+      ${wstFld()}`,
+    calc: calcPutty
+  },
+  paint: {
+    title:"Paint Estimator", code:"primer + finish coats",
+    inputs:()=>`
+      ${fld('pt_area','Area (m²)',50)}
+      ${sel('pt_type','Paint type',Object.keys(PAINT).map(k=>`<option value="${k}">${PAINT[k].label}</option>`).join(''))}
+      ${fld('pt_coats','Finish coats',2)}
+      ${sel('pt_primer','Primer',`<option value="1" selected>1 coat primer</option><option value="2">2 coats primer</option><option value="0">No primer</option>`)}
+      ${wstFld()}`,
+    calc: calcPaint
+  },
+  tiles: {
+    title:"Tiles Estimator", code:"IS 13630 · thin-bed",
+    inputs:()=>`
+      ${fld('ti_area','Area to tile (m²)',20)}
+      ${sel('ti_size','Tile size',`<option value="0.3,0.3">300 × 300 mm</option><option value="0.6,0.6" selected>600 × 600 mm</option><option value="0.8,0.8">800 × 800 mm</option><option value="0.6,1.2">600 × 1200 mm</option><option value="0.3,0.45">300 × 450 mm (wall)</option>`)}
+      ${sel('ti_lay','Laying',`<option value="adh" selected>Thin-bed adhesive</option><option value="bed">Cement–sand bed (20 mm, 1:4)</option>`)}
+      ${fld('ti_price','Tile price (₹/m²)',0,'0 = exclude tile cost')}
+      ${fld('e_wst','Wastage (%)',10,'cutting/breakage — tiles need more','number','1')}`,
+    calc: calcTiles
+  },
+  wproof: {
+    title:"Waterproofing Estimator", code:"IS 2645 · chemical",
+    inputs:()=>`
+      ${fld('wp_area','Area (m²)',30,'terrace/toilet/sump surface')}
+      ${sel('wp_sys','System',Object.keys(WP).map(k=>`<option value="${k}">${WP[k].label} — ${WP[k].perArea?WP[k].cons+'× area':WP[k].cons+' kg/m²'}</option>`).join(''))}
+      ${wstFld()}`,
+    calc: calcWproof
+  },
+  shutter: {
+    title:"Shuttering / Formwork Estimator", code:"IS 14687 · film ply",
+    inputs:()=>`
+      ${fld('sh_area','Contact area (m²)',40,'surface in contact with concrete')}
+      ${fld('sh_reuse','Plywood reuses',6,'amortise ply & timber cost')}
+      ${wstFld()}`,
+    calc: calcShutter
+  },
+  steel: {
+    title:"Steel / Reinforcement Estimator", code:"thumb-rule kg/m³",
+    inputs:()=>`
+      ${sel('st_mode','Input by',`<option value="thumb">Concrete volume + member</option><option value="kg">Steel weight directly</option>`,'','toggleSteelMode()')}
+      ${fld('st_vol','Concrete volume (m³)',3)}
+      ${sel('st_member','Member',Object.keys(STEEL_RULE).map(k=>`<option value="${k}" ${k==='beam'?'selected':''}>${k.charAt(0).toUpperCase()+k.slice(1)} (${STEEL_RULE[k]} kg/m³)</option>`).join(''))}
+      ${fld('st_kg','Steel weight (kg)',300,'used when "weight directly"')}
+      ${wstFld()}`,
+    calc: calcSteel
+  }
+};
+
+function toggleConcMode(){ const dim=val('c_mode')==='dim'; ['c_l','c_w','c_d'].forEach(i=>$(i).disabled=!dim); $('c_vol').disabled=dim; }
+function toggleSteelMode(){ const t=val('st_mode')==='thumb'; ['st_vol','st_member'].forEach(i=>$(i).disabled=!t); $('st_kg').disabled=t; }
+
+/* ════════════════════════════════════════════════════════════════
+   UI WIRING
+   ════════════════════════════════════════════════════════════════ */
+let activeItem=null;
+function selectItem(m){
+  activeItem=m;
+  document.querySelectorAll('.member-card').forEach(c=>c.classList.toggle('active', c.dataset.m===m));
+  const d=ITEMS[m];
+  $("estTitle").textContent=d.title;
+  $("estCode").textContent=d.code;
+  $("estInputs").innerHTML=d.inputs();
+  $("results").className="results"; $("results").innerHTML="";
+  $("estPanel").style.display="block";
+  $("ctxEcho").textContent=echo();
+  $("calcBtn").onclick=()=>runCalc(m);
+  if(m==='concrete') toggleConcMode();
+  if(m==='steel') toggleSteelMode();
+  $("estPanel").scrollIntoView({behavior:'smooth',block:'start'});
+}
+function runCalc(m){
+  let html;
+  try { html = ITEMS[m].calc(); }
+  catch(e){ html = `<div class="err-msg">Could not estimate: ${e.message}. Please check your inputs.</div>`; }
+  $("results").innerHTML=html;
+  $("results").className="results show";
+}
+
+/* ════════════════════════════════════════════════════════════════
+   1 · CONCRETE
+   ════════════════════════════════════════════════════════════════ */
+function calcConcrete(){
+  const grade=val('c_grade'), wc=num('c_wc'), f=1+ (Math.max(0,num('e_wst'))/100);
+  let wet = val('c_mode')==='dim' ? num('c_l')*num('c_w')*num('c_d') : num('c_vol');
+  if(wet<=0) throw new Error("enter positive dimensions or volume");
+  const mix=CONC_MIX[grade], sum=mix[0]+mix[1]+mix[2];
+  const dry=wet*1.54;
+  const cem_m3=dry*mix[0]/sum, cem_kg=cem_m3*CEMENT_DENS, bags=cem_kg/BAG;
+  const sand_m3=dry*mix[1]/sum, agg_m3=dry*mix[2]/sum;
+  const water=wc*cem_kg;
+  // apply wastage
+  const Bags=bags*f, Sand=sand_m3*f*CFT, Agg=agg_m3*f*CFT, Water=water*f;
+  const rt=getRates();
+  const out = [];
+  out.push(step("Volume & mix","dry volume factor 1.54",
+    `Wet volume = <span class="out">${r(wet,3)} m³</span> · Mix ${grade} = ${mix.join(':')} (Σ=${sum})<br>
+     Dry volume = ${r(wet,3)} × 1.54 = <span class="out">${r(dry,3)} m³</span>`));
+  out.push(step("Material split","",
+    calcLine(`Cement = ${mix[0]}/${sum} × ${r(dry,3)} × 1440 = ${r(cem_kg,0)} kg → ${r(bags,1)} bags
+Sand   = ${mix[1]}/${sum} × ${r(dry,3)} = ${r(sand_m3,3)} m³ (${r(sand_m3*CFT,1)} cft)
+Aggreg = ${mix[2]}/${sum} × ${r(dry,3)} = ${r(agg_m3,3)} m³ (${r(agg_m3*CFT,1)} cft)
+Water  = ${wc} × ${r(cem_kg,0)} = ${r(water,0)} litres`)
+    + `Quantities below include ${r((f-1)*100,0)}% wastage.`));
+  const cardArr=[
+    ['Cement', Math.ceil(Bags)+' bags', r(Bags*BAG,0)+' kg'],
+    ['Sand', r(Sand,1)+' cft', r(Sand/CFT,3)+' m³'],
+    ['Aggregate', r(Agg,1)+' cft', r(Agg/CFT,3)+' m³'],
+    ['Water', r(Water,0)+' L', 'w/c '+wc]
+  ];
+  const rows=[
+    {item:'Cement', qty:Math.ceil(Bags)+' bags', rate:'₹'+rt.cement+'/bag', amt:Math.ceil(Bags)*rt.cement},
+    {item:'Sand', qty:r(Sand,1)+' cft', rate:'₹'+rt.sand+'/cft', amt:Sand*rt.sand},
+    {item:'Aggregate', qty:r(Agg,1)+' cft', rate:'₹'+rt.agg+'/cft', amt:Agg*rt.agg},
+    {item:'Water', qty:r(Water/1000,2)+' kL', rate:'₹'+FIN.water+'/kL', amt:(Water/1000)*FIN.water}
+  ];
+  const note = ['M20','M25'].includes(grade) ? `<div class="disclaimer" style="margin:1rem 0 0;">For ${grade} and above, IS 456 recommends a <strong>design mix (IS 10262)</strong> — nominal proportions shown are an approximation for estimating only.</div>` : '';
+  return cards(cardArr)+out.join('')+note+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   2 · PCC
+   ════════════════════════════════════════════════════════════════ */
+function calcPCC(){
+  const wet=num('p_l')*num('p_w')*(num('p_t')/1000), grade=val('p_grade'), f=1+Math.max(0,num('e_wst'))/100;
+  if(wet<=0) throw new Error("enter positive area and thickness");
+  const mix=CONC_MIX[grade], sum=mix[0]+mix[1]+mix[2];
+  const dry=wet*1.52;
+  const cem_kg=dry*mix[0]/sum*CEMENT_DENS, bags=cem_kg/BAG*f;
+  const sand=dry*mix[1]/sum*CFT*f, agg=dry*mix[2]/sum*CFT*f;
+  const rt=getRates();
+  const out=[ step("Lean concrete","",
+    `Area = ${r(num('p_l')*num('p_w'),2)} m² × ${num('p_t')} mm = wet ${r(wet,3)} m³<br>
+     Dry = ${r(wet,3)} × 1.52 = <span class="out">${r(dry,3)} m³</span> · Mix ${grade} (${mix.join(':')})`) ];
+  const rows=[
+    {item:'Cement', qty:Math.ceil(bags)+' bags', rate:'₹'+rt.cement+'/bag', amt:Math.ceil(bags)*rt.cement},
+    {item:'Sand', qty:r(sand,1)+' cft', rate:'₹'+rt.sand+'/cft', amt:sand*rt.sand},
+    {item:'Aggregate', qty:r(agg,1)+' cft', rate:'₹'+rt.agg+'/cft', amt:agg*rt.agg}
+  ];
+  return cards([['Cement',Math.ceil(bags)+' bags',''],['Sand',r(sand,1)+' cft',''],['Aggregate',r(agg,1)+' cft','']])+out.join('')+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   3 · BRICKWORK
+   ════════════════════════════════════════════════════════════════ */
+function calcBrick(){
+  const L=num('br_l'), H=num('br_h'), t=parseFloat(val('br_t')), bk=BRICK[val('br_type')];
+  const s=parseFloat(val('br_mix')), open=Math.max(0,num('br_open'))/100, f=1+Math.max(0,num('e_wst'))/100;
+  const wallVol = L*H*t*(1-open);
+  if(wallVol<=0) throw new Error("enter positive wall size");
+  const j=0.010;
+  const vJoint=(bk.l+j)*(bk.w+j)*(bk.h+j), vBrick=bk.l*bk.w*bk.h;
+  const nBricks = wallVol/vJoint;
+  const mortarVol = wallVol - nBricks*vBrick;
+  const dryMortar = mortarVol*1.33;
+  const cem_kg=dryMortar/(1+s)*CEMENT_DENS, bags=cem_kg/BAG;
+  const sand_cft=dryMortar*s/(1+s)*CFT;
+  const Nb=Math.ceil(nBricks*f), Bags=bags*f, Sand=sand_cft*f;
+  const rt=getRates();
+  const out=[ step("Wall volume & bricks","IS 1077 · 10 mm joint",
+    `Wall = ${r(L,2)} × ${r(H,2)} × ${t} m, less ${r(open*100,0)}% openings = <span class="out">${r(wallVol,3)} m³</span><br>
+     Brick+joint = ${r(vJoint*1e3,3)} L → bricks = ${r(wallVol,3)} / ${r(vJoint,5)} = <span class="out">${r(nBricks,0)} nos</span>`),
+    step("Mortar","mortar DV ×1.33",
+    calcLine(`Mortar vol = wall − bricks = ${r(mortarVol,3)} m³ ; mix 1:${s}
+Cement = ${r(cem_kg,0)} kg → ${r(bags,1)} bags ; Sand = ${r(sand_cft,1)} cft`)) ];
+  const rows=[
+    {item:'Bricks ('+bk.label+')', qty:Nb+' nos', rate:'₹'+rt.brick+'/pc', amt:Nb*rt.brick},
+    {item:'Cement', qty:Math.ceil(Bags)+' bags', rate:'₹'+rt.cement+'/bag', amt:Math.ceil(Bags)*rt.cement},
+    {item:'Sand', qty:r(Sand,1)+' cft', rate:'₹'+rt.sand+'/cft', amt:Sand*rt.sand}
+  ];
+  return cards([['Bricks',Nb+' nos',''],['Cement',Math.ceil(Bags)+' bags',''],['Sand',r(Sand,1)+' cft','']])+out.join('')+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   4 · BLOCKWORK (AAC)
+   ════════════════════════════════════════════════════════════════ */
+function calcBlock(){
+  const L=num('bl_l'), H=num('bl_h'), t=parseInt(val('bl_t')), join=val('bl_join');
+  const open=Math.max(0,num('bl_open'))/100, f=1+Math.max(0,num('e_wst'))/100;
+  const area=L*H*(1-open); if(area<=0) throw new Error("enter positive wall size");
+  const wallVol=area*(t/1000);
+  const jl = join==='thin'?0.003:0.010;
+  const faceArea=(0.6+jl)*(0.2+jl);
+  const nBlocks=area/faceArea;
+  const rt=getRates(), idx=rt.idx;
+  let out=[ step("Wall & blocks","600×200×"+t+" mm",
+    `Wall = ${r(area,2)} m² (less ${r(open*100,0)}% openings) → blocks = ${r(area,2)} / ${r(faceArea,4)} = <span class="out">${r(nBlocks,0)} nos</span>`) ];
+  const Nb=Math.ceil(nBlocks*f);
+  const rows=[ {item:'AAC blocks ('+t+' mm)', qty:Nb+' nos', rate:'₹'+r(FIN.aac[t]*idx,0)+'/pc', amt:Nb*FIN.aac[t]*idx} ];
+  let cardArr=[['AAC blocks',Nb+' nos',t+' mm']];
+  if(join==='thin'){
+    const adh=wallVol*40*f; // ~1 bag(40kg)/m³
+    out.push(step("Thin-bed adhesive","~1 bag (40 kg) / m³",
+      calcLine(`Adhesive = ${r(wallVol,3)} m³ × 40 = ${r(adh,0)} kg → ${r(adh/40,1)} bags (40 kg)`)));
+    rows.push({item:'Block adhesive', qty:Math.ceil(adh/40)+' bags', rate:'₹'+r(FIN.aacAdhesive*idx,0)+'/kg', amt:Math.ceil(adh/40)*40*FIN.aacAdhesive*idx});
+    cardArr.push(['Adhesive',Math.ceil(adh/40)+' bags',r(adh,0)+' kg']);
+  } else {
+    const blockVol=nBlocks*(0.6*0.2*(t/1000));
+    const mortarVol=Math.max(0,wallVol-blockVol), dry=mortarVol*1.30;
+    const bags=dry/(1+4)*CEMENT_DENS/BAG*f, sand=dry*4/5*CFT*f; // 1:4
+    out.push(step("Cement mortar (1:4)","mortar DV ×1.30",
+      calcLine(`Mortar = ${r(mortarVol,3)} m³ → cement ${r(bags,1)} bags, sand ${r(sand,1)} cft`)));
+    rows.push({item:'Cement', qty:Math.ceil(bags)+' bags', rate:'₹'+rt.cement+'/bag', amt:Math.ceil(bags)*rt.cement});
+    rows.push({item:'Sand', qty:r(sand,1)+' cft', rate:'₹'+rt.sand+'/cft', amt:sand*rt.sand});
+    cardArr.push(['Cement',Math.ceil(bags)+' bags',''],['Sand',r(sand,1)+' cft','']);
+  }
+  return cards(cardArr)+out.join('')+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   5 · PLASTER
+   ════════════════════════════════════════════════════════════════ */
+function calcPlaster(){
+  const A=num('pl_area'), thk=parseInt(val('pl_thk'))/1000, s=parseFloat(val('pl_mix')), f=1+Math.max(0,num('e_wst'))/100;
+  if(A<=0) throw new Error("enter positive area");
+  const wet=A*thk, dry=wet*1.30;
+  const bags=dry/(1+s)*CEMENT_DENS/BAG*f, sand=dry*s/(1+s)*CFT*f;
+  const rt=getRates();
+  const out=[ step("Plaster volume","DV ×1.30",
+    `Area ${r(A,2)} m² × ${val('pl_thk')} mm = wet ${r(wet,3)} m³ → dry <span class="out">${r(dry,3)} m³</span>, mix 1:${s}`) ];
+  const rows=[
+    {item:'Cement', qty:Math.ceil(bags)+' bags', rate:'₹'+rt.cement+'/bag', amt:Math.ceil(bags)*rt.cement},
+    {item:'Sand', qty:r(sand,1)+' cft', rate:'₹'+rt.sand+'/cft', amt:sand*rt.sand}
+  ];
+  return cards([['Cement',Math.ceil(bags)+' bags',''],['Sand',r(sand,1)+' cft',''],['Plaster area',r(A,1)+' m²','']])+out.join('')+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   6 · WALL PUTTY
+   ════════════════════════════════════════════════════════════════ */
+function calcPutty(){
+  const A=num('pu_area'), coats=num('pu_coats'), cov=num('pu_cov'), f=1+Math.max(0,num('e_wst'))/100;
+  if(A<=0||coats<=0) throw new Error("enter positive area and coats");
+  const kg=A*cov*coats*f;
+  const out=[ step("Putty quantity","coverage-based",
+    `${r(A,1)} m² × ${cov} kg/m² × ${coats} coats = <span class="out">${r(kg,1)} kg</span> (${r(kg/40,2)} × 40 kg bags)`) ];
+  const rows=[ {item:'Wall putty', qty:r(kg,1)+' kg', rate:'₹'+r(fin('putty'),0)+'/kg', amt:kg*fin('putty')} ];
+  return cards([['Putty',r(kg,1)+' kg',Math.ceil(kg/40)+' × 40 kg bags']])+out.join('')+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   7 · PAINT
+   ════════════════════════════════════════════════════════════════ */
+function calcPaint(){
+  const A=num('pt_area'), p=PAINT[val('pt_type')], coats=num('pt_coats'), pc=parseInt(val('pt_primer')), f=1+Math.max(0,num('e_wst'))/100;
+  if(A<=0) throw new Error("enter positive area");
+  const paintL=A*p.perCoat*coats*f;
+  const primerL=A*0.098*pc*f;
+  const out=[ step("Paint & primer","coverage-based",
+    calcLine(`Primer = ${r(A,1)} × 0.098 × ${pc} = ${r(primerL,1)} L (≈10 m²/L)
+${p.label} = ${r(A,1)} × ${p.perCoat} × ${coats} = ${r(paintL,1)} L`)) ];
+  const rows=[ {item:p.label, qty:r(paintL,1)+' L', rate:'₹'+r(fin(p.rateKey),0)+'/L', amt:paintL*fin(p.rateKey)} ];
+  if(pc>0) rows.unshift({item:'Primer', qty:r(primerL,1)+' L', rate:'₹'+r(fin('primer'),0)+'/L', amt:primerL*fin('primer')});
+  return cards([['Primer',r(primerL,1)+' L',pc+' coat(s)'],[p.label.split(' ')[0]+' paint',r(paintL,1)+' L',coats+' coats']])+out.join('')+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   8 · TILES
+   ════════════════════════════════════════════════════════════════ */
+function calcTiles(){
+  const A=num('ti_area'), sz=val('ti_size').split(',').map(Number), lay=val('ti_lay');
+  const price=num('ti_price'), f=1+Math.max(0,num('e_wst'))/100;
+  if(A<=0) throw new Error("enter positive area");
+  const tileArea=sz[0]*sz[1];
+  const nTiles=Math.ceil(A/tileArea*f);
+  const grout=A*0.4; // kg
+  const rt=getRates(), idx=rt.idx;
+  let out=[ step("Tile count","incl. "+r((f-1)*100,0)+"% wastage",
+    `Tile ${sz[0]*1000}×${sz[1]*1000} mm = ${r(tileArea,3)} m² → ${r(A,1)}/${r(tileArea,3)} × ${f.toFixed(2)} = <span class="out">${nTiles} tiles</span>`) ];
+  let cardArr=[['Tiles',nTiles+' nos',(sz[0]*1000)+'×'+(sz[1]*1000)+' mm'],['Grout',r(grout,1)+' kg','']];
+  let rows=[];
+  if(price>0) rows.push({item:'Tiles', qty:r(A*f,1)+' m²', rate:'₹'+price+'/m²', amt:A*f*price});
+  if(lay==='adh'){
+    const adh=A*4; // kg thin-bed
+    out.push(step("Adhesive & grout","thin-bed ~4 kg/m²",
+      calcLine(`Adhesive = ${r(A,1)} × 4 = ${r(adh,0)} kg (${r(adh/20,1)} × 20 kg bags)\nGrout ≈ ${r(grout,1)} kg`)));
+    rows.push({item:'Tile adhesive', qty:Math.ceil(adh/20)+' bags', rate:'₹'+r(FIN.tileAdhesive*idx,0)+'/kg', amt:Math.ceil(adh/20)*20*FIN.tileAdhesive*idx});
+    cardArr.push(['Adhesive',Math.ceil(adh/20)+' bags',r(adh,0)+' kg']);
+  } else {
+    const wet=A*0.020, dry=wet*1.30;
+    const bags=dry/5*CEMENT_DENS/BAG, sand=dry*4/5*CFT; // 1:4 bed
+    out.push(step("Cement–sand bed (20 mm, 1:4)","",
+      calcLine(`Bed = ${r(A,1)} × 20 mm → cement ${r(bags,1)} bags, sand ${r(sand,1)} cft\nGrout ≈ ${r(grout,1)} kg`)));
+    rows.push({item:'Cement (bed)', qty:Math.ceil(bags)+' bags', rate:'₹'+rt.cement+'/bag', amt:Math.ceil(bags)*rt.cement});
+    rows.push({item:'Sand (bed)', qty:r(sand,1)+' cft', rate:'₹'+rt.sand+'/cft', amt:sand*rt.sand});
+    cardArr.push(['Cement',Math.ceil(bags)+' bags',''],['Sand',r(sand,1)+' cft','']);
+  }
+  rows.push({item:'Grout', qty:r(grout,1)+' kg', rate:'₹'+r(FIN.grout*idx,0)+'/kg', amt:grout*FIN.grout*idx});
+  const note = price>0?'':'<p class="cost-note">Tile material cost excluded (set a ₹/m² tile price to include it).</p>';
+  return cards(cardArr)+out.join('')+note+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   9 · WATERPROOFING
+   ════════════════════════════════════════════════════════════════ */
+function calcWproof(){
+  const A=num('wp_area'), sysKey=val('wp_sys'), s=WP[sysKey], f=1+Math.max(0,num('e_wst'))/100, idx=getRates().idx;
+  if(A<=0) throw new Error("enter positive area");
+  let qty, amt, qtyLabel, rateLabel;
+  if(s.perArea){ // membrane priced per m²
+    qty=A*s.cons*f; qtyLabel=r(qty,1)+' m²'; const rate=s.rate*idx; amt=qty*rate; rateLabel='₹'+r(rate,0)+'/m²';
+  } else {
+    qty=A*s.cons*f; qtyLabel=r(qty,1)+' kg'; const rate=s.rate*idx; amt=qty*rate; rateLabel='₹'+r(rate,0)+'/kg';
+  }
+  const out=[ step("Waterproofing quantity","IS 2645",
+    `${s.label}: ${r(A,1)} m² × ${s.cons} ${s.perArea?'(area factor)':'kg/m²'} × ${f.toFixed(2)} = <span class="out">${qtyLabel}</span>`) ];
+  const rows=[ {item:s.label, qty:qtyLabel, rate:rateLabel, amt:amt} ];
+  return cards([[s.label.split(' ')[0],qtyLabel,''],['Surface',r(A,1)+' m²','']])+out.join('')+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   10 · SHUTTERING
+   ════════════════════════════════════════════════════════════════ */
+function calcShutter(){
+  const A=num('sh_area'), reuse=Math.max(1,num('sh_reuse')), f=1+Math.max(0,num('e_wst'))/100, idx=getRates().idx;
+  if(A<=0) throw new Error("enter positive contact area");
+  const SHEET=2.97; // m² per 8'×4' sheet
+  const sheets=Math.ceil(A/SHEET*f);
+  const battenCft=A*0.4; // cft timber
+  const oilL=A*0.075, nailsKg=A*0.10;
+  const out=[ step("Formwork take-off","film-faced ply 8'×4' = 2.97 m²",
+    calcLine(`Plywood = ${r(A,1)} / 2.97 × ${f.toFixed(2)} = ${sheets} sheets
+Battens/runners ≈ ${r(battenCft,1)} cft ; shutter oil ≈ ${r(oilL,1)} L ; nails ≈ ${r(nailsKg,1)} kg
+Costs for ply & timber amortised over ${reuse} reuses.`)) ];
+  const rows=[
+    {item:'Plywood (÷'+reuse+' reuse)', qty:sheets+' sheets', rate:'₹'+r(FIN.ply*idx,0)+'/sheet', amt:sheets*FIN.ply*idx/reuse},
+    {item:'Battens/timber (÷'+reuse+')', qty:r(battenCft,1)+' cft', rate:'₹'+r(FIN.batten*idx,0)+'/cft', amt:battenCft*FIN.batten*idx/reuse},
+    {item:'Shuttering oil', qty:r(oilL,1)+' L', rate:'₹'+r(FIN.shutterOil*idx,0)+'/L', amt:oilL*FIN.shutterOil*idx},
+    {item:'Nails', qty:r(nailsKg,1)+' kg', rate:'₹'+r(FIN.nails*idx,0)+'/kg', amt:nailsKg*FIN.nails*idx}
+  ];
+  return cards([['Plywood',sheets+' sheets',''],['Timber',r(battenCft,1)+' cft',''],['Oil',r(oilL,1)+' L','']])+out.join('')+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   11 · STEEL / REINFORCEMENT
+   ════════════════════════════════════════════════════════════════ */
+function calcSteel(){
+  const f=1+Math.max(0,num('e_wst'))/100, rt=getRates();
+  let kg, basis;
+  if(val('st_mode')==='thumb'){
+    const vol=num('st_vol'), member=val('st_member'), rule=STEEL_RULE[member];
+    if(vol<=0) throw new Error("enter positive concrete volume");
+    kg=vol*rule; basis=`${r(vol,2)} m³ × ${rule} kg/m³ (${member})`;
+  } else { kg=num('st_kg'); basis=`${r(kg,0)} kg entered`; }
+  if(kg<=0) throw new Error("steel weight must be positive");
+  const Kg=kg*f, wire=Kg*0.01; // ~10 kg binding wire / tonne
+  const out=[ step("Steel weight","thumb-rule kg/m³",
+    `${basis} = ${r(kg,0)} kg → with ${r((f-1)*100,0)}% wastage <span class="out">${r(Kg,0)} kg (${r(Kg/1000,3)} t)</span><br>
+     Binding wire ≈ ${r(wire,1)} kg (≈10 kg/tonne)`) ];
+  const rows=[
+    {item:'TMT steel (Fe500)', qty:r(Kg,0)+' kg', rate:'₹'+rt.steel+'/kg', amt:Kg*rt.steel},
+    {item:'Binding wire', qty:r(wire,1)+' kg', rate:'₹'+r(fin('bindingWire'),0)+'/kg', amt:wire*fin('bindingWire')}
+  ];
+  return cards([['Steel',r(Kg,0)+' kg',r(Kg/1000,3)+' tonnes'],['Binding wire',r(wire,1)+' kg','']])+out.join('')+costTable(rows);
+}
+
+/* ════════════════════════════════════════════════════════════════ */
+initCity();
+</script>
+
+</body>
+</html>
