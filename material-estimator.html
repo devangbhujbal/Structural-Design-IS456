@@ -196,6 +196,19 @@
       .hero h1 { font-size: 1.8rem; } .page-body { padding: 1.5rem 1rem 3rem; }
       .site-title { font-size: 0.85rem; }
     }
+
+    /* ── FAQ & COMMON MISTAKES ── */
+    .faq-item { border-bottom: 1px solid var(--border); padding: 0.95rem 0; }
+    .faq-item:last-child { border-bottom: none; padding-bottom: 0.2rem; }
+    .faq-q { font-weight: 700; font-size: 0.97rem; color: var(--text); margin-bottom: 0.35rem; }
+    .faq-a { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; }
+    .faq-a a { color: var(--accent); text-decoration: none; }
+    .faq-a a:hover { text-decoration: underline; }
+    .mistake-list { list-style: none; padding: 0; margin: 0; }
+    .mistake-list li { position: relative; padding: 0.8rem 0 0.8rem 1.9rem; border-bottom: 1px solid var(--border); font-size: 0.91rem; color: var(--text-muted); line-height: 1.6; }
+    .mistake-list li:last-child { border-bottom: none; padding-bottom: 0.2rem; }
+    .mistake-list li::before { content: '✕'; position: absolute; left: 0.2rem; top: 0.8rem; color: var(--fail); font-weight: 800; }
+    .mistake-list strong { color: var(--text); }
   </style>
 </head>
 <body>
@@ -307,6 +320,57 @@
         <span class="hint" id="ctxEcho"></span>
       </div>
       <div class="results" id="results"></div>
+    </div>
+  </div>
+
+  <!-- ════════ COMMON MISTAKES ════════ -->
+  <div class="panel">
+    <div class="panel-head">⚠️ Common Mistakes to Avoid</div>
+    <div class="panel-body">
+      <ul class="mistake-list">
+        <li><strong>Treating the estimate as a measured bill of quantities.</strong> Figures use volumetric rules of thumb — ideal for ordering and cross-checks, but a contract BOQ needs detailed measurement.</li>
+        <li><strong>Not deducting openings.</strong> For brickwork, blockwork and plaster, set the openings (%) field for doors and windows, otherwise the quantities are overstated.</li>
+        <li><strong>Trusting the rates without a local check.</strong> Prices are indicative 2026 averages and move weekly — confirm cement, sand, steel and brick rates with your supplier before ordering.</li>
+        <li><strong>Forgetting wastage.</strong> Set a realistic wastage % for each item; tiles in particular need around 10% for cutting and breakage.</li>
+        <li><strong>Mixing up units.</strong> Lengths are in metres and thickness in millimetres where labelled. Sand and aggregate are output in cft (and m³) — order in the unit your supplier quotes.</li>
+        <li><strong>Assuming the cost includes labour.</strong> Totals are material-only and exclude labour, scaffolding, tools, taxes and transport unless noted.</li>
+        <li><strong>Using the steel thumb-rule as a final quantity.</strong> The kg/m³ figures are for budgeting; the actual steel must come from a bar bending schedule.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════ FAQ ════════ -->
+  <div class="panel">
+    <div class="panel-head">❓ Frequently Asked Questions</div>
+    <div class="panel-body">
+      <div class="faq-item">
+        <div class="faq-q">How accurate are the quantities?</div>
+        <div class="faq-a">They follow standard IS-based volumetric methods (e.g. the 1.54 dry-volume factor, ~500 bricks/m³). Expect them to be close enough for ordering and budgeting, not exact to the last bag.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Are the city prices live?</div>
+        <div class="faq-a">No — they are indicative 2026 market averages stored in the page and easy to update. Always verify rates locally before purchase.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Why does the cost change when I pick a different city?</div>
+        <div class="faq-a">Cement, sand, aggregate, brick and steel use per-city rates, while finishing items (putty, paint, adhesive, tiles, waterproofing, plywood) use national rates scaled by a regional cost index.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Does the cost include labour?</div>
+        <div class="faq-a">No — material cost only. Labour, scaffolding, tools, taxes and transport are excluded unless specifically noted.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What is the 1.54 dry-volume factor for concrete?</div>
+        <div class="faq-a">Dry materials (cement, sand, aggregate) occupy roughly 54% more loose volume than the finished wet concrete, because they fill voids when mixed and compacted. So dry volume = 1.54 × wet volume.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Why is the tile material cost sometimes excluded?</div>
+        <div class="faq-a">Tile prices vary enormously by design and brand — enter a ₹/m² tile price to include them. Adhesive and grout are always costed.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Why does it warn about a nominal mix for M25?</div>
+        <div class="faq-a">IS 456 recommends a <em>design mix</em> (IS 10262) for M25 and above. The nominal proportions are shown only as an estimating approximation, not for actual proportioning.</div>
+      </div>
     </div>
   </div>
 
