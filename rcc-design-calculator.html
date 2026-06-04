@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DP111VJT0Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DP111VJT0Q');
+</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RCC Design Calculator | Structural Design IS 456</title>
+  <meta name="description" content="Free RCC design calculator per IS 456:2000 — set project location, seismic zone, wind, exposure and material grades once, then design slabs, beams, columns, footings, staircases and water tanks with step-by-step calculations." />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [
+      {left:'$$',right:'$$',display:true},
+      {left:'$',right:'$',display:false}
+    ]});"></script>
+  <style>
+    :root {
+      --bg: #f5f2eb;
+      --surface: #fffef9;
+      --surface2: #f5f0e8;
+      --border: #d9d0bc;
+      --accent: #b5451b;
+      --accent-light: #f0ddd6;
+      --text: #1e1b16;
+      --text-muted: #6b6256;
+      --heading-font: 'Merriweather', Georgia, serif;
+      --body-font: 'Source Sans 3', sans-serif;
+      --ok: #4a9e4a;
+      --warn: #d4a017;
+      --fail: #c0392b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body-font);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    /* ── HEADER (matches topic pages) ── */
+    header {
+      background: var(--text); color: #fff; padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 62px; position: sticky; top: 0; z-index: 100;
+      border-bottom: 3px solid var(--accent);
+    }
+    .site-title { font-family: var(--heading-font); font-size: 1rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .site-title span { color: var(--accent); }
+    nav { display: flex; align-items: center; }
+    nav a { color: #ccc; text-decoration: none; margin-left: 1.5rem; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: #fff; }
+
+    .nav-dropdown { position: relative; display: flex; align-items: center; margin-left: 1.5rem; }
+    .nav-dropdown > a {
+      display: inline-flex; align-items: center; gap: 4px; color: #ccc;
+      text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; margin-left: 0;
+    }
+    .nav-dropdown > a::after {
+      content: ''; display: inline-block; width: 0; height: 0;
+      border-left: 4px solid transparent; border-right: 4px solid transparent;
+      border-top: 5px solid currentColor; opacity: 0.7; transition: transform 0.2s;
+    }
+    .nav-dropdown:hover > a::after, .nav-dropdown:focus-within > a::after { transform: rotate(180deg); }
+    .dropdown-menu {
+      display: none; position: absolute; top: calc(100% + 4px); left: 50%;
+      transform: translateX(-50%); background: #1a1814; border: 1px solid #333028;
+      border-top: 3px solid #b5451b; border-radius: 0 0 4px 4px; min-width: 260px;
+      z-index: 999; padding: 0.4rem 0; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .nav-dropdown:hover .dropdown-menu, .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-menu a {
+      display: flex; align-items: center; gap: 10px; padding: 0.55rem 1.1rem;
+      font-size: 0.875rem; color: #9a9080; text-decoration: none;
+      transition: background 0.15s, color 0.15s; white-space: nowrap; margin-left: 0;
+    }
+    .dropdown-menu a:hover { background: #242018; color: #f0ebe0; }
+    .dropdown-menu .topic-num { font-size: 0.72rem; font-weight: 700; color: #b5451b; min-width: 20px; font-family: 'Courier New', monospace; }
+    .dropdown-menu .dropdown-divider { height: 1px; background: #333028; margin: 0.35rem 0; }
+    .nav-dropdown::after { content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 12px; }
+
+    /* ── HERO ── */
+    .hero { background: var(--text); color: #fff; padding: 3rem 2rem 2.5rem; border-bottom: 4px solid var(--accent); }
+    .hero-inner { max-width: 1080px; margin: 0 auto; }
+    .breadcrumb { font-size: 0.8rem; color: #999; margin-bottom: 1rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .breadcrumb a { color: #aaa; text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+    .hero h1 { font-family: var(--heading-font); font-size: 2.4rem; line-height: 1.25; margin-bottom: 0.75rem; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { color: #b8b0a2; font-size: 1rem; max-width: 720px; }
+    .hero-badges { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .hero-badge { font-size: 0.78rem; background: rgba(181,69,27,0.18); color: #e6a583; border: 1px solid rgba(181,69,27,0.4); padding: 3px 10px; border-radius: 3px; font-weight: 600; }
+
+    .page-body { max-width: 1080px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer { background: #fffbe6; border: 1px solid #ffe58f; border-left: 4px solid var(--warn);
+      padding: 1rem 1.4rem; border-radius: 0 4px 4px 0; margin-bottom: 2.5rem; font-size: 0.92rem; color: #6b5d1f; }
+    .disclaimer strong { color: #8a7300; }
+
+    /* ── PANELS ── */
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 2rem; overflow: hidden; }
+    .panel-head {
+      background: var(--surface2); border-bottom: 1px solid var(--border);
+      padding: 0.9rem 1.4rem; display: flex; align-items: center; gap: 0.6rem;
+      font-family: var(--heading-font); font-weight: 700; font-size: 1.05rem;
+    }
+    .panel-head .code-tag { margin-left: auto; font-family: 'Courier New', monospace; font-size: 0.72rem;
+      background: var(--accent-light); color: var(--accent); border: 1px solid #e4bfb2; padding: 2px 8px; border-radius: 2px; font-weight: 700; }
+    .panel-body { padding: 1.4rem; }
+
+    /* ── FORM GRID ── */
+    .field-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem 1.25rem; }
+    .field { display: flex; flex-direction: column; gap: 0.3rem; }
+    .field label { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .field .hint { font-size: 0.74rem; color: var(--text-muted); }
+    .field input, .field select {
+      font-family: var(--body-font); font-size: 0.95rem; padding: 0.5rem 0.65rem;
+      border: 1px solid var(--border); border-radius: 4px; background: #fff; color: var(--text); width: 100%;
+    }
+    .field input:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(181,69,27,0.15); }
+    .field input[readonly] { background: var(--surface2); color: var(--text-muted); cursor: not-allowed; }
+
+    .derived-pill { font-size: 0.78rem; font-weight: 700; padding: 2px 10px; border-radius: 3px; display: inline-block; }
+    .zone2 { background:#e8f5e9; color:#2e7d32; } .zone3 { background:#fff8e1; color:#b08400; }
+    .zone4 { background:#fde8d8; color:#c65d12; } .zone5 { background:#fde4e4; color:#c0392b; }
+
+    .ctx-sub { font-family: var(--heading-font); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--accent); margin: 1.4rem 0 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+    .ctx-sub:first-child { margin-top: 0; }
+
+    /* ── MEMBER PICKER ── */
+    .picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 0.85rem; }
+    .member-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.1rem 1rem;
+      cursor: pointer; text-align: center; transition: all 0.18s; border-top: 3px solid var(--border);
+    }
+    .member-card:hover { border-color: var(--accent); border-top-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+    .member-card.active { border-color: var(--accent); border-top-color: var(--accent); background: var(--accent-light); }
+    .member-card .ico { font-size: 1.9rem; line-height: 1; }
+    .member-card .mc-title { font-weight: 700; font-size: 0.95rem; margin: 0.5rem 0 0.2rem; }
+    .member-card .mc-sub { font-size: 0.74rem; color: var(--text-muted); }
+
+    .btn {
+      font-family: var(--body-font); font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      background: var(--accent); color: #fff; border: none; padding: 0.7rem 1.8rem; border-radius: 4px; transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn-row { margin-top: 1.4rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+
+    /* ── RESULTS ── */
+    .results { margin-top: 1.6rem; display: none; }
+    .results.show { display: block; }
+    .res-banner { padding: 0.9rem 1.3rem; border-radius: 4px; font-weight: 600; margin-bottom: 1.25rem; display: flex; gap: 0.6rem; align-items: center; }
+    .res-banner.pass { background: #eef7ee; border: 1px solid #b8ddb8; color: #2e6b2e; }
+    .res-banner.warn { background: #fffbe6; border: 1px solid #ffe58f; color: #8a6d00; }
+    .res-banner.fail { background: #fdecea; border: 1px solid #f0b3aa; color: #a3271a; }
+
+    .step { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; padding: 0.85rem 1.1rem; margin-bottom: 0.75rem; }
+    .step-title { font-weight: 700; font-size: 0.9rem; display: flex; align-items: baseline; gap: 0.5rem; }
+    .step-title .clause { font-family: 'Courier New', monospace; font-size: 0.7rem; color: var(--accent); background: var(--accent-light); padding: 1px 7px; border-radius: 2px; margin-left: auto; }
+    .step-body { font-size: 0.92rem; color: var(--text); margin-top: 0.35rem; }
+    .step-body .calc { font-family: 'Courier New', monospace; font-size: 0.86rem; background: var(--surface2); padding: 0.5rem 0.7rem; border-radius: 3px; margin: 0.4rem 0; overflow-x: auto; white-space: pre-wrap; }
+    .step-body .out { font-weight: 700; color: var(--accent); }
+
+    .result-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px,1fr)); gap: 0.75rem; margin: 1.25rem 0; }
+    .rc { background: var(--text); color: #f0ebe0; border-radius: 5px; padding: 0.9rem 1rem; border-left: 3px solid var(--accent); }
+    .rc .rc-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #b0a896; }
+    .rc .rc-value { font-family: var(--heading-font); font-size: 1.25rem; font-weight: 700; color: #fff; margin-top: 0.15rem; line-height: 1.25; }
+    .rc .rc-sub { font-size: 0.76rem; color: #9a9080; margin-top: 0.1rem; }
+
+    .err-msg { color: var(--fail); font-size: 0.9rem; font-weight: 600; margin-top: 1rem; }
+
+    .nav-footer { margin-top: 3rem; border-top: 2px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .nav-footer a { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .nav-footer a:hover { text-decoration: underline; }
+
+    footer { background: var(--text); color: #888; text-align: center; padding: 1.5rem; font-size: 0.85rem; border-top: 3px solid var(--accent); }
+
+    @media (max-width: 600px) {
+      header { padding: 0 1rem; } nav a, .nav-dropdown { margin-left: 0.9rem; }
+      .hero h1 { font-size: 1.8rem; } .page-body { padding: 1.5rem 1rem 3rem; }
+      .site-title { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="site-title" href="index.html">Structural Design <span>IS 456</span></a>
+  <nav>
+    <a href="index.html">Home</a>
+    <div class="nav-dropdown">
+      <a href="what-is-rcc.html">Topics</a>
+      <div class="dropdown-menu">
+        <a href="what-is-rcc.html"><span class="topic-num">01</span> What is RCC?</a>
+        <a href="limit-state-method.html"><span class="topic-num">02</span> Limit State Method</a>
+        <div class="dropdown-divider"></div>
+        <a href="singly-reinforced-beams.html"><span class="topic-num">03</span> Singly Reinforced Beams</a>
+        <a href="doubly-reinforced-beams.html"><span class="topic-num">04</span> Doubly Reinforced Beams</a>
+        <a href="flanged-beams.html"><span class="topic-num">05</span> Flanged Beams (T &amp; L)</a>
+        <div class="dropdown-divider"></div>
+        <a href="one-way-slabs.html"><span class="topic-num">06</span> One-Way Slabs</a>
+        <a href="two-way-slabs.html"><span class="topic-num">07</span> Two-Way Slabs</a>
+        <div class="dropdown-divider"></div>
+        <a href="short-columns.html"><span class="topic-num">08</span> Short Columns</a>
+        <a href="isolated-footings.html"><span class="topic-num">09</span> Isolated Footings</a>
+      </div>
+    </div>
+    <a href="about-us.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a> &nbsp;/&nbsp; RCC Design Calculator</div>
+    <h1>RCC Design <span>Calculator</span></h1>
+    <p>Set your project context once — location auto-derives seismic zone and wind speed, exposure sets the minimum grade and cover. Then design any member below. Every designer inherits the context.</p>
+    <div class="hero-badges">
+      <span class="hero-badge">IS 456 : 2000</span>
+      <span class="hero-badge">IS 1893 : 2016 seismic zone</span>
+      <span class="hero-badge">IS 875-3 : 2015 wind</span>
+      <span class="hero-badge">Limit State Method</span>
+      <span class="hero-badge">Free · No signup</span>
+    </div>
+  </div>
+</section>
+
+<div class="page-body">
+
+  <div class="disclaimer">
+    <strong>Preliminary design only.</strong> Results are for concept design, teaching and quick checks. The seismic and wind values here set the design environment — actual earthquake and wind <em>load calculations</em> must be added separately. For construction drawings, verify with full analysis (STAAD/ETABS) and a qualified structural engineer's sign-off, per IS 456 : 2000.
+  </div>
+
+  <!-- ════════ DESIGN CONTEXT ════════ -->
+  <div class="panel">
+    <div class="panel-head">⚙️ Design Context <span class="code-tag">flows into every member</span></div>
+    <div class="panel-body">
+
+      <div class="ctx-sub">Project &amp; Location</div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="ctxProject">Project name</label>
+          <input type="text" id="ctxProject" placeholder="e.g. G+3 Residential, Pune" />
+          <span class="hint">For your reference only</span>
+        </div>
+        <div class="field">
+          <label for="ctxLocation">Location</label>
+          <select id="ctxLocation" onchange="onLocationChange()"></select>
+          <span class="hint">Sets seismic zone &amp; wind speed</span>
+        </div>
+        <div class="field">
+          <label for="ctxCategory">Building category</label>
+          <select id="ctxCategory" onchange="onCategoryChange()">
+            <option value="res">Residential</option>
+            <option value="com">Commercial</option>
+            <option value="inst">Institutional / School</option>
+            <option value="ind">Industrial</option>
+            <option value="crit">Critical (hospital / emergency)</option>
+          </select>
+          <span class="hint">Sets importance factor I</span>
+        </div>
+      </div>
+
+      <div class="ctx-sub">Seismic &mdash; IS 1893 : 2016</div>
+      <div class="field-grid">
+        <div class="field">
+          <label>Seismic zone (derived)</label>
+          <div style="padding-top:0.35rem;"><span id="ctxZonePill" class="derived-pill zone3">Zone III</span></div>
+          <span class="hint" id="ctxZoneHint">Z = 0.16 · Moderate</span>
+        </div>
+        <div class="field">
+          <label for="ctxImportance">Importance factor (I)</label>
+          <select id="ctxImportance">
+            <option value="1.0">1.0 — Regular</option>
+            <option value="1.2">1.2 — Intermediate</option>
+            <option value="1.5">1.5 — Hospital / school / emergency</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="ctxR">Response reduction (R)</label>
+          <select id="ctxR">
+            <option value="3.0">3.0 — OMRF (non-ductile)</option>
+            <option value="4.0">4.0 — Ordinary shear wall</option>
+            <option value="5.0" selected>5.0 — SMRF (ductile)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>IS 13920 ductile detailing</label>
+          <div style="padding-top:0.35rem;"><span id="ctxDuctilePill" class="derived-pill zone3">Applied</span></div>
+          <span class="hint" id="ctxDuctileHint">Auto-on for Zone III+ · forces Fe500D</span>
+        </div>
+      </div>
+
+      <div class="ctx-sub">Wind &mdash; IS 875 (Part 3) : 2015</div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="ctxVb">Basic wind speed Vb (m/s)</label>
+          <input type="number" id="ctxVb" readonly />
+          <span class="hint">Derived from location</span>
+        </div>
+        <div class="field">
+          <label for="ctxTerrain">Terrain category</label>
+          <select id="ctxTerrain">
+            <option value="1">1 — Open sea / shoreline</option>
+            <option value="2" selected>2 — Open country, few obstructions</option>
+            <option value="3">3 — Densely built-up urban</option>
+            <option value="4">4 — Large city centre</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="ctxHeight">Structure height (m)</label>
+          <input type="number" id="ctxHeight" value="12" step="0.5" />
+          <span class="hint">Roof level above ground</span>
+        </div>
+      </div>
+
+      <div class="ctx-sub">Exposure &amp; Materials &mdash; IS 456 Table 5</div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="ctxExposure">Exposure condition</label>
+          <select id="ctxExposure" onchange="onExposureChange()">
+            <option value="mild">Mild</option>
+            <option value="moderate" selected>Moderate</option>
+            <option value="severe">Severe</option>
+            <option value="vsevere">Very severe</option>
+            <option value="extreme">Extreme</option>
+          </select>
+          <span class="hint" id="ctxExpHint">Min M25 · cover 30 mm · w/c ≤ 0.50</span>
+        </div>
+        <div class="field">
+          <label for="ctxFck">Concrete grade</label>
+          <select id="ctxFck">
+            <option value="20">M20</option>
+            <option value="25" selected>M25</option>
+            <option value="30">M30</option>
+            <option value="35">M35</option>
+            <option value="40">M40</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="ctxFy">Steel grade</label>
+          <select id="ctxFy">
+            <option value="415">Fe 415</option>
+            <option value="500">Fe 500</option>
+            <option value="500" data-d="1" selected>Fe 500D</option>
+            <option value="550">Fe 550D</option>
+          </select>
+          <span class="hint">Fe 500D required in Zone III–V</span>
+        </div>
+        <div class="field">
+          <label for="ctxCover">Nominal cover (mm)</label>
+          <input type="number" id="ctxCover" value="30" step="5" />
+          <span class="hint">Min per exposure</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════ MEMBER PICKER ════════ -->
+  <div class="panel">
+    <div class="panel-head">🧱 Pick a member to design</div>
+    <div class="panel-body">
+      <div class="picker-grid" id="picker">
+        <div class="member-card" data-m="slab" onclick="selectMember('slab')">
+          <div class="ico">🏗️</div><div class="mc-title">Slab</div><div class="mc-sub">One-way &amp; two-way</div>
+        </div>
+        <div class="member-card" data-m="beam" onclick="selectMember('beam')">
+          <div class="ico">📐</div><div class="mc-title">Beam</div><div class="mc-sub">Singly &amp; doubly</div>
+        </div>
+        <div class="member-card" data-m="column" onclick="selectMember('column')">
+          <div class="ico">🏛️</div><div class="mc-title">Column</div><div class="mc-sub">Axial &amp; biaxial</div>
+        </div>
+        <div class="member-card" data-m="footing" onclick="selectMember('footing')">
+          <div class="ico">🔲</div><div class="mc-title">Footing</div><div class="mc-sub">Square &amp; rectangular</div>
+        </div>
+        <div class="member-card" data-m="stair" onclick="selectMember('stair')">
+          <div class="ico">🪜</div><div class="mc-title">Staircase</div><div class="mc-sub">Dog-legged (waist)</div>
+        </div>
+        <div class="member-card" data-m="tank" onclick="selectMember('tank')">
+          <div class="ico">💧</div><div class="mc-title">Water Tank</div><div class="mc-sub">Rectangular wall</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ DESIGNER PANEL (dynamic) ════════ -->
+  <div class="panel" id="designerPanel" style="display:none;">
+    <div class="panel-head"><span id="designerTitle">Designer</span> <span class="code-tag" id="designerCode"></span></div>
+    <div class="panel-body">
+      <div class="field-grid" id="designerInputs"></div>
+      <div class="btn-row">
+        <button class="btn" id="designBtn">Design</button>
+        <span class="hint" id="ctxEcho"></span>
+      </div>
+      <div class="results" id="results"></div>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a href="index.html">← Back to Home</a>
+    <a href="contact.html">Found an issue? Contact us →</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Structural Design IS 456 · Reference: IS 456:2000, Plain and Reinforced Concrete — Code of Practice (4th Revision)</p>
+  <p style="margin-top:0.4rem;">Calculator is for educational and preliminary use. Always verify designs with a qualified structural engineer.</p>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   DATA TABLES
+   ════════════════════════════════════════════════════════════════ */
+
+// Location → seismic zone (IS 1893:2016) + basic wind speed Vb (IS 875-3)
+const CITIES = [
+  ["Agra, Uttar Pradesh", 3, 47], ["Ahmedabad, Gujarat", 3, 39],
+  ["Amritsar, Punjab", 4, 47], ["Aurangabad, Maharashtra", 2, 39],
+  ["Bangalore, Karnataka", 2, 33], ["Bhopal, Madhya Pradesh", 2, 39],
+  ["Bhubaneswar, Odisha", 3, 50], ["Bhuj, Gujarat", 5, 50],
+  ["Chandigarh", 4, 47], ["Chennai, Tamil Nadu", 3, 50],
+  ["Coimbatore, Tamil Nadu", 3, 39], ["Dehradun, Uttarakhand", 4, 47],
+  ["Delhi NCR", 4, 47], ["Goa (Panaji)", 3, 39],
+  ["Gurgaon, Haryana", 4, 47], ["Guwahati, Assam", 5, 50],
+  ["Hyderabad, Telangana", 2, 44], ["Indore, Madhya Pradesh", 3, 39],
+  ["Jaipur, Rajasthan", 2, 47], ["Jammu, J&K", 4, 47],
+  ["Jodhpur, Rajasthan", 2, 47], ["Kanpur, Uttar Pradesh", 3, 47],
+  ["Kochi, Kerala", 3, 39], ["Kolkata, West Bengal", 3, 50],
+  ["Lucknow, Uttar Pradesh", 3, 47], ["Ludhiana, Punjab", 4, 47],
+  ["Madurai, Tamil Nadu", 2, 39], ["Mangalore, Karnataka", 3, 39],
+  ["Mumbai, Maharashtra", 3, 44], ["Mysore, Karnataka", 2, 33],
+  ["Nagpur, Maharashtra", 2, 44], ["Nashik, Maharashtra", 3, 39],
+  ["Noida, Uttar Pradesh", 4, 47], ["Patna, Bihar", 4, 47],
+  ["Pune, Maharashtra", 3, 39], ["Raipur, Chhattisgarh", 2, 39],
+  ["Rajkot, Gujarat", 3, 39], ["Ranchi, Jharkhand", 2, 47],
+  ["Shimla, Himachal Pradesh", 4, 39], ["Siliguri, West Bengal", 4, 47],
+  ["Srinagar, J&K", 5, 39], ["Surat, Gujarat", 3, 44],
+  ["Thiruvananthapuram, Kerala", 3, 39], ["Tiruchirappalli, Tamil Nadu", 2, 47],
+  ["Udaipur, Rajasthan", 2, 47], ["Vadodara, Gujarat", 3, 44],
+  ["Varanasi, Uttar Pradesh", 3, 47], ["Vijayawada, Andhra Pradesh", 3, 50],
+  ["Visakhapatnam, Andhra Pradesh", 2, 50]
+];
+const ZONE_Z = {2:0.10, 3:0.16, 4:0.24, 5:0.36};
+const ZONE_DESC = {2:"Low", 3:"Moderate", 4:"Severe", 5:"Very severe"};
+
+// Exposure → min grade, min cover, max w/c (IS 456 Table 5 + Cl 26.4)
+const EXPOSURE = {
+  mild:    {grade:20, cover:20, wc:0.55, label:"Min M20 · cover 20 mm · w/c ≤ 0.55"},
+  moderate:{grade:25, cover:30, wc:0.50, label:"Min M25 · cover 30 mm · w/c ≤ 0.50"},
+  severe:  {grade:30, cover:45, wc:0.45, label:"Min M30 · cover 45 mm · w/c ≤ 0.45"},
+  vsevere: {grade:35, cover:50, wc:0.45, label:"Min M35 · cover 50 mm · w/c ≤ 0.45"},
+  extreme: {grade:40, cover:75, wc:0.40, label:"Min M40 · cover 75 mm · w/c ≤ 0.40"}
+};
+const CATEGORY_I = {res:"1.0", com:"1.0", inst:"1.5", ind:"1.0", crit:"1.5"};
+
+// xu,max / d  by steel grade (IS 456 Cl 38.1)
+const XUMAX = {250:0.5313, 415:0.4791, 500:0.4560, 550:0.4439};
+// limiting moment factor Mu,lim = k·fck·b·d²
+function ruLim(fy){ const x=XUMAX[fy]; return 0.36*x*(1-0.42*x); }
+
+// Table 19 — design shear strength τc (N/mm²); rows = 100As/bd, cols M20..M40
+const TAU_PT = [0.15,0.25,0.50,0.75,1.00,1.25,1.50,1.75,2.00,2.25,2.50,2.75,3.00];
+const TAU_C = {
+  20:[0.28,0.36,0.48,0.56,0.62,0.67,0.72,0.75,0.79,0.81,0.82,0.82,0.82],
+  25:[0.29,0.36,0.49,0.57,0.64,0.70,0.74,0.78,0.82,0.85,0.88,0.90,0.92],
+  30:[0.29,0.37,0.50,0.59,0.66,0.71,0.76,0.80,0.84,0.88,0.91,0.94,0.96],
+  35:[0.29,0.37,0.50,0.59,0.67,0.73,0.78,0.82,0.86,0.90,0.93,0.96,0.99],
+  40:[0.30,0.38,0.51,0.60,0.68,0.74,0.79,0.84,0.88,0.92,0.95,0.98,1.01]
+};
+const TAU_MAX = {20:2.8,25:3.1,30:3.5,35:3.7,40:4.0};
+
+// compression-steel stress fsc (N/mm²) by d'/d  (Fe415, Fe500)
+const FSC = {
+  415:[[0.05,355],[0.10,353],[0.15,342],[0.20,329]],
+  500:[[0.05,424],[0.10,412],[0.15,395],[0.20,370]]
+};
+
+// Two-way slab — Table 27 (simply supported, corners not held down): αx, αy by Ly/Lx
+const T27 = [[1.0,0.062,0.062],[1.1,0.074,0.061],[1.2,0.084,0.059],[1.3,0.093,0.055],
+  [1.4,0.099,0.051],[1.5,0.104,0.046],[1.75,0.113,0.037],[2.0,0.118,0.029]];
+// Two-way — Table 26 interior panel (case 1): short-span neg(edge)/pos(mid); long-span constant
+const T26_SHORT = [[1.0,0.032,0.024],[1.1,0.037,0.028],[1.2,0.043,0.032],[1.3,0.047,0.036],
+  [1.4,0.051,0.039],[1.5,0.053,0.041],[1.75,0.060,0.045],[2.0,0.065,0.049]];
+const T26_LONG = [0.032,0.024]; // neg edge, pos mid (long span, all ratios)
+
+/* ════════════════════════════════════════════════════════════════
+   HELPERS
+   ════════════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+function num(id){ const v=parseFloat($(id).value); return isNaN(v)?0:v; }
+function r(x,n=2){ return (Math.round(x*10**n)/10**n).toLocaleString('en-IN'); }
+function barArea(d){ return Math.PI*d*d/4; }
+
+// 1-D linear interpolation on [[x,y],...]
+function interp1(table, x, xi=0, yi=1){
+  if(x<=table[0][xi]) return table[0][yi];
+  if(x>=table[table.length-1][xi]) return table[table.length-1][yi];
+  for(let i=0;i<table.length-1;i++){
+    if(x>=table[i][xi] && x<=table[i+1][xi]){
+      const t=(x-table[i][xi])/(table[i+1][xi]-table[i][xi]);
+      return table[i][yi]+t*(table[i+1][yi]-table[i][yi]);
+    }
+  }
+  return table[table.length-1][yi];
+}
+// τc lookup with interpolation across pt
+function tauc(pt, fck){
+  const arr=TAU_C[fck]||TAU_C[25];
+  if(pt<=TAU_PT[0]) return arr[0];
+  if(pt>=TAU_PT[TAU_PT.length-1]) return arr[arr.length-1];
+  for(let i=0;i<TAU_PT.length-1;i++){
+    if(pt>=TAU_PT[i]&&pt<=TAU_PT[i+1]){
+      const t=(pt-TAU_PT[i])/(TAU_PT[i+1]-TAU_PT[i]);
+      return arr[i]+t*(arr[i+1]-arr[i]);
+    }
+  }
+  return arr[arr.length-1];
+}
+// fsc by d'/d
+function fscLookup(fy, ratio){
+  const t = FSC[fy] || FSC[500];
+  return interp1(t, ratio);
+}
+// Ast for given Mu (N·mm), singly reinforced  → mm²
+function astFromMu(Mu, fck, fy, b, d){
+  const k = 4.6*Mu/(fck*b*d*d);
+  if(k>=1) return null; // section inadequate as singly
+  return (0.5*fck/fy)*(1-Math.sqrt(1-k))*b*d;
+}
+// deflection basic span/d ratios
+const BASIC_LD = {ss:20, cont:26, cant:7};
+// modification factor for tension steel — interpolated from IS 456 Fig 4
+// columns: fs = 240 N/mm² (Fe415) and fs = 290 N/mm² (Fe500); fs = 0.58·fy·(Ast,req/Ast,prov)
+function modFactor(fs, pt){
+  const PT=[0.2,0.3,0.4,0.5,0.6,0.8,1.0,1.2,1.5,2.0,2.5,3.0];
+  const MF240=[2.00,1.70,1.50,1.38,1.30,1.18,1.10,1.04,0.96,0.88,0.83,0.80];
+  const MF290=[1.85,1.50,1.33,1.22,1.14,1.04,0.97,0.92,0.85,0.78,0.74,0.72];
+  function lk(arr){
+    if(pt<=PT[0]) return arr[0];
+    if(pt>=PT[PT.length-1]) return arr[arr.length-1];
+    for(let i=0;i<PT.length-1;i++){ if(pt>=PT[i]&&pt<=PT[i+1]){
+      const t=(pt-PT[i])/(PT[i+1]-PT[i]); return arr[i]+t*(arr[i+1]-arr[i]); } }
+    return arr[arr.length-1];
+  }
+  const m240=lk(MF240), m290=lk(MF290);
+  let mf;
+  if(fs>=240){ const t=(fs-240)/(290-240); mf=m240+t*(m290-m240); }
+  else { const tlo=Math.min((240-fs)/120,1); mf=m240+tlo*(2.0-m240); } // lower stress → higher factor
+  return Math.min(Math.max(mf,0.8),2.0);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CONTEXT
+   ════════════════════════════════════════════════════════════════ */
+function initContext(){
+  const sel=$("ctxLocation");
+  CITIES.forEach((c,i)=>{
+    const o=document.createElement('option'); o.value=i; o.textContent=c[0];
+    if(c[0].startsWith("Mumbai")) o.selected=true;
+    sel.appendChild(o);
+  });
+  onLocationChange();
+}
+function onLocationChange(){
+  const c=CITIES[parseInt($("ctxLocation").value)];
+  const zone=c[1], vb=c[2];
+  const pill=$("ctxZonePill");
+  pill.textContent="Zone "+["","I","II","III","IV","V"][zone];
+  pill.className="derived-pill zone"+zone;
+  $("ctxZoneHint").textContent="Z = "+ZONE_Z[zone].toFixed(2)+" · "+ZONE_DESC[zone];
+  $("ctxVb").value=vb;
+  // ductile detailing auto for zone III+
+  const dp=$("ctxDuctilePill");
+  if(zone>=3){ dp.textContent="Applied"; dp.className="derived-pill zone"+zone;
+    $("ctxDuctileHint").textContent="Zone "+["","I","II","III","IV","V"][zone]+" → IS 13920 ductile detailing, Fe500D"; }
+  else { dp.textContent="Not required"; dp.className="derived-pill zone2";
+    $("ctxDuctileHint").textContent="Zone II → standard detailing"; }
+}
+function onCategoryChange(){
+  $("ctxImportance").value = CATEGORY_I[$("ctxCategory").value];
+}
+function onExposureChange(){
+  const e=EXPOSURE[$("ctxExposure").value];
+  $("ctxExpHint").textContent=e.label;
+  // bump grade & cover up to minimums
+  if(parseInt($("ctxFck").value) < e.grade) $("ctxFck").value=e.grade;
+  if(num("ctxCover") < e.cover) $("ctxCover").value=e.cover;
+}
+function getContext(){
+  const fyOpt=$("ctxFy").selectedOptions[0];
+  return {
+    project: $("ctxProject").value || "Untitled project",
+    location: CITIES[parseInt($("ctxLocation").value)][0],
+    zone: CITIES[parseInt($("ctxLocation").value)][1],
+    fck: parseInt($("ctxFck").value),
+    fy: parseInt($("ctxFy").value),
+    fyD: fyOpt.dataset.d ? true : false,
+    cover: num("ctxCover"),
+    exposure: $("ctxExposure").value
+  };
+}
+
+/* ════════════════════════════════════════════════════════════════
+   DESIGNER DEFINITIONS  (inputs + calc per member)
+   ════════════════════════════════════════════════════════════════ */
+function fld(id,label,val,hint,type='number',step='any'){
+  return `<div class="field"><label for="${id}">${label}</label>
+    <input type="${type}" id="${id}" value="${val}" step="${step}"/>
+    ${hint?`<span class="hint">${hint}</span>`:''}</div>`;
+}
+function sel(id,label,opts,hint){
+  return `<div class="field"><label for="${id}">${label}</label><select id="${id}">${opts}</select>
+    ${hint?`<span class="hint">${hint}</span>`:''}</div>`;
+}
+
+const DESIGNERS = {
+  slab: {
+    title:"Slab Designer", code:"IS 456 Cl. 24, 23.2",
+    inputs:()=>`
+      ${fld('s_lx','Shorter clear span Lx (mm)',3000)}
+      ${fld('s_ly','Longer clear span Ly (mm)',4500)}
+      ${sel('s_support','Support condition',
+        `<option value="ss_two">Two-way · simply supported</option>
+         <option value="rest_two">Two-way · restrained (interior panel)</option>
+         <option value="ss_one">One-way · simply supported</option>
+         <option value="cont_one">One-way · continuous</option>
+         <option value="cant_one">One-way · cantilever</option>`)}
+      ${fld('s_ll','Live load (kN/m²)',3,'IS 875-2')}
+      ${fld('s_ff','Floor finish (kN/m²)',1.0)}
+      ${fld('s_D','Trial overall depth D (mm)',125,'tool checks deflection')}
+      ${fld('s_bar','Main bar dia (mm)',10)}`,
+    calc: calcSlab
+  },
+  beam: {
+    title:"Beam Designer", code:"IS 456 Cl. 38, 40, Annex G",
+    inputs:()=>`
+      ${fld('b_b','Width b (mm)',300)}
+      ${fld('b_D','Overall depth D (mm)',450)}
+      ${fld('b_span','Effective span (mm)',5000)}
+      ${sel('b_support','Support',`<option value="ss">Simply supported</option><option value="cont">Continuous (wL²/10)</option>`)}
+      ${fld('b_dl','Superimposed dead load (kN/m)',10,'excl. self-weight')}
+      ${fld('b_ll','Live load (kN/m)',8)}
+      ${fld('b_effcover','Effective cover d\u2032 (mm)',45,'to bar centroid')}
+      ${fld('b_bar','Tension bar dia (mm)',16)}
+      ${fld('b_stirrup','Stirrup dia (mm)',8)}`,
+    calc: calcBeam
+  },
+  column: {
+    title:"Column Designer", code:"IS 456 Cl. 39, 25, 26.5",
+    inputs:()=>`
+      ${sel('c_mode','Loading',`<option value="axial">Axial (short)</option><option value="biaxial">Axial + biaxial bending</option>`)}
+      ${fld('c_b','Width b (mm)',300)}
+      ${fld('c_D','Depth D (mm)',450)}
+      ${fld('c_len','Unsupported length (mm)',3000)}
+      ${fld('c_kx','Effective length factor k',1.0,'le = k·L')}
+      ${fld('c_pu','Factored axial load Pu (kN)',1200)}
+      ${fld('c_mux','Mux (kN·m)',60,'biaxial only')}
+      ${fld('c_muy','Muy (kN·m)',40,'biaxial only')}`,
+    calc: calcColumn
+  },
+  footing: {
+    title:"Isolated Footing Designer", code:"IS 456 Cl. 34, 31.6",
+    inputs:()=>`
+      ${sel('f_shape','Footing shape',`<option value="square">Square</option><option value="rect">Rectangular</option>`)}
+      ${fld('f_cx','Column size cx (mm)',300)}
+      ${fld('f_cy','Column size cy (mm)',450)}
+      ${fld('f_load','Service axial load (kN)',1000,'unfactored')}
+      ${fld('f_sbc','Safe bearing capacity (kN/m²)',200)}
+      ${fld('f_ratio','L/B ratio (rect only)',1.5)}
+      ${fld('f_D','Trial footing depth D (mm)',500)}
+      ${fld('f_bar','Bar dia (mm)',12)}`,
+    calc: calcFooting
+  },
+  stair: {
+    title:"Dog-legged Staircase Designer", code:"IS 456 Cl. 33, 23.2",
+    inputs:()=>`
+      ${fld('t_rise','Riser R (mm)',160)}
+      ${fld('t_going','Going / tread G (mm)',270)}
+      ${fld('t_nsteps','No. of risers in flight',9)}
+      ${fld('t_landing','Landing width (mm)',1200,'each end')}
+      ${fld('t_waist','Trial waist thickness (mm)',180)}
+      ${fld('t_width','Flight width (mm)',1000)}
+      ${fld('t_ll','Live load (kN/m²)',3,'IS 875-2')}
+      ${fld('t_ff','Floor finish (kN/m²)',1.0)}
+      ${fld('t_bar','Main bar dia (mm)',12)}`,
+    calc: calcStair
+  },
+  tank: {
+    title:"Rectangular Water Tank — wall (preliminary)", code:"IS 3370 (Parts 1 & 2)",
+    inputs:()=>`
+      ${fld('w_L','Tank length L (m)',4)}
+      ${fld('w_B','Tank breadth B (m)',3)}
+      ${fld('w_H','Depth of water H (m)',3)}
+      ${fld('w_free','Free board (m)',0.3)}
+      ${sel('w_base','Wall base condition',`<option value="fixed">Fixed at base (cantilever)</option><option value="hinged">Hinged at base</option>`)}
+      ${fld('w_thk','Trial wall thickness (mm)',200)}
+      ${fld('w_bar','Vertical bar dia (mm)',12)}`,
+    calc: calcTank
+  }
+};
+
+/* ════════════════════════════════════════════════════════════════
+   UI WIRING
+   ════════════════════════════════════════════════════════════════ */
+let activeMember=null;
+function selectMember(m){
+  activeMember=m;
+  document.querySelectorAll('.member-card').forEach(c=>c.classList.toggle('active', c.dataset.m===m));
+  const d=DESIGNERS[m];
+  $("designerTitle").textContent=d.title;
+  $("designerCode").textContent=d.code;
+  $("designerInputs").innerHTML=d.inputs();
+  $("results").className="results"; $("results").innerHTML="";
+  $("designerPanel").style.display="block";
+  const c=getContext();
+  $("ctxEcho").textContent=`Using: M${c.fck}, Fe${c.fy}${c.fyD?'D':''}, cover ${c.cover} mm · ${c.location} (Zone ${["","I","II","III","IV","V"][c.zone]})`;
+  $("designBtn").onclick=()=>runDesign(m);
+  $("designerPanel").scrollIntoView({behavior:'smooth',block:'start'});
+}
+function runDesign(m){
+  const ctx=getContext();
+  let html;
+  try { html = DESIGNERS[m].calc(ctx); }
+  catch(e){ html = `<div class="err-msg">Could not complete: ${e.message}. Please check your inputs.</div>`; }
+  $("results").innerHTML=html;
+  $("results").className="results show";
+  if(window.renderMathInElement) renderMathInElement($("results"),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+}
+
+// reusable result builders
+function banner(type, txt){ return `<div class="res-banner ${type}">${type==='pass'?'✓':type==='fail'?'✕':'⚠'} ${txt}</div>`; }
+function step(title, clause, body){ return `<div class="step"><div class="step-title">${title}${clause?`<span class="clause">${clause}</span>`:''}</div><div class="step-body">${body}</div></div>`; }
+function calcLine(s){ return `<div class="calc">${s}</div>`; }
+function cards(arr){ return `<div class="result-cards">`+arr.map(c=>`<div class="rc"><div class="rc-label">${c[0]}</div><div class="rc-value">${c[1]}</div>${c[2]?`<div class="rc-sub">${c[2]}</div>`:''}</div>`).join('')+`</div>`; }
+
+/* ════════════════════════════════════════════════════════════════
+   1 · SLAB
+   ════════════════════════════════════════════════════════════════ */
+function calcSlab(ctx){
+  const lx=num('s_lx'), ly=num('s_ly'), support=$('s_support').value,
+        ll=num('s_ll'), ff=num('s_ff'), D=num('s_D'), bar=num('s_bar');
+  if(lx<=0||ly<=0||D<=0) throw new Error("spans and depth must be positive");
+  const fck=ctx.fck, fy=ctx.fy, cover=ctx.cover;
+  const d = D - cover - bar/2;                       // effective depth (mm)
+  if(d<=0) throw new Error("cover + bar exceed depth");
+  const ratio = Math.max(ly,lx)/Math.min(ly,lx);
+  const isTwoWay = support.includes('two');
+  const Lxs = Math.min(lx,ly);                       // shorter span
+  let out=[]; out.push(step("Geometry","IS 456 Cl. 24.1",
+    `Ly/Lx = ${r(Math.max(ly,lx))}/${r(Math.min(ly,lx))} = <span class="out">${r(ratio)}</span> → ${isTwoWay?'two-way':'one-way'} slab.<br>
+     Effective depth d = D − cover − φ/2 = ${r(D)} − ${r(cover)} − ${r(bar/2)} = <span class="out">${r(d)} mm</span>`));
+
+  // loads (per m width)
+  const sw = 25*D/1000;                               // self weight kN/m²
+  const dl = sw + ff;
+  const w = 1.5*(dl+ll);                              // factored kN/m²
+  out.push(step("Loads","IS 456 Cl. 22 + IS 875",
+    `Self weight = 25 × ${r(D)}/1000 = ${r(sw)} kN/m²<br>
+     Total DL = ${r(sw)} + ${r(ff)} = ${r(dl)} kN/m² ; LL = ${r(ll)} kN/m²<br>
+     Factored wu = 1.5 × (${r(dl)} + ${r(ll)}) = <span class="out">${r(w)} kN/m²</span>`));
+
+  let Mx, My=0, Medge=0, label;
+  const Lx_m = Lxs/1000;
+  if(isTwoWay){
+    if(support==='ss_two'){
+      const ax=interp1(T27,ratio), ay=interp1(T27,ratio,0,2);
+      Mx=ax*w*Lx_m*Lx_m; My=ay*w*Lx_m*Lx_m;
+      label="simply supported (Table 27)";
+      out.push(step("Two-way moments","IS 456 Annex D, Table 27",
+        `αx = ${r(ax,3)}, αy = ${r(ay,3)} (for Ly/Lx = ${r(ratio)})<br>
+         Mx = αx·wu·Lx² = ${r(ax,3)} × ${r(w)} × ${r(Lx_m)}² = <span class="out">${r(Mx)} kN·m/m</span><br>
+         My = αy·wu·Lx² = <span class="out">${r(My)} kN·m/m</span>`));
+    } else {
+      const aMid=interp1(T26_SHORT,ratio,0,2), aEdge=interp1(T26_SHORT,ratio,0,1);
+      Mx=aMid*w*Lx_m*Lx_m; Medge=aEdge*w*Lx_m*Lx_m;
+      My=T26_LONG[1]*w*Lx_m*Lx_m;
+      label="restrained interior panel (Table 26)";
+      out.push(step("Two-way moments","IS 456 Annex D, Table 26",
+        `Mid-span (short) coeff = ${r(aMid,3)}, edge = ${r(aEdge,3)}<br>
+         Mx(mid) = <span class="out">${r(Mx)} kN·m/m</span> ; Mx(edge) = ${r(Medge)} kN·m/m<br>
+         My(mid, long span) = <span class="out">${r(My)} kN·m/m</span>`));
+    }
+  } else {
+    const Leff=Lxs+d;
+    let coeff = support==='ss_one'?8 : support==='cont_one'?10 : 2; // wL²/coeff (cant=wL²/2)
+    const span = support==='cant_one'? Lxs/1000 : Leff/1000;
+    Mx = w*span*span/coeff;
+    label = support==='ss_one'?'simply supported': support==='cont_one'?'continuous':'cantilever';
+    out.push(step("One-way moment","IS 456 Cl. 22.2 / Table 12",
+      `Effective span = ${r(span*1000)} mm = ${r(span)} m<br>
+       Mu = wu·L²/${coeff} = ${r(w)} × ${r(span)}²/${coeff} = <span class="out">${r(Mx)} kN·m/m</span>`));
+  }
+
+  // design main steel for governing Mx (mid)
+  const Mu = Math.max(Mx, Medge)*1e6; // N·mm per m
+  const b=1000;
+  const ruL = ruLim(fy)*fck;
+  const MuLim = ruL*b*d*d/1e6;
+  if(Mx > MuLim) out.push(step("Capacity check","IS 456 Cl. 38.1",
+    `Mu,lim = ${r(ruLim(fy),4)}·fck·b·d² = <span class="out">${r(MuLim)} kN·m/m</span> &lt; applied — increase depth.`));
+  let astMain=astFromMu(Mx*1e6,fck,fy,b,d);
+  const astMin=0.0012*b*D; // 0.12% for HYSD
+  if(!astMain) throw new Error("slab too thin for the moment — increase D");
+  astMain=Math.max(astMain,astMin);
+  const aBar=barArea(bar);
+  let sMain=Math.floor(1000*aBar/astMain/10)*10;
+  const sMax=Math.min(3*d,300);
+  sMain=Math.min(sMain,sMax);
+  const astProv=1000*aBar/sMain;
+  out.push(step("Main reinforcement","IS 456 Cl. 26.5.2.1",
+    `Ast,req = ${r(astMain)} mm²/m (min 0.12% = ${r(astMin)} mm²/m)<br>
+     Using φ${bar}: spacing = 1000·${r(aBar)}/${r(astMain)} → adopt <span class="out">φ${bar} @ ${sMain} mm c/c</span> (max ${r(sMax)} mm)<br>
+     Ast provided = ${r(astProv)} mm²/m`));
+
+  // distribution / secondary
+  let astDist=astMin, distBar=8;
+  const aDist=barArea(distBar);
+  let sDist=Math.min(Math.floor(1000*aDist/astDist/10)*10, 5*d, 450);
+  out.push(step(isTwoWay?"Steel in long-span direction":"Distribution steel","IS 456 Cl. 26.5.2.1",
+    isTwoWay
+      ? `My = ${r(My)} kN·m/m → Ast = ${r(Math.max(astFromMu(My*1e6,fck,fy,b,d)||0,astMin))} mm²/m. Adopt φ8 @ ${Math.min(sDist,300)} mm c/c.`
+      : `Distribution = 0.12% = ${r(astMin)} mm²/m → φ8 @ ${sDist} mm c/c (max 450 mm).`));
+
+  // deflection check
+  let defOk, defStep;
+  if(isTwoWay && Lxs<=3500){
+    // IS 456 Cl. 24.1 note — shorter span ≤ 3.5 m, span/overall-depth ratio
+    const isSS = support==='ss_two';
+    const ldAllow = fy<=250 ? (isSS?35:40) : (isSS?28:32); // ×0.8 for HYSD
+    const actualLD = Lxs/D;
+    defOk = actualLD <= ldAllow;
+    defStep = step("Deflection check","IS 456 Cl. 24.1",
+      `Two-way slab, shorter span ≤ 3.5 m → use span/overall-depth ratio.<br>
+       Allowable span/D = ${ldAllow} (Fe${fy}, ${isSS?'simply supported':'continuous'}) ; actual = ${r(Lxs)}/${r(D)} = ${r(actualLD)}<br>
+       <span class="out">${defOk?'OK ✓':'NOT OK — increase D'}</span>`);
+  } else {
+    const basic = support.includes('cant')?7 : support.includes('cont')?26 : 20;
+    const pt=100*astProv/(b*d);
+    const fs=0.58*fy*(astMain/astProv);
+    const mf=modFactor(fs,pt);
+    const allow=basic*mf;
+    const actual=Lxs/d;
+    defOk=actual<=allow;
+    defStep = step("Deflection check","IS 456 Cl. 23.2.1",
+      `pt = ${r(pt,3)}%, fs = 0.58·fy·(req/prov) = ${r(fs)} N/mm² → modification factor ≈ ${r(mf)} (Fig 4)<br>
+       Allowable L/d = ${basic} × ${r(mf)} = ${r(allow)} ; actual = ${r(Lxs)}/${r(d)} = ${r(actual)}<br>
+       <span class="out">${defOk?'OK ✓':'NOT OK — increase D'}</span>`);
+  }
+  out.push(defStep);
+
+  const ok = Mx<=MuLim && defOk;
+  return banner(ok?'pass':'warn', ok?`Two-way / one-way slab design OK (${label})`:'Design needs a deeper section — see flagged steps')
+    + cards([
+        ["Slab type", isTwoWay?"Two-way":"One-way", label],
+        ["Overall depth", r(D)+" mm", "d = "+r(d)+" mm"],
+        ["Main steel", "φ"+bar+" @ "+sMain, "c/c "+(isTwoWay?"both ways short":"")],
+        ["Distribution", "φ8 @ "+Math.min(sDist,300), "long / secondary"],
+        ["Factored load", r(w)+" kN/m²", ""]
+      ]) + out.join('');
+}
+
+/* ════════════════════════════════════════════════════════════════
+   2 · BEAM
+   ════════════════════════════════════════════════════════════════ */
+function calcBeam(ctx){
+  const b=num('b_b'), D=num('b_D'), span=num('b_span'), support=$('b_support').value,
+        dl=num('b_dl'), ll=num('b_ll'), effc=num('b_effcover'), bar=num('b_bar'), stir=num('b_stirrup');
+  const fck=ctx.fck, fy=ctx.fy;
+  if(b<=0||D<=0||span<=0) throw new Error("dimensions must be positive");
+  const d=D-effc;
+  const sw=25*b*D/1e6; // kN/m
+  const w=1.5*(dl+sw+ll);
+  const coeff= support==='cont'?10:8;
+  const Mu=w*(span/1000)*(span/1000)/coeff; // kN·m
+  const Vu=w*(span/1000)/2; // kN (SS); for cont approximate same
+  let out=[];
+  out.push(step("Section & loads","IS 456 Cl. 22",
+    `d = D − d′ = ${r(D)} − ${r(effc)} = <span class="out">${r(d)} mm</span><br>
+     Self weight = 25 × ${r(b)} × ${r(D)}/10⁶ = ${r(sw)} kN/m<br>
+     wu = 1.5 × (${r(dl)} + ${r(sw)} + ${r(ll)}) = <span class="out">${r(w)} kN/m</span><br>
+     Mu = wu·L²/${coeff} = <span class="out">${r(Mu)} kN·m</span> ; Vu = wu·L/2 = <span class="out">${r(Vu)} kN</span>`));
+
+  const ruL=ruLim(fy)*fck;
+  const MuLim=ruL*b*d*d/1e6;
+  const doubly = Mu>MuLim;
+  out.push(step("Limiting moment","IS 456 Cl. 38.1 / Annex G",
+    `xu,max/d = ${r(XUMAX[fy],3)} (Fe${fy}) → Mu,lim = ${r(ruLim(fy),4)}·fck·b·d² = <span class="out">${r(MuLim)} kN·m</span><br>
+     Applied Mu = ${r(Mu)} kN·m → <span class="out">${doubly?'Mu &gt; Mu,lim → DOUBLY reinforced':'Mu ≤ Mu,lim → SINGLY reinforced'}</span>`));
+
+  let Ast, Asc=0, astMsg;
+  if(!doubly){
+    Ast=astFromMu(Mu*1e6,fck,fy,b,d);
+    if(!Ast) throw new Error("section inadequate — increase depth");
+    astMsg=`Ast = (0.5 fck/fy)[1 − √(1 − 4.6Mu/fck b d²)]·b·d = <span class="out">${r(Ast)} mm²</span>`;
+    out.push(step("Tension steel","IS 456 Annex G-1.1", astMsg));
+  } else {
+    const Ast1=astFromMu(MuLim*1e6,fck,fy,b,d);
+    const Mu2=(Mu-MuLim);
+    const dd=effc; const ratio=dd/d;
+    const fsc=fscLookup(fy,ratio);
+    const Asc_=Mu2*1e6/((fsc-0.446*fck)*(d-dd));
+    const Ast2=Mu2*1e6/(0.87*fy*(d-dd));
+    Ast=Ast1+Ast2; Asc=Asc_;
+    out.push(step("Doubly reinforced design","IS 456 Cl. 38 / G-1.2",
+      `Ast1 (balanced) = ${r(Ast1)} mm² ; Mu2 = Mu − Mu,lim = ${r(Mu2)} kN·m<br>
+       d′/d = ${r(ratio,3)} → fsc = ${r(fsc)} N/mm²<br>
+       Compression steel Asc = Mu2/[(fsc − 0.446fck)(d − d′)] = <span class="out">${r(Asc)} mm²</span><br>
+       Ast2 = Mu2/[0.87 fy (d − d′)] = ${r(Ast2)} mm²<br>
+       Total tension Ast = Ast1 + Ast2 = <span class="out">${r(Ast)} mm²</span>`));
+  }
+  const astMin=0.85*b*d/fy, astMax=0.04*b*D;
+  Ast=Math.max(Ast,astMin);
+  const nBars=Math.ceil(Ast/barArea(bar));
+  out.push(step("Bar selection","IS 456 Cl. 26.5.1.1",
+    `Ast,min = 0.85·b·d/fy = ${r(astMin)} mm² ; Ast,max = 0.04·b·D = ${r(astMax)} mm²<br>
+     Using φ${bar} (area ${r(barArea(bar))} mm²): n = ${r(Ast)}/${r(barArea(bar))} → <span class="out">${nBars} bars of φ${bar}</span> (${r(nBars*barArea(bar))} mm²)
+     ${Asc>0?`<br>Compression: ${Math.ceil(Asc/barArea(bar))} bars of φ${bar} (${r(Asc)} mm² reqd)`:''}`));
+
+  // shear
+  const astProv=Math.max(nBars*barArea(bar),Ast);
+  const pt=100*astProv/(b*d);
+  const tv=Vu*1000/(b*d);
+  const tc=tauc(pt,fck);
+  const tmax=TAU_MAX[fck];
+  let shearMsg, sv=0;
+  if(tv>tmax){ shearMsg=`τv = ${r(tv,3)} &gt; τc,max = ${tmax} → <span class="out">section fails in shear, increase size</span>`; }
+  else if(tv<=tc){ const svmax=Math.min(0.75*d,300); sv=svmax;
+    shearMsg=`τv = ${r(tv,3)} ≤ τc = ${r(tc,3)} → only minimum stirrups: φ${stir} 2-leg @ ${r(svmax)} mm c/c`; }
+  else { const Vus=(tv-tc)*b*d/1000; const Asv=2*barArea(stir);
+    sv=0.87*fy*Asv*d/(Vus*1000); sv=Math.min(Math.floor(sv/5)*5,0.75*d,300);
+    shearMsg=`τv = ${r(tv,3)} &gt; τc = ${r(tc,3)} → shear steel needed.<br>Vus = (τv−τc)·b·d = ${r(Vus)} kN<br>φ${stir} 2-leg stirrups @ <span class="out">${r(sv)} mm c/c</span> (max ${r(Math.min(0.75*d,300))} mm)`; }
+  out.push(step("Shear design","IS 456 Cl. 40", `pt = ${r(pt,3)}% → τc = ${r(tc,3)} N/mm² (Table 19); τv = Vu/(b·d) = ${r(tv,3)} N/mm²<br>${shearMsg}`));
+
+  const ok = tv<=tmax && Mu<=MuLim*1.0001 || (doubly && tv<=tmax);
+  const okFinal = tv<=tmax;
+  return banner(okFinal?'pass':'fail', okFinal?(doubly?'Doubly reinforced beam designed':'Singly reinforced beam designed'):'Section fails in shear — increase dimensions')
+    + cards([
+        ["Type", doubly?"Doubly":"Singly", "Mu/"+r(MuLim)+" kN·m lim"],
+        ["Section", r(b)+"×"+r(D), "d = "+r(d)+" mm"],
+        ["Tension steel", nBars+"-φ"+bar, r(Ast)+" mm²"],
+        Asc>0?["Compression", Math.ceil(Asc/barArea(bar))+"-φ"+bar, r(Asc)+" mm²"]:["Mu applied", r(Mu)+" kN·m", ""],
+        ["Stirrups", sv>0?("φ"+stir+" @ "+r(sv)):"—", "2-legged"]
+      ]) + out.join('');
+}
+
+/* ════════════════════════════════════════════════════════════════
+   3 · COLUMN
+   ════════════════════════════════════════════════════════════════ */
+function calcColumn(ctx){
+  const mode=$('c_mode').value, b=num('c_b'), D=num('c_D'), L=num('c_len'),
+        k=num('c_kx'), Pu=num('c_pu'), Mux=num('c_mux'), Muy=num('c_muy');
+  const fck=ctx.fck, fy=ctx.fy;
+  if(b<=0||D<=0) throw new Error("dimensions must be positive");
+  const Ag=b*D, le=k*L;
+  const slx=le/D, sly=le/b;
+  const short = slx<12 && sly<12;
+  let out=[];
+  out.push(step("Slenderness","IS 456 Cl. 25.1.2",
+    `le = k·L = ${r(k)} × ${r(L)} = ${r(le)} mm<br>
+     le/D = ${r(slx)} , le/b = ${r(sly)} → <span class="out">${short?'SHORT column':'SLENDER column (add moment magnification — verify separately)'}</span>`));
+  // min eccentricity
+  const emin=Math.max(L/500 + D/30, 20);
+  out.push(step("Minimum eccentricity","IS 456 Cl. 25.4",
+    `e,min = L/500 + D/30 = ${r(L/500)} + ${r(D/30)} = <span class="out">${r(emin)} mm</span> (≥ 20 mm)`));
+
+  // axial capacity sizing — find Asc
+  let Asc=(Pu*1000 - 0.4*fck*Ag)/(0.67*fy - 0.4*fck);
+  const ascMin=0.008*Ag, ascMax=0.04*Ag;
+  let note='';
+  if(Asc<ascMin){ Asc=ascMin; note=' (governed by minimum 0.8%)'; }
+  out.push(step("Longitudinal steel (axial)","IS 456 Cl. 39.3, 26.5.3.1",
+    `Pu = 0.4·fck·Ac + 0.67·fy·Asc<br>
+     Asc = (Pu − 0.4·fck·Ag)/(0.67·fy − 0.4·fck) = (${r(Pu*1000/1000)}k − ${r(0.4*fck*Ag/1000)}k)/(${r(0.67*fy)} − ${r(0.4*fck)})<br>
+     = <span class="out">${r(Asc)} mm²</span>${note} &nbsp;[${r(100*Asc/Ag,2)}% · min ${r(ascMin)} / max ${r(ascMax)} mm²]`));
+
+  const bar=20, nBars=Math.max(4,Math.ceil(Asc/barArea(bar)));
+  const tieDia=Math.max(6, Math.round(bar/4));
+  const tieSp=Math.min(D,b,16*bar,300);
+  out.push(step("Bars & ties","IS 456 Cl. 26.5.3.2",
+    `Provide <span class="out">${nBars} bars of φ${bar}</span> (${r(nBars*barArea(bar))} mm²)<br>
+     Ties: φ${tieDia} @ <span class="out">${r(tieSp)} mm c/c</span> [min(D, b, 16φ, 300)]`));
+
+  let biaxMsg='', biOk=true;
+  if(mode==='biaxial'){
+    const Puz=0.45*fck*(Ag-Asc)+0.75*fy*Asc; // N
+    const ratioP=Pu*1000/Puz;
+    let alpha;
+    if(ratioP<=0.2) alpha=1.0; else if(ratioP>=0.8) alpha=2.0; else alpha=1+(ratioP-0.2)/0.6;
+    // uniaxial moment capacity — simplified estimate via Mu,lim of equivalent section
+    const dEff=D-50, dEffb=b-50;
+    const Mux1=0.36*XUMAX[fy]*(1-0.42*XUMAX[fy])*fck*b*dEff*dEff/1e6 * 1.0;
+    const Muy1=0.36*XUMAX[fy]*(1-0.42*XUMAX[fy])*fck*D*dEffb*dEffb/1e6 * 1.0;
+    const util=Math.pow(Mux/Mux1,alpha)+Math.pow(Muy/Muy1,alpha);
+    biOk=util<=1.0;
+    biaxMsg=step("Biaxial bending check","IS 456 Cl. 39.6",
+      `Puz = 0.45·fck·Ac + 0.75·fy·Asc = ${r(Puz/1000)} kN ; Pu/Puz = ${r(ratioP,3)} → αn = ${r(alpha,2)}<br>
+       Approx uniaxial capacities Mux1 ≈ ${r(Mux1)} , Muy1 ≈ ${r(Muy1)} kN·m<br>
+       (Mux/Mux1)^αn + (Muy/Muy1)^αn = ${r(util,3)} → <span class="out">${biOk?'≤ 1.0 OK ✓':'&gt; 1.0 — increase steel/section'}</span><br>
+       <em>Biaxial uses an SP-16-style approximation; verify against interaction charts for final design.</em>`);
+    out.push(biaxMsg);
+  }
+  const ok = short && Asc<=ascMax && biOk;
+  return banner(ok?'pass':'warn', ok?`${mode==='biaxial'?'Biaxial':'Axial'} short column designed`:'Review flagged items (slender / steel limit / biaxial)')
+    + cards([
+        ["Section", r(b)+"×"+r(D), short?"short":"slender"],
+        ["Steel", nBars+"-φ"+bar, r(100*Asc/Ag,2)+"% ("+r(Asc)+" mm²)"],
+        ["Ties", "φ"+tieDia+" @ "+r(tieSp), "c/c"],
+        ["Pu", r(Pu)+" kN", mode==='biaxial'?("Mux "+r(Mux)+", Muy "+r(Muy)):""]
+      ]) + out.join('');
+}
+
+/* ════════════════════════════════════════════════════════════════
+   4 · FOOTING
+   ════════════════════════════════════════════════════════════════ */
+function calcFooting(ctx){
+  const shape=$('f_shape').value, cx=num('f_cx'), cy=num('f_cy'),
+        P=num('f_load'), sbc=num('f_sbc'), rratio=num('f_ratio'), D=num('f_D'), bar=num('f_bar');
+  const fck=ctx.fck, fy=ctx.fy, cover=Math.max(ctx.cover,50);
+  if(P<=0||sbc<=0) throw new Error("load and SBC must be positive");
+  let out=[];
+  const Preq=1.1*P; // +10% self weight
+  const Areq=Preq/sbc; // m²
+  let L,B;
+  if(shape==='square'){ L=B=Math.ceil(Math.sqrt(Areq)*10)/10; }
+  else { B=Math.ceil(Math.sqrt(Areq/rratio)*10)/10; L=Math.ceil(B*rratio*10)/10; }
+  const Aprov=L*B;
+  out.push(step("Footing size","IS 456 Cl. 34.1",
+    `Service load + 10% self wt = ${r(Preq)} kN ; Area = ${r(Preq)}/${r(sbc)} = ${r(Areq)} m²<br>
+     Provide <span class="out">${r(L)} m × ${r(B)} m</span> (= ${r(Aprov)} m²)`));
+
+  const pu=1.5*P/Aprov; // factored net upward pressure kN/m²
+  out.push(step("Net upward pressure","IS 456 Cl. 34.2",
+    `pu = 1.5·P / (L·B) = 1.5 × ${r(P)} / ${r(Aprov)} = <span class="out">${r(pu)} kN/m²</span>`));
+
+  const d=D-cover-bar; // effective depth
+  // two-way (punching) shear at d/2 from face
+  const b0=2*((cx+d)+(cy+d)); // perimeter mm
+  const Vp=pu*(Aprov - (cx+d)*(cy+d)/1e6); // kN
+  const tvp=Vp*1000/(b0*d);
+  const ks=Math.min(1, 0.5+Math.min(cx,cy)/Math.max(cx,cy));
+  const tcp=ks*0.25*Math.sqrt(fck);
+  const punchOk=tvp<=tcp;
+  out.push(step("Two-way (punching) shear","IS 456 Cl. 31.6",
+    `Critical perimeter b0 = ${r(b0)} mm at d/2 from column.<br>
+     τv = Vp/(b0·d) = ${r(tvp,3)} N/mm² ; permissible ks·0.25√fck = ${r(ks,2)}×0.25×√${fck} = ${r(tcp,3)} N/mm²<br>
+     <span class="out">${punchOk?'OK ✓':'NOT OK — increase depth'}</span>`));
+
+  // one-way shear at d from face (long projection)
+  const projL=(L*1000-cx)/2;
+  const Vo=pu*(projL-d)/1000*B; // kN per full width
+  const tvo=Vo*1000/(B*1000*d);
+  // bending at column face
+  const Mu=pu*B*Math.pow(projL/1000,2)/2; // kN·m (full width B)
+  const bWidth=B*1000;
+  let Ast=astFromMu(Mu*1e6,fck,fy,bWidth,d);
+  const astMin=0.0012*bWidth*D;
+  if(!Ast) throw new Error("footing too shallow — increase D");
+  Ast=Math.max(Ast,astMin);
+  const sp=Math.min(Math.floor(bWidth*barArea(bar)/Ast/10)*10,3*d,300);
+  out.push(step("Flexural design","IS 456 Cl. 34.2.3 + 34.3",
+    `Cantilever projection = (${r(L*1000)} − ${r(cx)})/2 = ${r(projL)} mm<br>
+     Mu = pu·B·(proj)²/2 = ${r(Mu)} kN·m (over ${r(B)} m width)<br>
+     Ast = ${r(Ast)} mm² (min 0.12% = ${r(astMin)} mm²) → <span class="out">φ${bar} @ ${sp} mm c/c</span> each way`));
+
+  const ok=punchOk;
+  return banner(ok?'pass':'warn', ok?'Isolated footing designed':'Increase depth — punching shear governs')
+    + cards([
+        ["Footing", r(L)+"×"+r(B)+" m", shape],
+        ["Depth", r(D)+" mm", "d = "+r(d)+" mm"],
+        ["Reinforcement", "φ"+bar+" @ "+sp, "each way"],
+        ["Soil pressure", r(P/Aprov)+" kN/m²", "≤ SBC "+r(sbc)],
+        ["Punching τv", r(tvp,3), "≤ "+r(tcp,3)]
+      ]) + out.join('');
+}
+
+/* ════════════════════════════════════════════════════════════════
+   5 · STAIRCASE  (dog-legged, waist slab)
+   ════════════════════════════════════════════════════════════════ */
+function calcStair(ctx){
+  const R=num('t_rise'), G=num('t_going'), n=num('t_nsteps'), land=num('t_landing'),
+        t=num('t_waist'), width=num('t_width'), ll=num('t_ll'), ff=num('t_ff'), bar=num('t_bar');
+  const fck=ctx.fck, fy=ctx.fy, cover=ctx.cover;
+  if(R<=0||G<=0||t<=0) throw new Error("riser, going and waist must be positive");
+  const d=t-cover-bar/2;
+  const goingLen=(n-1)*G; // horizontal length of flight (mm)
+  // effective span ≈ going + one landing (flight spans floor beam to landing beam, Cl 33.1)
+  const Leff=(goingLen + land)/1000; // m
+  const slope=Math.sqrt(R*R+G*G)/G;
+  let out=[];
+  out.push(step("Geometry","IS 456 Cl. 33.1",
+    `Flight horizontal length = (${n}−1)×${r(G)} = ${r(goingLen)} mm<br>
+     d = t − cover − φ/2 = ${r(t)} − ${r(cover)} − ${r(bar/2)} = <span class="out">${r(d)} mm</span><br>
+     Effective span ≈ ${r(Leff)} m (going + landing, Cl 33.1)`));
+  // loads on going
+  const wWaist=25*(t/1000)*slope;          // kN/m² on plan
+  const wSteps=25*(R/1000)/2;               // kN/m²
+  const dlGoing=wWaist+wSteps+ff;
+  const wGoing=1.5*(dlGoing+ll);
+  out.push(step("Loads on going","IS 456 + IS 875",
+    `Waist (on plan) = 25 × ${r(t/1000)} × ${r(slope,3)} = ${r(wWaist)} kN/m²<br>
+     Steps = 25 × ${r(R/1000)}/2 = ${r(wSteps)} kN/m²<br>
+     DL = ${r(dlGoing)} + LL ${r(ll)} → wu = 1.5×(${r(dlGoing)}+${r(ll)}) = <span class="out">${r(wGoing)} kN/m²</span>`));
+  // design per metre width
+  const Mu=wGoing*Leff*Leff/8; // kN·m/m  (simply supported)
+  const b=1000;
+  const MuLim=ruLim(fy)*fck*b*d*d/1e6;
+  let Ast=astFromMu(Mu*1e6,fck,fy,b,d);
+  const astMin=0.0012*b*t;
+  if(!Ast) throw new Error("waist too thin — increase thickness");
+  Ast=Math.max(Ast,astMin);
+  const sp=Math.min(Math.floor(1000*barArea(bar)/Ast/10)*10,3*d,300);
+  out.push(step("Main steel (along span)","IS 456 Cl. 38 + 26.5.2.1",
+    `Mu = wu·L²/8 = ${r(Mu)} kN·m/m (Mu,lim = ${r(MuLim)})<br>
+     Ast = ${r(Ast)} mm²/m (min ${r(astMin)}) → <span class="out">φ${bar} @ ${sp} mm c/c</span>`));
+  const distMin=astMin, sDist=Math.min(Math.floor(1000*barArea(8)/distMin/10)*10,5*d,450);
+  out.push(step("Distribution steel","IS 456 Cl. 26.5.2.1",
+    `0.12% = ${r(distMin)} mm²/m → φ8 @ ${sDist} mm c/c`));
+  const ld=Leff*1000/d;
+  const defOk=ld<=20*1.4;
+  out.push(step("Deflection (approx)","IS 456 Cl. 23.2",
+    `L/d = ${r(Leff*1000)}/${r(d)} = ${r(ld)} ; allowable ≈ 20 × 1.4 = 28 → <span class="out">${defOk?'OK ✓':'increase waist'}</span>`));
+  const ok=Mu<=MuLim && defOk;
+  return banner(ok?'pass':'warn', ok?'Dog-legged flight designed (waist slab)':'Increase waist thickness — see flags')
+    + cards([
+        ["Waist", r(t)+" mm", "d = "+r(d)+" mm"],
+        ["Effective span", r(Leff)+" m", ""],
+        ["Main steel", "φ"+bar+" @ "+sp, "along span"],
+        ["Distribution", "φ8 @ "+sDist, "transverse"],
+        ["Factored load", r(wGoing)+" kN/m²", "on going"]
+      ]) + out.join('');
+}
+
+/* ════════════════════════════════════════════════════════════════
+   6 · WATER TANK  (rectangular wall, preliminary)
+   ════════════════════════════════════════════════════════════════ */
+function calcTank(ctx){
+  const L=num('w_L'), B=num('w_B'), H=num('w_H'), fb=num('w_free'),
+        base=$('w_base').value, thk=num('w_thk'), bar=num('w_bar');
+  const fck=Math.max(ctx.fck,30), fy=ctx.fy; // IS 3370 prefers M30+
+  const cover=Math.max(ctx.cover,45);
+  if(H<=0||thk<=0) throw new Error("water depth and thickness must be positive");
+  const gw=9.81; // kN/m³
+  const d=thk-cover-bar/2;
+  let out=[];
+  if(ctx.fck<30) out.push(step("Material note","IS 3370 Part 2",
+    `For liquid-retaining structures a minimum of M30 is recommended; using fck = ${fck} N/mm² for this check.`));
+  const p=gw*H; // base pressure kN/m²
+  out.push(step("Hydrostatic pressure","IS 3370 Part 1",
+    `Max pressure at base = γw·H = 9.81 × ${r(H)} = <span class="out">${r(p)} kN/m²</span> (triangular).`));
+  // cantilever wall fixed at base: M = γw·H³/6
+  let M, mMsg;
+  if(base==='fixed'){ M=gw*Math.pow(H,3)/6; mMsg=`M = γw·H³/6 = 9.81 × ${r(H)}³/6 = <span class="out">${r(M)} kN·m/m</span> (at base, cantilever)`; }
+  else { M=gw*Math.pow(H,3)/(9*Math.sqrt(3)); mMsg=`M ≈ γw·H³/(9√3) = <span class="out">${r(M)} kN·m/m</span> (hinged base, max span moment)`; }
+  const Mu=1.5*M; // LSM factor (IS 3370:2009 permits LSM with crack-width check)
+  out.push(step("Design moment","IS 3370 Part 2 (LSM)",
+    `${mMsg}<br>Factored Mu = 1.5 × ${r(M)} = <span class="out">${r(Mu)} kN·m/m</span>`));
+  const b=1000;
+  const MuLim=ruLim(fy)*fck*b*d*d/1e6;
+  let Ast=astFromMu(Mu*1e6,fck,fy,b,d);
+  const astMin=0.0024*b*thk/2; // ~0.24% split each face per IS 3370 (min surface steel)
+  if(!Ast) throw new Error("wall too thin — increase thickness");
+  Ast=Math.max(Ast,astMin);
+  const sp=Math.min(Math.floor(1000*barArea(bar)/Ast/10)*10,3*d,300);
+  out.push(step("Vertical steel (water face)","IS 3370 Part 2 + IS 456",
+    `Mu,lim = ${r(MuLim)} kN·m/m ; Ast = ${r(Ast)} mm²/m (min surface 0.24% ≈ ${r(astMin)})<br>
+     → <span class="out">φ${bar} @ ${sp} mm c/c</span> vertical on water face`));
+  // direct tension on long wall from water on short wall: T = p·B/2 per m height (pull on long walls)
+  const Tdir=p*B/2; // kN/m
+  out.push(step("Horizontal steel (direct tension)","IS 3370 Part 1",
+    `Walls also carry direct tension from adjacent wall: T ≈ p·B/2 = ${r(Tdir)} kN/m.<br>
+     Provide horizontal steel each face: Ast = T·10³/(0.87·fy) = <span class="out">${r(Tdir*1000/(0.87*fy))} mm²/m</span> (distribute both faces).`));
+  out.push(step("Serviceability","IS 3370 Part 2 Cl. 4",
+    `Liquid-retaining walls must satisfy crack width ≤ 0.2 mm. This preliminary sizing does not run the full crack-width check — verify with IS 3370 Part 2 limit-state crack calculations before construction.`));
+  const tankH=H+fb;
+  const ok=Mu<=MuLim;
+  return banner(ok?'warn':'fail', ok?'Preliminary wall section OK — crack-width check still required':'Increase wall thickness')
+    + cards([
+        ["Tank (internal)", r(L)+"×"+r(B)+" m", "water depth "+r(H)+" m"],
+        ["Wall thickness", r(thk)+" mm", "d = "+r(d)+" mm"],
+        ["Vertical steel", "φ"+bar+" @ "+sp, "water face"],
+        ["Base pressure", r(p)+" kN/m²", "γw·H"],
+        ["Wall height", r(tankH)+" m", "+"+r(fb)+" m freeboard"]
+      ]) + out.join('');
+}
+
+/* ════════════════════════════════════════════════════════════════ */
+initContext();
+</script>
+
+</body>
+</html>
