@@ -250,6 +250,26 @@
       right: 0;
       height: 12px;             /* covers the gap between button and menu */
     }
+
+    /* ── CODES, STANDARDS & REFERENCES ── */
+    .refs { margin-top: 3rem; border-top: 2px solid var(--border); padding-top: 1.75rem; }
+    .refs > h2 { font-family: var(--heading-font, 'Merriweather', Georgia, serif); font-size: 1.5rem; color: var(--text); margin-bottom: 0.4rem; }
+    .refs .refs-intro { font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1.5rem; max-width: 760px; }
+    .refs-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2.25rem; }
+    .refs-col h3 { font-family: var(--heading-font, 'Merriweather', Georgia, serif); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); margin-bottom: 0.9rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+    .code-ref-list, .book-list { list-style: none; padding: 0; margin: 0; }
+    .code-ref-list li { font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; padding: 0.4rem 0; }
+    .code-pill { display: inline-block; font-family: 'Courier New', monospace; font-size: 0.72rem; font-weight: 700; color: var(--accent); background: var(--surface2, var(--surface)); border: 1px solid var(--border); border-radius: 3px; padding: 1px 7px; margin-right: 0.4rem; white-space: nowrap; }
+    .book-list li { padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .book-list li:last-child { border-bottom: none; }
+    .book-link { display: block; font-weight: 700; font-size: 0.9rem; color: var(--accent); text-decoration: none; line-height: 1.4; }
+    .book-link:hover { text-decoration: underline; }
+    .book-desc { display: block; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-top: 0.1rem; }
+    .refs-note { font-size: 0.76rem; color: var(--text-muted); margin-top: 0.9rem; line-height: 1.5; }
+    .refs-note a { color: var(--accent); text-decoration: none; }
+    .refs-note a:hover { text-decoration: underline; }
+    .refs-disclosure { font-style: italic; }
+    @media (max-width: 700px) { .refs-cols { grid-template-columns: 1fr; gap: 1.5rem; } }
   </style>
 </head>
 <body>
@@ -980,6 +1000,38 @@
     <p>Table 26 gives coefficients for restrained panels (with the nine edge conditions and negative moments); Table 27 is for simply supported slabs with corners not held down.</p>
     <h3>Which direction carries more steel?</h3>
     <p>The shorter span ($l_x$) carries the larger moment and hence more steel; its bars are placed in the bottom-most layer for maximum effective depth.</p>
+  </div>
+
+  <!-- ════════ CODES, STANDARDS & REFERENCES ════════ -->
+  <div class="refs" id="references">
+    <h2>Codes, Standards &amp; References</h2>
+    <p class="refs-intro">The calculations and explanations on this page are based on the following Indian Standards. The textbooks listed are recommended for deeper study and additional worked examples.</p>
+    <div class="refs-cols">
+      <div class="refs-col">
+        <h3>Indian Standards used here</h3>
+        <ul class="code-ref-list">
+          <li><span class="code-pill">IS 456 : 2000</span> Two-way slabs — Cl. 24 and moment coefficients (Annex D, Tables 26 &amp; 27).</li>
+          <li><span class="code-pill">IS 875 (Part 2) : 1987</span> Imposed (live) loads for floors and roofs.</li>
+          <li><span class="code-pill">SP 16 : 1980</span> Design aids for reinforced concrete.</li>
+          <li><span class="code-pill">SP 34 : 1987</span> Detailing of slab reinforcement.</li>
+        </ul>
+        <p class="refs-note">BIS standards are free to download for personal use from the <a href="https://www.bis.gov.in" target="_blank" rel="noopener">Bureau of Indian Standards</a> website.</p>
+      </div>
+      <div class="refs-col">
+        <h3>Recommended books</h3>
+        <ul class="book-list">
+          <li><a class="book-link" href="https://amzn.to/4e2cn9Y" target="_blank" rel="sponsored nofollow noopener">Reinforced Concrete Design — Pillai &amp; Menon</a><span class="book-desc">Standard IIT-Madras LSM textbook; thorough theory with worked examples.</span></li>
+          <li><a class="book-link" href="https://amzn.to/4uR01bW" target="_blank" rel="sponsored nofollow noopener">Design of Reinforced Concrete Structures — N. Subramanian</a><span class="book-desc">Comprehensive, modern reference for students and practising engineers.</span></li>
+          <li><a class="book-link" href="https://amzn.to/49AWaXY" target="_blank" rel="sponsored nofollow noopener">Design of RC Structures (IS 456:2000) — N. Krishna Raju</a><span class="book-desc">University-recommended; clear, element-by-element design.</span></li>
+          <li><a class="book-link" href="https://amzn.to/4at3kh3" target="_blank" rel="sponsored nofollow noopener">R.C.C. Designs — Punmia, Jain &amp; Jain</a><span class="book-desc">The classic exam favourite covering all RCC members.</span></li>
+          <li><a class="book-link" href="https://amzn.to/4aqIY88" target="_blank" rel="sponsored nofollow noopener">Limit State Design of Reinforced Concrete — Punmia, Jain &amp; Jain</a><span class="book-desc">LSM-focused companion, aligned to IS 456:2000.</span></li>
+          <li><a class="book-link" href="https://amzn.to/43dRIe8" target="_blank" rel="sponsored nofollow noopener">Reinforced Concrete: Limit State Design — Ashok K. Jain</a><span class="book-desc">Detailed LSM treatment with 700+ review questions.</span></li>
+          <li><a class="book-link" href="https://amzn.to/4x8CVPm" target="_blank" rel="sponsored nofollow noopener">Design Aids for LSD of RC Members (SP 16-style)</a><span class="book-desc">Ready-made charts and tables for beams, columns, slabs and footings.</span></li>
+          <li><a class="book-link" href="https://amzn.to/3PVSrxu" target="_blank" rel="sponsored nofollow noopener">Reinforced Concrete Design: LSM and Beyond — Santanu Bhanja</a><span class="book-desc">Recent text extending the limit state method with modern detailing.</span></li>
+        </ul>
+        <p class="refs-note refs-disclosure">As an Amazon Associate, this site earns from qualifying purchases.</p>
+      </div>
+    </div>
   </div>
 
   <div class="nav-footer">
