@@ -345,6 +345,8 @@
       <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
       <li><a href="#example-axial">Worked Example 1 — Axially Loaded Column</a></li>
       <li><a href="#example-ecc">Worked Example 2 — Column with Minimum Eccentricity</a></li>
+          <li><a href="#mistakes">Common Mistakes to Avoid</a></li>
+      <li><a href="#faq">Frequently Asked Questions</a></li>
     </ol>
   </div>
 
@@ -944,6 +946,40 @@
       <div class="callout-title">Result — Example 2</div>
       <p>A 300 mm × 400 mm column with 6–20 mm bars (Fe 415) in M25 concrete has a safe load capacity of <strong>1705.6 kN</strong> under axial loading with minimum eccentricity.</p>
     </div>
+  </div>
+
+    <!-- COMMON MISTAKES -->
+  <div class="section" id="mistakes">
+    <h2>14. Common Mistakes to Avoid</h2>
+    <p>These are the errors that most often cost marks in exams and cause re-work on site. Watch for them when applying this topic.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Common Mistake</th><th>Why it’s wrong / the correct approach</th></tr></thead>
+        <tbody>
+          <tr><td>Ignoring the minimum eccentricity.</td><td>No column is truly axial. IS 456 Cl. 25.4 requires $e_{min} = l/500 + D/30 \ge 20$ mm; the design must account for it.</td></tr>
+          <tr><td>Using $P_u = 0.4 f_{ck}A_c + 0.67 f_y A_{sc}$ when eccentricity is large.</td><td>That simplified formula (IS 456 Cl. 39.3) is valid only when $e_{min} \le 0.05D$. For larger eccentricity, design for combined axial load and moment using interaction charts.</td></tr>
+          <tr><td>Confusing a short column with a slender one.</td><td>A column is “short” only if its slenderness ratio ($l_{ef}/D$ and $l_{ef}/b$) is $\le 12$ in both directions; otherwise additional moments apply.</td></tr>
+          <tr><td>Violating the steel limits.</td><td>Longitudinal steel must be between <strong>0.8%</strong> and 6% of gross area (4% is practical to allow lap splices) — IS 456 Cl. 26.5.3.1.</td></tr>
+          <tr><td>Getting the tie diameter or spacing wrong.</td><td>Tie diameter $\ge \max(\phi_{main}/4,\ 6\text{ mm})$; spacing $\le \min(D,\ 16\phi_{main},\ 300\text{ mm})$ — IS 456 Cl. 26.5.3.2.</td></tr>
+          <tr><td>Providing fewer than the minimum number of bars.</td><td>At least 4 bars in a rectangular column and 6 bars in a circular column are required.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <h2>15. Frequently Asked Questions</h2>
+    <h3>What distinguishes a short column from a slender one?</h3>
+    <p>The slenderness ratio. If both $l_{ex}/D \le 12$ and $l_{ey}/b \le 12$, the column is short and buckling/additional moments can be ignored.</p>
+    <h3>What is minimum eccentricity and why does it matter?</h3>
+    <p>It is the unavoidable accidental eccentricity of the load, $e_{min} = l/500 + D/30 \ge 20$ mm. It ensures even “axial” columns are designed for a small moment.</p>
+    <h3>When can I use the pure axial formula $0.4 f_{ck}A_c + 0.67 f_y A_{sc}$?</h3>
+    <p>Only when the minimum eccentricity does not exceed $0.05D$. Otherwise the column must be designed for axial load plus moment.</p>
+    <h3>What are the minimum and maximum steel percentages?</h3>
+    <p>Minimum 0.8% and maximum 6% of the gross cross-sectional area; in practice keep it near 4% so lap splices fit.</p>
+    <h3>What is the difference between a tied and a spirally reinforced column?</h3>
+    <p>Tied columns use lateral ties; helically (spirally) reinforced circular columns gain a 5% strength bonus (factor 1.05) because the spiral confines the core.</p>
   </div>
 
   <div class="nav-footer">

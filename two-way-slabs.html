@@ -335,6 +335,8 @@
       <li><a href="#detailing">Detailing Rules</a></li>
       <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
       <li><a href="#example">Worked Example</a></li>
+          <li><a href="#mistakes">Common Mistakes to Avoid</a></li>
+      <li><a href="#faq">Frequently Asked Questions</a></li>
     </ol>
   </div>
 
@@ -939,6 +941,40 @@
         <li>All IS 456 checks satisfied ✓</li>
       </ul>
     </div>
+  </div>
+
+    <!-- COMMON MISTAKES -->
+  <div class="section" id="mistakes">
+    <h2>13. Common Mistakes to Avoid</h2>
+    <p>These are the errors that most often cost marks in exams and cause re-work on site. Watch for them when applying this topic.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Common Mistake</th><th>Why it’s wrong / the correct approach</th></tr></thead>
+        <tbody>
+          <tr><td>Using $l_y^2$ for the long-span moment.</td><td>Both $M_x$ and $M_y$ use $l_x^2$ (the <strong>shorter</strong> span squared) in IS 456 Annex D. Only the $\alpha$ coefficients differ between the two directions.</td></tr>
+          <tr><td>Omitting corner (torsion) reinforcement in restrained slabs.</td><td>Where corners are held down and the slab is restrained, torsion reinforcement must be provided at the corners (IS 456 Cl. D-1.8), or the corners will crack.</td></tr>
+          <tr><td>Picking the wrong edge condition / coefficient table.</td><td>Restrained panels use Table 26 (nine edge cases); simply supported corners-free panels use Table 27. Mixing them gives wrong moments.</td></tr>
+          <tr><td>Carrying only the mid-span steel to the supports.</td><td>At least 50% of the mid-span bars should extend into the support, and negative steel is required at continuous edges — IS 456 detailing rules.</td></tr>
+          <tr><td>Treating a slab with $l_y/l_x \le 2$ as one-way.</td><td>If the ratio is 2 or less the slab spans in both directions and must be designed as two-way; designing it one-way ignores the long-span moment.</td></tr>
+          <tr><td>Putting the short-span steel in the upper layer.</td><td>The short-span (main) bottom steel should be in the <strong>lower</strong> layer to get the maximum effective depth, since its moment is larger.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <h2>14. Frequently Asked Questions</h2>
+    <h3>When is a slab two-way?</h3>
+    <p>When the longer-to-shorter span ratio $l_y/l_x \le 2$, so it bends and carries load in both directions.</p>
+    <h3>Why do both $M_x$ and $M_y$ use $l_x^2$?</h3>
+    <p>The IS 456 coefficient method is formulated on the shorter span $l_x$; the directional difference is captured entirely by the coefficients $\alpha_x$ and $\alpha_y$.</p>
+    <h3>When is corner reinforcement required?</h3>
+    <p>In restrained slabs whose corners are prevented from lifting. Simply supported slabs with corners free to lift (Table 27) do not need torsion steel.</p>
+    <h3>What is the difference between Table 26 and Table 27?</h3>
+    <p>Table 26 gives coefficients for restrained panels (with the nine edge conditions and negative moments); Table 27 is for simply supported slabs with corners not held down.</p>
+    <h3>Which direction carries more steel?</h3>
+    <p>The shorter span ($l_x$) carries the larger moment and hence more steel; its bars are placed in the bottom-most layer for maximum effective depth.</p>
   </div>
 
   <div class="nav-footer">

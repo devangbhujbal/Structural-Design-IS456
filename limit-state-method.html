@@ -639,6 +639,8 @@
       <li><a href="#stress-block">Stress Block Parameters</a></li>
       <li><a href="#design-strengths">Design Strengths</a></li>
       <li><a href="#characteristic">Characteristic Loads & Strengths</a></li>
+          <li><a href="#mistakes">Common Mistakes to Avoid</a></li>
+      <li><a href="#faq">Frequently Asked Questions</a></li>
     </ol>
   </div>
 
@@ -1113,6 +1115,42 @@
   </div>
 
   <!-- NAVIGATION -->
+    <!-- COMMON MISTAKES -->
+  <div class="section" id="mistakes">
+    <h2>11. Common Mistakes to Avoid</h2>
+    <p>These are the errors that most often cost marks in exams and cause re-work on site. Watch for them when applying this topic.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Common Mistake</th><th>Why it’s wrong / the correct approach</th></tr></thead>
+        <tbody>
+          <tr><td>Using a load factor of 1.5 for every combination.</td><td>1.5 applies to the basic <strong>DL + LL</strong> case. Combinations with wind or earthquake use different factors (e.g. 1.2 (DL+LL+EL), 0.9 DL) from IS 456 Table 18.</td></tr>
+          <tr><td>Applying $\gamma_m = 1.5$ to steel.</td><td>The partial safety factor on concrete is <strong>1.5</strong>, but on steel it is <strong>1.15</strong> — steel is far more reliable and ductile, so it gets a smaller factor.</td></tr>
+          <tr><td>Forgetting where 0.446 $f_{ck}$ and 0.87 $f_y$ come from.</td><td>Design strengths are $f_{ck}/1.5 = 0.67f_{ck}$ (peak block 0.446$f_{ck}$) and $f_y/1.15 = 0.87f_y$. Using characteristic values directly overestimates capacity.</td></tr>
+          <tr><td>Designing only for collapse and ignoring serviceability.</td><td>A section can be safe against collapse yet deflect or crack excessively. Deflection and cracking (Limit State of Serviceability) must be checked separately.</td></tr>
+          <tr><td>Mixing WSM permissible stresses into an LSM design.</td><td>Working Stress and Limit State are two different philosophies. Do not combine permissible stresses with factored loads.</td></tr>
+          <tr><td>Treating characteristic and design loads as the same.</td><td>Characteristic loads are unfactored service values; design (factored) loads = characteristic × $\gamma_f$. Use service loads for serviceability, factored loads for strength.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <h2>12. Frequently Asked Questions</h2>
+    <h3>Why is the DL + LL load factor 1.5?</h3>
+    <p>It provides the margin against collapse — accounting for overloads and uncertainty in the loads — while keeping the structure economical.</p>
+    <h3>Why is $\gamma_m$ for concrete 1.5 but for steel only 1.15?</h3>
+    <p>Concrete strength is more variable (site mixing, curing, compaction) and fails in a brittle way, so it carries a larger safety factor than factory-made, ductile steel.</p>
+    <h3>What is characteristic strength?</h3>
+    <p>The strength below which not more than <strong>5%</strong> of test results are expected to fall: $f_{ck} = f_{mean} - 1.65\,\sigma$.</p>
+    <h3>What is the difference between the Limit State of Collapse and of Serviceability?</h3>
+    <p>Collapse deals with strength and stability (flexure, shear, etc.) under factored loads; Serviceability deals with deflection, cracking and durability under service loads.</p>
+    <h3>Where does the 0.446 $f_{ck}$ in the stress block come from?</h3>
+    <p>It is $0.67 f_{ck} / 1.5$ — the 0.67 relates cube strength to the strength in a flexural member, and 1.5 is the material safety factor.</p>
+    <h3>Is the Working Stress Method still used at all?</h3>
+    <p>Yes — for some liquid-retaining structures (IS 3370) and where crack control under service loads governs, WSM-based checks are still referenced.</p>
+  </div>
+
   <div class="nav-footer">
     <a class="prev-btn" href="what-is-rcc.html">← What is RCC?</a>
     <a class="next-btn" href="singly-reinforced-beams.html">Next: Singly Reinforced Beams →</a>

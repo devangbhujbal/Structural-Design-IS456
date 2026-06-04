@@ -349,6 +349,8 @@
       <li><a href="#detailing">Detailing Rules — IS 456 Cl. 34</a></li>
       <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
       <li><a href="#example">Worked Example</a></li>
+          <li><a href="#mistakes">Common Mistakes to Avoid</a></li>
+      <li><a href="#faq">Frequently Asked Questions</a></li>
     </ol>
   </div>
 
@@ -947,6 +949,42 @@
       <div class="topic-done">Slender Columns</div>
       <div class="topic-done">Isolated Footings</div>
     </div>
+  </div>
+
+    <!-- COMMON MISTAKES -->
+  <div class="section" id="mistakes">
+    <h2>14. Common Mistakes to Avoid</h2>
+    <p>These are the errors that most often cost marks in exams and cause re-work on site. Watch for them when applying this topic.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Common Mistake</th><th>Why it’s wrong / the correct approach</th></tr></thead>
+        <tbody>
+          <tr><td>Sizing the footing area with the factored load.</td><td>Plan area is found from the <strong>service (unfactored)</strong> load and the safe bearing capacity: $A = P_{service}/q_{SBC}$. Using the factored load oversizes the footing.</td></tr>
+          <tr><td>Using gross soil pressure for structural design.</td><td>Member moments and shears use the <strong>net upward factored</strong> soil pressure (self-weight/overburden cancels with the downward soil reaction), not the gross bearing pressure.</td></tr>
+          <tr><td>Forgetting the two-way (punching) shear check.</td><td>Punching shear at a critical perimeter $d/2$ from the column face usually governs the footing depth — it must be checked (IS 456 Cl. 31.6).</td></tr>
+          <tr><td>Taking the wrong critical sections.</td><td>Bending moment is taken at the <strong>face of the column</strong>; one-way shear at a distance $d$ from the column face. Confusing these gives wrong depths and steel.</td></tr>
+          <tr><td>Skipping the development length check.</td><td>The bars must develop their stress within the available length from the critical section; if not, provide hooks/bends or a larger footing (IS 456 Cl. 26.2).</td></tr>
+          <tr><td>Ignoring self-weight and overburden when sizing.</td><td>When computing plan area, add roughly 10–15% of the column load for the footing self-weight and soil over it before dividing by the SBC.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <h2>15. Frequently Asked Questions</h2>
+    <h3>Why use service load for area but factored load for design?</h3>
+    <p>Soil bearing capacity is itself a working (service) value, so area is checked at service loads; member strength is checked at factored loads per the Limit State Method.</p>
+    <h3>Where is punching (two-way) shear checked?</h3>
+    <p>On a perimeter located $d/2$ from the face of the column all around it. This check usually decides the footing thickness.</p>
+    <h3>Where is the bending moment critical section?</h3>
+    <p>At the face of the column (for a concrete column). The cantilever of footing beyond that face produces the design moment.</p>
+    <h3>Where is one-way shear checked?</h3>
+    <p>At a section a distance $d$ (the effective depth) from the face of the column.</p>
+    <h3>What governs the footing depth?</h3>
+    <p>Usually two-way (punching) shear, since footings are kept thick enough to avoid shear reinforcement; bending and one-way shear are then verified.</p>
+    <h3>What is the minimum reinforcement in a footing?</h3>
+    <p>As for a slab — 0.12% of the gross section for high-yield bars (0.15% for mild steel) — IS 456 Cl. 26.5.2.1.</p>
   </div>
 
   <div class="nav-footer">

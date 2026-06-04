@@ -377,6 +377,8 @@
       <li><a href="#shear">Shear Design</a></li>
       <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
       <li><a href="#example">Worked Example</a></li>
+          <li><a href="#mistakes">Common Mistakes to Avoid</a></li>
+      <li><a href="#faq">Frequently Asked Questions</a></li>
     </ol>
   </div>
 
@@ -955,6 +957,42 @@
         <li>All IS 456 checks satisfied ✓</li>
       </ul>
     </div>
+  </div>
+
+    <!-- COMMON MISTAKES -->
+  <div class="section" id="mistakes">
+    <h2>13. Common Mistakes to Avoid</h2>
+    <p>These are the errors that most often cost marks in exams and cause re-work on site. Watch for them when applying this topic.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Common Mistake</th><th>Why it’s wrong / the correct approach</th></tr></thead>
+        <tbody>
+          <tr><td>Allowing the section to become over-reinforced ($x_u > x_{u,\max}$).</td><td>IS 456 does not permit this — failure would be sudden concrete crushing. If $M_u > M_{u,\lim}$, increase the depth or design a doubly reinforced section.</td></tr>
+          <tr><td>Forgetting the beam self-weight in the loads.</td><td>Self-weight ($0.25\times b\times D$ in kN/m for normal concrete... i.e. $25\,b\,D$) is a dead load and must be added before factoring.</td></tr>
+          <tr><td>Using overall depth $D$ instead of effective depth $d$ in the moment equation.</td><td>All flexure formulae use the effective depth $d = D - \text{cover} - \phi_{stirrup} - \phi/2$, measured to the centroid of tension steel.</td></tr>
+          <tr><td>Skipping the deflection (span/depth) check.</td><td>A beam adequate in strength can still deflect excessively. Verify $l/d$ against the basic ratio (20 / 26 / 7) modified for steel percentage — IS 456 Cl. 23.2.1.</td></tr>
+          <tr><td>Using the wrong $x_{u,\max}/d$ for the steel grade.</td><td>It is 0.479 for Fe 415 and 0.456 for Fe 500 — not a single fixed value. The limiting moment coefficient changes with it.</td></tr>
+          <tr><td>Designing with the service (unfactored) moment.</td><td>Strength design uses the factored moment $M_u = 1.5\,(M_{DL}+M_{LL})$. Forgetting the 1.5 under-designs the section.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <h2>14. Frequently Asked Questions</h2>
+    <h3>What is the difference between $M_u$ and $M_{u,\lim}$?</h3>
+    <p>$M_u$ is the factored design moment from the loads; $M_{u,\lim}$ is the maximum moment a singly reinforced section of that size can resist. Design is valid only if $M_u \le M_{u,\lim}$.</p>
+    <h3>Why are under-reinforced sections preferred?</h3>
+    <p>The steel yields before the concrete crushes, giving large deflections and cracking as <strong>warning</strong> before failure — a ductile, safer mode.</p>
+    <h3>What do I do if $M_u > M_{u,\lim}$?</h3>
+    <p>Either increase the effective depth (or width), or keep the size and add compression steel — i.e. design a doubly reinforced beam.</p>
+    <h3>Why is the design stress in steel $0.87 f_y$?</h3>
+    <p>It is the characteristic yield strength divided by the material safety factor: $f_y/1.15 = 0.87 f_y$.</p>
+    <h3>How do I choose trial $b$ and $D$?</h3>
+    <p>As a start, $d \approx l/10$ to $l/12$ for simply supported spans and $b \approx d/2$ to $d/3$; then verify by calculation and the deflection check.</p>
+    <h3>Does a singly reinforced beam still need top bars?</h3>
+    <p>Yes — at least two hanger bars at the top to hold the stirrups, even though they are not counted in the flexure design.</p>
   </div>
 
   <div class="nav-footer">

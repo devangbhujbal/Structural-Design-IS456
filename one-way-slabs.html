@@ -343,6 +343,8 @@
       <li><a href="#shear">Shear Check</a></li>
       <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
       <li><a href="#example">Worked Example</a></li>
+          <li><a href="#mistakes">Common Mistakes to Avoid</a></li>
+      <li><a href="#faq">Frequently Asked Questions</a></li>
     </ol>
   </div>
 
@@ -981,6 +983,42 @@
         <li>All IS 456 checks satisfied ✓</li>
       </ul>
     </div>
+  </div>
+
+    <!-- COMMON MISTAKES -->
+  <div class="section" id="mistakes">
+    <h2>13. Common Mistakes to Avoid</h2>
+    <p>These are the errors that most often cost marks in exams and cause re-work on site. Watch for them when applying this topic.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Common Mistake</th><th>Why it’s wrong / the correct approach</th></tr></thead>
+        <tbody>
+          <tr><td>Designing for the whole slab width instead of a 1 m strip.</td><td>A one-way slab is designed as a series of <strong>1 m wide beams</strong> ($b = 1000$ mm). All loads and steel are computed per metre width.</td></tr>
+          <tr><td>Forgetting distribution (secondary) steel.</td><td>Distribution steel perpendicular to the main bars is mandatory — minimum 0.12% of gross area for Fe 500 (0.15% for Fe 250) — to resist shrinkage, temperature and to spread loads.</td></tr>
+          <tr><td>Exceeding the maximum bar spacing.</td><td>Main bars: spacing $\le 3d$ or 300 mm (whichever is less); distribution bars: $\le 5d$ or 450 mm — IS 456 Cl. 26.3.3.</td></tr>
+          <tr><td>Skipping the deflection check with its modification factor.</td><td>Slab depth is usually governed by deflection, not strength. Apply the tension-steel modification factor to the basic $l/d$ ratio (IS 456 Cl. 23.2.1).</td></tr>
+          <tr><td>Using the clear span instead of the effective span.</td><td>Effective span = clear span + $d$, or centre-to-centre of supports, whichever is smaller (IS 456 Cl. 22.2).</td></tr>
+          <tr><td>Providing shear stirrups in a thin slab.</td><td>Slabs are normally proportioned so that $\tau_v < \tau_c$ and need no shear reinforcement; if shear governs, increase the depth rather than add stirrups.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <h2>14. Frequently Asked Questions</h2>
+    <h3>When is a slab designed as one-way?</h3>
+    <p>When the longer-to-shorter span ratio $l_y/l_x > 2$. The slab then bends essentially in the short direction only.</p>
+    <h3>Why is a one-way slab designed for a 1 m wide strip?</h3>
+    <p>Because the slab is uniform along its length, a representative 1 m wide strip behaves like a beam and simplifies the calculation to “per metre width.”</p>
+    <h3>What is the purpose of distribution steel?</h3>
+    <p>It resists shrinkage and temperature stresses, distributes concentrated loads, and holds the main bars in position. It is not the primary load-carrying steel.</p>
+    <h3>What is the minimum reinforcement in a slab?</h3>
+    <p>0.12% of gross cross-section for high-yield bars (Fe 415/500) and 0.15% for mild steel (Fe 250) — IS 456 Cl. 26.5.2.1.</p>
+    <h3>What is the maximum diameter of bars in a slab?</h3>
+    <p>Not more than one-eighth of the total slab thickness (IS 456 Cl. 26.5.2.2).</p>
+    <h3>Do one-way slabs need shear reinforcement?</h3>
+    <p>Rarely — the depth is chosen so the nominal shear stress stays below $\tau_c$. Providing stirrups in thin slabs is impractical.</p>
   </div>
 
   <div class="nav-footer">

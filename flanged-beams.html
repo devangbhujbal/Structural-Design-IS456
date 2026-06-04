@@ -334,6 +334,8 @@
       <li><a href="#limiting">Limiting Moment of Resistance</a></li>
       <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
       <li><a href="#example">Worked Example</a></li>
+          <li><a href="#mistakes">Common Mistakes to Avoid</a></li>
+      <li><a href="#faq">Frequently Asked Questions</a></li>
     </ol>
   </div>
 
@@ -891,6 +893,40 @@
         <li>All IS 456 checks satisfied ✓</li>
       </ul>
     </div>
+  </div>
+
+    <!-- COMMON MISTAKES -->
+  <div class="section" id="mistakes">
+    <h2>12. Common Mistakes to Avoid</h2>
+    <p>These are the errors that most often cost marks in exams and cause re-work on site. Watch for them when applying this topic.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Common Mistake</th><th>Why it’s wrong / the correct approach</th></tr></thead>
+        <tbody>
+          <tr><td>Using the full slab width as the flange.</td><td>Only the <strong>effective flange width</strong> $b_f$ (IS 456 Cl. 23.1) is counted as compression flange — not the entire slab spanning between beams.</td></tr>
+          <tr><td>Applying the T-beam formula to an L-beam.</td><td>An end (L) beam has a flange on one side only, so its $b_f$ formula differs from an intermediate T-beam. Using the T-beam width overestimates capacity.</td></tr>
+          <tr><td>Assuming the neutral axis always lies in the flange.</td><td>First assume it does and check: if the computed $x_u > D_f$, the neutral axis is in the web and the web-case equations must be used.</td></tr>
+          <tr><td>Using $b_f$ for shear and tension-side calculations.</td><td>Shear and the tension zone use the <strong>web width</strong> $b_w$, not the flange width. Only the compression flange uses $b_f$.</td></tr>
+          <tr><td>Treating a continuous support region as a T-beam.</td><td>Over continuous supports the slab (flange) is in tension, so the section behaves as a <strong>rectangular beam of width $b_w$</strong>, not a flanged beam.</td></tr>
+          <tr><td>Forgetting the modified flange thickness $y_f$.</td><td>When $D_f > 0.2\,d$ in the web case, use $y_f = 0.15 x_u + 0.65 D_f$ (limited to $D_f$) instead of $D_f$ for the flange compression.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <h2>13. Frequently Asked Questions</h2>
+    <h3>What is the effective flange width?</h3>
+    <p>The portion of slab that acts together with the rib in compression. For a T-beam, $b_f = l_0/6 + b_w + 6D_f$ (IS 456 Cl. 23.1.2), limited to the actual available width.</p>
+    <h3>What is the difference between a T-beam and an L-beam?</h3>
+    <p>A T-beam has slab (flange) on both sides of the web (interior beams); an L-beam has slab on one side only (edge beams). This changes the effective flange width.</p>
+    <h3>How do I know if the neutral axis is in the flange or the web?</h3>
+    <p>Assume it is in the flange and compute the compressive capacity of the flange. If the applied moment needs more compression than the flange alone provides ($x_u > D_f$), the neutral axis is in the web.</p>
+    <h3>Why are flanged beams economical?</h3>
+    <p>The slab provides a large compression area for free, so the rib (web) can be smaller and need less compression concrete than an equivalent rectangular beam.</p>
+    <h3>Is a beam at a continuous support still designed as a T-beam?</h3>
+    <p>No. Where the moment is hogging the flange is in tension and is ignored, so the section is designed as rectangular with width $b_w$.</p>
   </div>
 
   <div class="nav-footer">

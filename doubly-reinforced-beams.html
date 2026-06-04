@@ -333,6 +333,8 @@
       <li><a href="#equivalent">Equivalent Area of Compression Steel</a></li>
       <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
       <li><a href="#example">Worked Example</a></li>
+          <li><a href="#mistakes">Common Mistakes to Avoid</a></li>
+      <li><a href="#faq">Frequently Asked Questions</a></li>
     </ol>
   </div>
 
@@ -812,6 +814,40 @@
         <li>All IS 456 checks satisfied ✓</li>
       </ul>
     </div>
+  </div>
+
+    <!-- COMMON MISTAKES -->
+  <div class="section" id="mistakes">
+    <h2>10. Common Mistakes to Avoid</h2>
+    <p>These are the errors that most often cost marks in exams and cause re-work on site. Watch for them when applying this topic.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Common Mistake</th><th>Why it’s wrong / the correct approach</th></tr></thead>
+        <tbody>
+          <tr><td>Providing compression steel when it isn’t required.</td><td>If $M_u \le M_{u,\lim}$ a singly reinforced section works and is cheaper. Doubly reinforced design is justified only when $M_u > M_{u,\lim}$ or the depth is restricted.</td></tr>
+          <tr><td>Using $0.87 f_y$ as the compression-steel stress.</td><td>The stress $f_{sc}$ in compression steel is limited by its strain (governed by $d'/d$) and is usually <strong>less</strong> than $0.87 f_y$ — read it from the $d'/d$ table (SP 16).</td></tr>
+          <tr><td>Ignoring the concrete displaced by the compression bars.</td><td>The compression-steel force should use $(f_{sc} - 0.446 f_{ck})$, subtracting the concrete that the bars replace, otherwise capacity is overstated.</td></tr>
+          <tr><td>Not splitting the tension steel into $A_{st1}$ and $A_{st2}$.</td><td>$A_{st1}$ balances $M_{u,\lim}$ (with concrete) and $A_{st2}$ balances the extra moment (with compression steel). Total $A_{st} = A_{st1} + A_{st2}$.</td></tr>
+          <tr><td>Leaving compression bars without restraint.</td><td>Compression bars can buckle. They must be enclosed by ties at spacing not exceeding the limits of IS 456 Cl. 26.5.3.2 (as for columns).</td></tr>
+          <tr><td>Using the wrong $d'/d$ ratio.</td><td>$d'$ is the cover to the <strong>compression</strong> steel centroid. A larger $d'/d$ lowers $f_{sc}$ significantly, so it must be estimated correctly before design.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <h2>11. Frequently Asked Questions</h2>
+    <h3>When is a doubly reinforced beam needed?</h3>
+    <p>When the factored moment exceeds the limiting moment of the section ($M_u > M_{u,\lim}$) — typically because the depth is architecturally restricted.</p>
+    <h3>Why is $f_{sc}$ less than $0.87 f_y$?</h3>
+    <p>Because the compression steel sits close to the neutral axis, its strain may be below the yield strain. The stress is therefore read from the strain-compatibility table as a function of $d'/d$.</p>
+    <h3>What are $A_{st1}$ and $A_{st2}$?</h3>
+    <p>$A_{st1}$ is the tension steel that pairs with the concrete to resist $M_{u,\lim}$; $A_{st2}$ is the additional tension steel that pairs with the compression steel to resist the balance $M_u - M_{u,\lim}$.</p>
+    <h3>Do the compression bars need stirrups around them?</h3>
+    <p>Yes — they must be tied like column bars to prevent buckling, per IS 456 Cl. 26.5.3.2.</p>
+    <h3>Is a doubly reinforced beam economical?</h3>
+    <p>Only when genuinely required. Adding compression steel and the matching tension steel is more expensive than simply deepening the beam where space allows.</p>
   </div>
 
   <div class="nav-footer">

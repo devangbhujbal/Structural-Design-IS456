@@ -212,6 +212,8 @@
       <li><a href="#detailing">Detailing — Lateral Ties and Steel Limits</a></li>
       <li><a href="#procedure">Step-by-Step Design Procedure</a></li>
       <li><a href="#example">Worked Example</a></li>
+          <li><a href="#mistakes">Common Mistakes to Avoid</a></li>
+      <li><a href="#faq">Frequently Asked Questions</a></li>
     </ol>
   </div>
 
@@ -744,6 +746,40 @@
         <li>All IS 456 checks satisfied ✓</li>
       </ul>
     </div>
+  </div>
+
+    <!-- COMMON MISTAKES -->
+  <div class="section" id="mistakes">
+    <h2>13. Common Mistakes to Avoid</h2>
+    <p>These are the errors that most often cost marks in exams and cause re-work on site. Watch for them when applying this topic.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Common Mistake</th><th>Why it’s wrong / the correct approach</th></tr></thead>
+        <tbody>
+          <tr><td>Checking slenderness about one axis only.</td><td>Slenderness must be checked about <strong>both</strong> axes ($l_{ex}/D$ and $l_{ey}/b$). A column can be short one way and slender the other.</td></tr>
+          <tr><td>Omitting the additional moments $M_{ax}$ and $M_{ay}$.</td><td>Slender columns must be designed for the primary moments plus the additional moments from the P-δ effect (IS 456 Cl. 39.7).</td></tr>
+          <tr><td>Reading the wrong effective length.</td><td>Effective length depends on the end restraints and whether the column is braced or unbraced — use IS 456 Table 28, not simply the actual length.</td></tr>
+          <tr><td>Assuming minimum eccentricity no longer applies.</td><td>The minimum eccentricity check of Cl. 25.4 still applies in addition to the additional-moment calculation.</td></tr>
+          <tr><td>Skipping the reduction factor $k$ on the additional moment.</td><td>The additional moment may be reduced by $k = (P_{uz}-P_u)/(P_{uz}-P_b) \le 1$ to avoid over-conservative design (IS 456 Cl. 39.7.1.1).</td></tr>
+          <tr><td>Mixing up braced and unbraced behaviour.</td><td>Unbraced (sway) columns attract larger additional moments than braced ones; the effective length and design moments differ accordingly.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <h2>14. Frequently Asked Questions</h2>
+    <h3>When is a column classified as slender?</h3>
+    <p>When either $l_{ex}/D > 12$ or $l_{ey}/b > 12$ — i.e. its slenderness ratio about any axis exceeds 12 (IS 456 Cl. 25.1.2).</p>
+    <h3>What are additional moments?</h3>
+    <p>Moments caused by the lateral deflection of the column under load (the P-δ effect). They are added to the primary moments before designing the section.</p>
+    <h3>What is the P-δ effect?</h3>
+    <p>As a slender column bends, the axial load acts at an offset δ from the original axis, creating extra moment $P\delta$ that further increases the deflection — a second-order effect.</p>
+    <h3>How is the effective length found?</h3>
+    <p>From the end conditions (fixed, hinged, free) and bracing, using the factors in IS 456 Table 28: $l_{ef} = k \times l$.</p>
+    <h3>What is the reduction factor $k$ for?</h3>
+    <p>It reduces the calculated additional moment for columns carrying high axial load, recognising that they deflect less. It is between 0 and 1.</p>
   </div>
 
   <div class="nav-footer">
