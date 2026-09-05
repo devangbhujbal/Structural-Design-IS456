@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RC Design Sheets — Eurocode 2 &amp; ACI 318 spreadsheets</title>
+<title>ACI 318-19 RC Design Sheets — RC Design Sheets</title>
+<meta name="description" content="Excel design sheets for beams, columns, slabs and footings built directly to ACI 318-19, with every check traceable back to its section.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -69,6 +70,7 @@
     display:flex;
     align-items:baseline;
     gap:6px;
+    text-decoration:none;
   }
   .wordmark span{
     font-family:'IBM Plex Mono', monospace;
@@ -97,9 +99,9 @@
     align-items:start;
   }
   .hero h1{
-    font-size:2.75rem;
-    line-height:1.08;
-    max-width:15ch;
+    font-size:2.5rem;
+    line-height:1.1;
+    max-width:18ch;
   }
   .hero p.lead{
     margin-top:20px;
@@ -182,7 +184,6 @@
     border-radius:var(--radius);
     margin-bottom:14px;
   }
-  .tag-euro{background:var(--blue-soft);color:var(--blue);}
   .tag-aci{background:var(--rust-soft);color:var(--rust);}
   .product h3{font-size:1.5rem;}
   .product p.desc{color:var(--ink-soft);margin-top:12px;max-width:52ch;}
@@ -287,7 +288,7 @@
     .product{grid-template-columns:1fr;}
     ul.checks{grid-template-columns:1fr;}
     .steps{grid-template-columns:1fr;}
-    .hero h1{font-size:2.1rem;max-width:none;}
+    .hero h1{font-size:2rem;max-width:none;}
   }
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
@@ -299,10 +300,10 @@
 
 <header>
   <div class="wrap nav">
-    <div class="wordmark">RC&nbsp;DESIGN&nbsp;SHEETS <span>rev. 2026.1</span></div>
+    <a class="wordmark" href="index.html">RC&nbsp;DESIGN&nbsp;SHEETS <span>rev. 2026.1</span></a>
     <nav class="links">
-      <a href="#eurocode">Eurocode 2</a>
-      <a href="#aci">ACI 318</a>
+      <a href="index.html">Home</a>
+      <a href="index.html#eurocode">Eurocode 2</a>
       <a href="#how">How it works</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -312,16 +313,17 @@
 <section class="hero">
   <div class="wrap hero-inner">
     <div>
-      <h1>Reinforced concrete design, checked against the clause.</h1>
-      <p class="lead">Excel design sheets for beams, columns, slabs and footings, built directly to EN&nbsp;1992-1-1 or ACI&nbsp;318 — with every check traceable back to the clause it comes from.</p>
+      <span class="product-tag tag-aci">ACI 318</span>
+      <h1>RC design sheets for ACI 318-19.</h1>
+      <p class="lead">Excel design sheets for beams, columns, slabs and footings, built directly to ACI&nbsp;318-19 — with every check traceable back to the section it comes from.</p>
       <div class="cta-row">
-        <a href="eurocode-2-pack.html" class="btn btn-solid">View Eurocode 2 pack</a>
-        <a href="aci-318-pack.html" class="btn btn-ghost">View ACI 318 pack</a>
+        <a href="mailto:sales@example.com?subject=ACI%20318%20pack%20—%20purchase%20enquiry" class="btn btn-solid">Buy the ACI 318 pack</a>
+        <a href="index.html" class="btn btn-ghost">Back to all packs</a>
       </div>
     </div>
     <div class="titleblock">
-      <div class="head">DRG — RC DESIGN SHEET SET</div>
-      <div class="row"><div>Codes covered</div><div>EN 1992-1-1:2004 / ACI 318-19</div></div>
+      <div class="head">DRG — ACI 318 SHEET SET</div>
+      <div class="row"><div>Code covered</div><div>ACI 318-19</div></div>
       <div class="row"><div>Elements</div><div>Beam · column · slab · footing</div></div>
       <div class="row"><div>Format</div><div>.xlsx, open formulas, no macros</div></div>
       <div class="row"><div>Status</div><div>Hand-checked against worked examples</div></div>
@@ -330,41 +332,11 @@
   </div>
 </section>
 
-<section id="eurocode">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">EN 1992-1-1:2004 + UK/EU National Annexes</div>
-      <h2>Eurocode 2 pack</h2>
-    </div>
-    <div class="product">
-      <div>
-        <span class="product-tag tag-euro">Eurocode 2</span>
-        <h3>RC design to EN 1992-1-1</h3>
-        <p class="desc">Covers ultimate and serviceability limit states for the elements you design most often, with inputs for characteristic strengths, partial factors and exposure class set out the way the code sets them out — so a checker can follow the sheet without a separate calc note.</p>
-        <ul class="checks">
-          <li>Bending &amp; flexural capacity <span class="clause">— §6.1</span></li>
-          <li>Shear resistance <span class="clause">— §6.2</span></li>
-          <li>Deflection (span/depth) <span class="clause">— §7.4</span></li>
-          <li>Crack width control <span class="clause">— §7.3</span></li>
-          <li>Column axial + biaxial bending <span class="clause">— §5.8, §6.1</span></li>
-          <li>Punching shear, footings &amp; slabs <span class="clause">— §6.4</span></li>
-        </ul>
-      </div>
-      <div class="price-card">
-        <div class="price">£49<sup>.00</sup></div>
-        <div class="meta">ONE-OFF · .XLSX · SINGLE USER</div>
-        <a href="eurocode-2-pack.html" class="btn btn-solid">View the Eurocode 2 pack</a>
-        <p class="note">Full clause-by-clause breakdown and the purchase enquiry link are on the pack page.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="alt" id="aci">
+<section>
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">ACI 318-19</div>
-      <h2>ACI 318 pack</h2>
+      <h2>What's checked</h2>
     </div>
     <div class="product">
       <div>
@@ -383,14 +355,14 @@
       <div class="price-card">
         <div class="price">£49<sup>.00</sup></div>
         <div class="meta">ONE-OFF · .XLSX · SINGLE USER</div>
-        <a href="aci-318-pack.html" class="btn btn-solid">View the ACI 318 pack</a>
-        <p class="note">Full section-by-section breakdown and the purchase enquiry link are on the pack page.</p>
+        <a href="mailto:sales@example.com?subject=ACI%20318%20pack%20—%20purchase%20enquiry" class="btn btn-solid">Buy the ACI 318 pack</a>
+        <p class="note">Checkout isn't wired up yet — this button opens an email enquiry for now. Swap it for a Lemon&nbsp;Squeezy or Stripe link once you've set one up.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="how">
+<section class="alt" id="how">
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">FROM PURCHASE TO FIRST CHECK</div>
@@ -399,8 +371,8 @@
     <div class="steps">
       <div class="step">
         <div class="num">01</div>
-        <h4>Buy the pack you need</h4>
-        <p>Choose Eurocode 2, ACI 318, or both. You'll get the file by email — no account required.</p>
+        <h4>Buy the pack</h4>
+        <p>Send the purchase enquiry above. You'll get the file by email — no account required.</p>
       </div>
       <div class="step">
         <div class="num">02</div>
@@ -416,26 +388,26 @@
   </div>
 </section>
 
-<section class="alt" id="faq">
+<section id="faq">
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">QUESTIONS</div>
       <h2>Before you buy</h2>
     </div>
-    <details class="faq-item">
-      <summary>Which national annex does the Eurocode pack use?<span class="plus">+</span></summary>
-      <p>The base sheet uses the UK National Annex values. If you need a different annex's Nationally Determined Parameters, get in touch before buying and this can be adjusted.</p>
+    <details class="faq-item" open>
+      <summary>Which load combinations does the pack use?<span class="plus">+</span></summary>
+      <p>The sheet works to ACI 318-19's standard strength-design load combinations. If your project uses a different governing combination set, get in touch before buying and this can be adjusted.</p>
     </details>
     <details class="faq-item">
       <summary>Are the sheets suitable for submission to a checking engineer?<span class="plus">+</span></summary>
-      <p>They're built to show every step of the calculation with its clause reference, which is what most checkers ask for — but you remain responsible for verifying the output against your own project's specific requirements.</p>
+      <p>They're built to show every step of the calculation with its section reference, which is what most checkers ask for — but you remain responsible for verifying the output against your own project's specific requirements.</p>
     </details>
     <details class="faq-item">
       <summary>Can I use one pack on more than one project?<span class="plus">+</span></summary>
       <p>Yes. The licence is per user, not per project — use it on as many jobs as you like.</p>
     </details>
     <details class="faq-item">
-      <summary>Do you offer a bundle of both packs?<span class="plus">+</span></summary>
+      <summary>Do you offer a bundle with the Eurocode 2 pack?<span class="plus">+</span></summary>
       <p>Not yet — Eurocode 2 and ACI 318 are sold separately for now. Get in touch if you need both and would like them priced together.</p>
     </details>
   </div>
@@ -443,7 +415,7 @@
 
 <footer>
   <div class="wrap footer-row">
-    <div class="wordmark">RC&nbsp;DESIGN&nbsp;SHEETS</div>
+    <a class="wordmark" href="index.html" style="text-decoration:none;">RC&nbsp;DESIGN&nbsp;SHEETS</a>
     <div class="fine">Independent design aids, not affiliated with CEN or ACI. Verify all output against the current code edition before use.</div>
   </div>
 </footer>
