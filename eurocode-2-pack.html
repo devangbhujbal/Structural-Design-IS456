@@ -229,6 +229,32 @@
     color:var(--ink-soft);
     line-height:1.5;
   }
+  /* ---------- Sheet gallery ---------- */
+  .section-head p{color:var(--ink-soft);margin:10px 0 0;}
+  .shots{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:24px;
+  }
+  .shots figure{
+    margin:0;
+    border:1px solid var(--paper-line);
+    background:var(--paper);
+  }
+  .shots a{display:block;line-height:0;}
+  .shots img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-bottom:1px solid var(--paper-line);
+  }
+  .shots figcaption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.76rem;
+    color:var(--ink-soft);
+    padding:10px 12px;
+    line-height:1.5;
+  }
   /* ---------- How it works ---------- */
   .steps{
     display:grid;
@@ -288,6 +314,7 @@
     .product{grid-template-columns:1fr;}
     ul.checks{grid-template-columns:1fr;}
     .steps{grid-template-columns:1fr;}
+    .shots{grid-template-columns:1fr;}
     .hero h1{font-size:2rem;max-width:none;}
   }
   @media (prefers-reduced-motion: reduce){
@@ -304,6 +331,7 @@
     <nav class="links">
       <a href="index.html">Home</a>
       <a href="index.html#aci">ACI 318</a>
+      <a href="#inside">Inside</a>
       <a href="#how">How it works</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -362,7 +390,43 @@
   </div>
 </section>
 
-<section class="alt" id="how">
+<section class="alt" id="inside">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">A LOOK INSIDE</div>
+      <h2>The sheets themselves</h2>
+      <p>Screenshots of the actual workbook, not mock-ups. Click any one to see it full size.</p>
+    </div>
+    <div class="shots">
+      <figure>
+        <a href="img/ec2-beam.png" target="_blank" rel="noopener">
+          <img src="img/ec2-beam.png" width="1200" height="900" loading="lazy" alt="Eurocode 2 singly reinforced beam design sheet, showing section geometry, cover, design material strengths and the flexure check with EN 1992-1-1 clause references.">
+        </a>
+        <figcaption>Beam — bending, shear, deflection and crack control, with the clause beside every line.</figcaption>
+      </figure>
+      <figure>
+        <a href="img/ec2-column.png" target="_blank" rel="noopener">
+          <img src="img/ec2-column.png" width="1200" height="900" loading="lazy" alt="Eurocode 2 braced column design sheet with the nominal curvature method and a tabulated N–M interaction diagram.">
+        </a>
+        <figcaption>Column — second-order effects by the nominal curvature method, with a live N–M interaction table.</figcaption>
+      </figure>
+      <figure>
+        <a href="img/ec2-slab.png" target="_blank" rel="noopener">
+          <img src="img/ec2-slab.png" width="1200" height="900" loading="lazy" alt="Eurocode 2 solid slab design sheet covering one-way and two-way spanning slabs designed per metre width.">
+        </a>
+        <figcaption>Slab — one-way and two-way spanning, designed per metre width.</figcaption>
+      </figure>
+      <figure>
+        <a href="img/ec2-footing.png" target="_blank" rel="noopener">
+          <img src="img/ec2-footing.png" width="1200" height="900" loading="lazy" alt="Eurocode 2 isolated pad footing design sheet with the bearing pressure check and a punching shear perimeter table.">
+        </a>
+        <figcaption>Pad footing — bearing check to EN 1997-1, with punching shear on perimeters from 0.25d to 2.0d.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="how">
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">FROM PURCHASE TO FIRST CHECK</div>
@@ -388,7 +452,7 @@
   </div>
 </section>
 
-<section id="faq">
+<section class="alt" id="faq">
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">QUESTIONS</div>

@@ -229,6 +229,32 @@
     color:var(--ink-soft);
     line-height:1.5;
   }
+  /* ---------- Sheet gallery ---------- */
+  .section-head p{color:var(--ink-soft);margin:10px 0 0;}
+  .shots{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:24px;
+  }
+  .shots figure{
+    margin:0;
+    border:1px solid var(--paper-line);
+    background:var(--paper);
+  }
+  .shots a{display:block;line-height:0;}
+  .shots img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-bottom:1px solid var(--paper-line);
+  }
+  .shots figcaption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.76rem;
+    color:var(--ink-soft);
+    padding:10px 12px;
+    line-height:1.5;
+  }
   /* ---------- How it works ---------- */
   .steps{
     display:grid;
@@ -288,6 +314,7 @@
     .product{grid-template-columns:1fr;}
     ul.checks{grid-template-columns:1fr;}
     .steps{grid-template-columns:1fr;}
+    .shots{grid-template-columns:1fr;}
     .hero h1{font-size:2rem;max-width:none;}
   }
   @media (prefers-reduced-motion: reduce){
@@ -304,6 +331,7 @@
     <nav class="links">
       <a href="index.html">Home</a>
       <a href="index.html#eurocode">Eurocode 2</a>
+      <a href="#inside">Inside</a>
       <a href="#how">How it works</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -362,7 +390,43 @@
   </div>
 </section>
 
-<section class="alt" id="how">
+<section class="alt" id="inside">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">A LOOK INSIDE</div>
+      <h2>The sheets themselves</h2>
+      <p>Screenshots of the actual workbook, not mock-ups. Click any one to see it full size.</p>
+    </div>
+    <div class="shots">
+      <figure>
+        <a href="img/aci-beam.png" target="_blank" rel="noopener">
+          <img src="img/aci-beam.png" width="1200" height="900" loading="lazy" alt="ACI 318-19 singly reinforced beam design sheet, showing section geometry, cover, design material properties and the flexure check with ACI section references.">
+        </a>
+        <figcaption>Beam — flexure, shear, deflection and crack control, with the section beside every line.</figcaption>
+      </figure>
+      <figure>
+        <a href="img/aci-column.png" target="_blank" rel="noopener">
+          <img src="img/aci-column.png" width="1200" height="900" loading="lazy" alt="ACI 318-19 braced column design sheet with the moment magnifier of 6.6.4 and a plotted P–M interaction diagram.">
+        </a>
+        <figcaption>Column — moment magnifier to 6.6.4, with a P–M interaction diagram plotted from the section itself.</figcaption>
+      </figure>
+      <figure>
+        <a href="img/aci-slab.png" target="_blank" rel="noopener">
+          <img src="img/aci-slab.png" width="1200" height="900" loading="lazy" alt="ACI 318-19 solid slab design sheet covering one-way slabs and two-way flat plates by the Direct Design Method.">
+        </a>
+        <figcaption>Slab — one-way, or two-way by the Direct Design Method of 8.10, plus punching shear.</figcaption>
+      </figure>
+      <figure>
+        <a href="img/aci-footing.png" target="_blank" rel="noopener">
+          <img src="img/aci-footing.png" width="1200" height="900" loading="lazy" alt="ACI 318-19 isolated pad footing design sheet with bearing pressure, punching shear and the 318-19 one-way shear equation.">
+        </a>
+        <figcaption>Pad footing — bearing, punching, and the 318-19 one-way shear rule that catches thin footings.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="how">
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">FROM PURCHASE TO FIRST CHECK</div>
@@ -388,7 +452,7 @@
   </div>
 </section>
 
-<section id="faq">
+<section class="alt" id="faq">
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">QUESTIONS</div>
