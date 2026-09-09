@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What actually changed in the ACI 318-19 shear provisions — Structural Studio</title>
+<meta name="description" content="ACI 318-19 replaced the single 2&#955;&#8730;f'c expression for Vc with a three-case table, a longitudinal reinforcement term and a size effect factor. A worked pad footing showing why a design that passed under 318-14 can now fail.">
+<link rel="canonical" href="https://devangbhujbal.com/notes/aci-318-19-shear-changes.html">
+<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#14171A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What actually changed in the ACI 318-19 shear provisions">
+<meta property="og:description" content="A three-case table, a reinforcement ratio term and a size effect factor — and a worked pad footing that loses 60% of its shear capacity.">
+<meta property="og:url" content="https://devangbhujbal.com/notes/aci-318-19-shear-changes.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=20260909b">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "What actually changed in the ACI 318-19 shear provisions",
+  "description": "ACI 318-19 replaced the single 2 lambda root f'c expression for Vc with a three-case table, a longitudinal reinforcement ratio term and a size effect factor.",
+  "datePublished": "2026-09-09",
+  "dateModified": "2026-09-09",
+  "author": {"@type": "Organization", "name": "Structural Studio"},
+  "publisher": {"@type": "Organization", "name": "Structural Studio"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://devangbhujbal.com/notes/aci-318-19-shear-changes.html"},
+  "about": {"@type": "Thing", "name": "ACI 318-19 one-way shear design"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://devangbhujbal.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Notes", "item": "https://devangbhujbal.com/notes/"},
+    {"@type": "ListItem", "position": 3, "name": "What actually changed in the ACI 318-19 shear provisions"}
+  ]
+}
+</script>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="wordmark" href="../index.html">Structural&nbsp;Studio</a>
+    <nav class="links">
+      <a href="../index.html">Home</a>
+      <a href="../eurocode-2-pack.html">Eurocode 2</a>
+      <a href="../aci-318-pack.html">ACI 318</a>
+      <a href="./" aria-current="page">Notes</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap article-head">
+  <p class="crumb"><a href="./">Notes</a> &nbsp;/&nbsp; ACI 318</p>
+  <h1>What actually changed in the ACI&nbsp;318-19 shear provisions.</h1>
+  <p class="lead">One equation became a table of three, and two new terms crept into it. For beams with stirrups, almost nothing changed. For slabs, footings and mats, capacity can fall by more than half.</p>
+  <div class="article-meta">
+    <span class="tag tag-aci">ACI 318</span>
+    <time datetime="2026-09-09">9 September 2026</time>
+    <span>9 min read</span>
+  </div>
+</div>
+
+<section>
+  <div class="wrap article-grid">
+    <article class="prose">
+
+      <p>If you learned reinforced concrete on ACI 318-14 or earlier, one number is probably burned in: <code>2&#8730;f'c</code>. It was the concrete contribution to one-way shear, it applied to nearly everything, and you could estimate it in your head.</p>
+
+      <p>ACI 318-19 removed it as a general rule. In its place is <strong>Table 22.5.5.1</strong>, which gives three expressions for <code>Vc</code> and makes you choose between them based on how much shear reinforcement the member carries. Two quantities that never appeared in the old equation now appear in the new one: the longitudinal reinforcement ratio, and the effective depth itself.</p>
+
+      <p>The consequence is narrow but severe. Members carrying at least minimum shear reinforcement are broadly unaffected. Members carrying none — one-way slabs, pad footings, mat foundations, thick transfer slabs — can compute a design shear capacity 40 to 60% below what the same section was credited with under 318-14. Designs that passed a checker in 2018 do not necessarily pass now.</p>
+
+      <h2 id="old-rule">The rule that went away</h2>
+
+      <p>ACI 318-14 gave a single expression for members without axial load, and the whole profession used it as the default:</p>
+
+      <div class="eqn">
+        <span class="ref">318-14 Eq. 22.5.5.1</span>
+        Vc = 2 &#955; &#8730;f'c &#183; b<sub>w</sub> &#183; d
+        <span class="where">&#955; = 1.0 for normalweight concrete &#183; f'c in psi &#183; b<sub>w</sub>, d in inches. In SI the coefficient is 0.17, with f'c in MPa.</span>
+      </div>
+
+      <p>It did not care how heavily the member was reinforced in flexure. It did not care whether the member was 8 inches deep or 8 feet deep. Both omissions were known to be unconservative, and both were corrected in 318-19.</p>
+
+      <h2 id="new-table">What replaced it</h2>
+
+      <p>Table 22.5.5.1 splits on a single question: <strong>does the member carry at least the minimum area of shear reinforcement, <code>Av,min</code>?</strong></p>
+
+      <p>If it does, you get two options and may take the more favourable:</p>
+
+      <div class="eqn">
+        <span class="ref">A<sub>v</sub> &#8805; A<sub>v,min</sub></span>
+        (a)&nbsp;&nbsp;Vc = [ 2 &#955; &#8730;f'c + N<sub>u</sub> / (6 A<sub>g</sub>) ] &#183; b<sub>w</sub> &#183; d<br>
+        (b)&nbsp;&nbsp;Vc = [ 8 &#955; (&#961;<sub>w</sub>)<sup>1/3</sup> &#8730;f'c + N<sub>u</sub> / (6 A<sub>g</sub>) ] &#183; b<sub>w</sub> &#183; d
+      </div>
+
+      <p>Option (a) is the old familiar expression, preserved intact. <strong>This is why beams with stirrups barely moved.</strong> If your member has shear reinforcement you can still use <code>2&#955;&#8730;f'c</code> exactly as before, and only reach for option (b) when a high reinforcement ratio makes it more generous.</p>
+
+      <p>If the member carries less than <code>Av,min</code> — which includes every member exempted from minimum shear reinforcement altogether, so every ordinary slab and footing — there is no option. You get one equation, and it is the harsh one:</p>
+
+      <div class="eqn">
+        <span class="ref">A<sub>v</sub> &lt; A<sub>v,min</sub></span>
+        Vc = [ 8 &#955;<sub>s</sub> &#955; (&#961;<sub>w</sub>)<sup>1/3</sup> &#8730;f'c + N<sub>u</sub> / (6 A<sub>g</sub>) ] &#183; b<sub>w</sub> &#183; d
+        <span class="where">&#961;<sub>w</sub> = A<sub>s</sub> / (b<sub>w</sub> d), the ratio of longitudinal tension reinforcement &#183; &#955;<sub>s</sub> = size effect factor &#183; N<sub>u</sub> positive for compression, negative for tension.</span>
+      </div>
+
+      <p>Two independent penalties are stacked in that line. Take them one at a time.</p>
+
+      <h3>Penalty one: the reinforcement ratio</h3>
+
+      <p>The term <code>8(&#961;w)^(1/3)</code> replaces the constant <code>2</code>. It is worth finding the crossover point where the two are equal:</p>
+
+      <div class="eqn">
+        8 (&#961;<sub>w</sub>)<sup>1/3</sup> = 2&nbsp;&nbsp;&#8594;&nbsp;&nbsp;&#961;<sub>w</sub> = 0.25<sup>3</sup> = 0.0156&nbsp;&nbsp;(1.56%)
+      </div>
+
+      <p>Below a longitudinal reinforcement ratio of about 1.6%, the new expression gives <em>less</em> than the old <code>2&#8730;f'c</code> — before the size effect factor is applied at all. Slabs and footings typically sit between 0.2% and 0.6%. At &#961;<sub>w</sub> = 0.3% the term evaluates to roughly <code>1.15&#8730;f'c</code>, already only 58% of the old value.</p>
+
+      <p>The reasoning behind it is long established: aggregate interlock across a shear crack depends on crack width, crack width depends on the strain in the flexural steel, and a lightly reinforced section strains more. The old constant simply averaged over all of that.</p>
+
+      <h3>Penalty two: the size effect factor</h3>
+
+      <p>The second term, <code>&#955;s</code>, is new in 318-19 and is the one most likely to catch a foundation design:</p>
+
+      <div class="eqn">
+        <span class="ref">318-19 Eq. 22.5.5.1.3</span>
+        &#955;<sub>s</sub> = &#8730;( 2 / (1 + d/10) ) &#8804; 1.0
+        <span class="where">d in inches. In SI, replace d/10 with d/250 for d in millimetres. &#955;<sub>s</sub> applies <strong>only</strong> where A<sub>v</sub> &lt; A<sub>v,min</sub>.</span>
+      </div>
+
+      <p>It reaches 1.0 at d = 10 in. and falls away steadily above that. Note that <code>&#955;s</code> is a separate factor from <code>&#955;</code>, the lightweight-concrete modifier — they multiply together, and confusing the two is an easy way to be wrong by 30%.</p>
+
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr><th>Effective depth d</th><th>&#955;<sub>s</sub></th><th>Reduction</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="num">10 in.</td><td class="num">1.000</td><td>&mdash;</td></tr>
+            <tr><td class="num">16 in.</td><td class="num">0.877</td><td>12%</td></tr>
+            <tr><td class="num">20 in.</td><td class="num">0.816</td><td>18%</td></tr>
+            <tr><td class="num">24 in.</td><td class="num">0.767</td><td>23%</td></tr>
+            <tr><td class="num">30 in.</td><td class="num">0.707</td><td>29%</td></tr>
+            <tr><td class="num">40 in.</td><td class="num">0.632</td><td>37%</td></tr>
+            <tr><td class="num">60 in.</td><td class="num">0.535</td><td>47%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">The size effect is why "make the footing thicker" is no longer a reliable way out of a shear problem — beyond a point, added depth buys less capacity than the linear <code>d</code> term suggests.</p>
+
+      <h3>The ceiling and the axial term</h3>
+
+      <p>Two limits close out the table. <code>Vc</code> may not be taken greater than <code>5&#955;&#8730;f'c b<sub>w</sub> d</code> (&#167;22.5.5.1.1), which caps what a heavily reinforced section can claim from option (b). And the axial term <code>N<sub>u</sub>/(6A<sub>g</sub>)</code> now handles compression and tension in one expression, replacing the separate 318-14 equations — with <code>N<sub>u</sub></code> signed, so a member in net tension is penalised automatically rather than being sent to a different clause.</p>
+
+      <h2 id="worked">A pad footing, worked both ways</h2>
+
+      <p>Abstract percentages do not persuade anyone. Here is an ordinary isolated pad footing, checked for one-way shear on a 12-inch design strip.</p>
+
+      <div class="table-scroll">
+        <table class="data">
+          <thead><tr><th>Input</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Concrete strength, f'c</td><td class="num">4,000 psi (normalweight, &#955; = 1.0)</td></tr>
+            <tr><td>Overall depth, h</td><td class="num">24 in.</td></tr>
+            <tr><td>Effective depth, d</td><td class="num">20 in.</td></tr>
+            <tr><td>Design strip, b<sub>w</sub></td><td class="num">12 in.</td></tr>
+            <tr><td>Flexural steel</td><td class="num">#6 @ 12 in. &#8594; A<sub>s</sub> = 0.44 in&#178;/ft</td></tr>
+            <tr><td>Shear reinforcement</td><td class="num">None (exempt from A<sub>v,min</sub>)</td></tr>
+            <tr><td>Axial through section, N<sub>u</sub></td><td class="num">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Under <strong>ACI 318-14</strong>, one line:</p>
+
+      <div class="eqn">
+        Vc = 2 (1.0) &#8730;4000 &#215; 12 &#215; 20 = 30,360 lb = <strong>30.4 kip</strong><br>
+        &#966;Vc = 0.75 &#215; 30.4 = <strong>22.8 kip</strong>
+      </div>
+
+      <p>Under <strong>ACI 318-19</strong>, the footing has no stirrups, so the third row of Table 22.5.5.1 governs:</p>
+
+      <div class="eqn">
+        &#961;<sub>w</sub> = 0.44 / (12 &#215; 20) = 0.00183&nbsp;&nbsp;&#8594;&nbsp;&nbsp;(&#961;<sub>w</sub>)<sup>1/3</sup> = 0.1223<br>
+        &#955;<sub>s</sub> = &#8730;( 2 / (1 + 20/10) ) = &#8730;0.667 = 0.816<br><br>
+        Vc = 8 (0.816)(1.0)(0.1223) &#8730;4000 &#215; 12 &#215; 20<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;= 50.5 psi &#215; 240 in&#178; = 12,130 lb = <strong>12.1 kip</strong><br>
+        &#966;Vc = 0.75 &#215; 12.1 = <strong>9.1 kip</strong>
+        <span class="where">Check the ceiling: 5&#955;&#8730;f'c b<sub>w</sub> d = 75.9 kip, so &#167;22.5.5.1.1 does not govern here.</span>
+      </div>
+
+      <div class="callout callout-rust">
+        <span class="kicker">The result</span>
+        <p>&#966;Vc falls from <strong>22.8 kip to 9.1 kip</strong> — the same concrete, the same steel, the same geometry, retaining <strong>40% of its former design capacity</strong>. A footing sized against a factored shear of 15 kip passed comfortably under 318-14 and fails outright under 318-19.</p>
+      </div>
+
+      <p>Most of that loss is the reinforcement ratio, not the size effect. The &#961;<sub>w</sub> term on its own takes Vc to 49% of the old value; &#955;<sub>s</sub> then carries it down to 40%. That ordering matters, because it is the opposite of the intuition most engineers bring to the change — the headline is the new size effect factor, but the quieter cube-root term is doing roughly three quarters of the damage.</p>
+
+      <h2 id="avmin">The quieter change: when A<sub>v,min</sub> is triggered</h2>
+
+      <p>Alongside the Vc rewrite sits a second change that matters more than its column-inches suggest. Under 318-14, minimum shear reinforcement was required in nonprestressed beams wherever <code>Vu &gt; 0.5&#966;Vc</code>. Under 318-19 &#167;9.6.3.1 the general trigger for nonprestressed beams becomes:</p>
+
+      <div class="eqn">
+        <span class="ref">318-19 &#167;9.6.3.1</span>
+        A<sub>v,min</sub> required where&nbsp;&nbsp;V<sub>u</sub> &gt; &#966; &#955; &#8730;f'c &#183; b<sub>w</sub> &#183; d
+        <span class="where">Except for the cases listed in Table 9.6.3.1, where the trigger remains V<sub>u</sub> &gt; &#966;Vc.</span>
+      </div>
+
+      <p>That is a lower threshold than before, so stirrups are now required over longer stretches of a beam than they used to be. It also interacts with the table above in a way worth thinking through, because the two provisions form a loop: whether you need <code>Av,min</code> depends on <code>Vc</code>, and which <code>Vc</code> equation you may use depends on whether you provided <code>Av,min</code>.</p>
+
+      <div class="callout">
+        <span class="kicker">The design leverage</span>
+        <p>That loop cuts in your favour. Providing <code>Av,min</code> — often a modest amount of steel — moves the member from the third row of Table 22.5.5.1 to the first, which restores the full <code>2&#955;&#8730;f'c</code> and switches off <code>&#955;s</code> entirely.</p>
+        <p>On a deep, lightly reinforced member, the cheapest route to a passing shear check is frequently to add nominal stirrups rather than concrete. That inversion — reinforcement being more efficient than depth — is the most useful habit to take from 318-19.</p>
+      </div>
+
+      <h2 id="what-to-do">What this means in practice</h2>
+
+      <ul>
+        <li><strong>Beams with stirrups:</strong> essentially unchanged. Option (a) preserves the old expression, and option (b) is a bonus available when the reinforcement ratio is high.</li>
+        <li><strong>One-way slabs and pad footings:</strong> the most exposed members on any project. No stirrups, low reinforcement ratios and generous depths put them squarely in the worst row of the table.</li>
+        <li><strong>Mats and thick transfer slabs:</strong> worst affected of all. At d = 40 in., &#955;<sub>s</sub> alone removes 37%, before the &#961;<sub>w</sub> term has been applied.</li>
+        <li><strong>Joists and shallow members:</strong> &#955;<sub>s</sub> = 1.0 below d = 10 in., so the size effect is silent — but the reinforcement ratio term is not, and it is usually the larger of the two penalties anyway.</li>
+        <li><strong>Legacy spreadsheets:</strong> anything written before 2019 that hard-codes <code>2&#8730;f'c</code> is now unconservative for every member without shear reinforcement. It will not error. It will simply pass sections that the current code fails.</li>
+      </ul>
+
+      <p>That last point is the one worth acting on this week. The change is invisible inside an old workbook: no warning, no broken formula, just an answer that used to be right. If you are running a sheet you inherited from a colleague, open the shear cell and look at what it multiplies <code>&#8730;f'c</code> by.</p>
+
+      <div class="article-cta">
+        <h3>Our ACI 318 pack applies the current rule.</h3>
+        <p>The beam, slab and footing sheets implement Table 22.5.5.1 in full — testing <code>Av</code> against <code>Av,min</code>, computing <code>&#955;s</code> from the actual effective depth, and showing the section reference beside every line. The footing sheet will flag a section that a pre-2019 calculation would have passed.</p>
+        <p style="margin-top:14px;">The sample workbook is a complete, unlocked beam sheet with its Parameters tab, so you can read the formulas before paying anything.</p>
+        <div class="cta-row">
+          <a href="../samples/aci-318-beam-sample.xlsx" class="btn btn-solid">Download the free sample sheet</a>
+          <a href="../aci-318-pack.html" class="btn btn-ghost">See the ACI 318 pack</a>
+        </div>
+      </div>
+
+      <p class="article-foot">Section numbers refer to ACI 318-19, <em>Building Code Requirements for Structural Concrete</em>. This note is a summary written to help engineers navigate the change and is not a substitute for the code text — verify every provision against the current published edition before relying on it in design. Structural Studio is independent and not affiliated with ACI.</p>
+
+    </article>
+
+    <aside class="article-aside">
+      <div class="toc">
+        <span class="kicker">Contents</span>
+        <ol>
+          <li><a href="#old-rule">The rule that went away</a></li>
+          <li><a href="#new-table">What replaced it</a></li>
+          <li><a href="#worked">A pad footing, worked both ways</a></li>
+          <li><a href="#avmin">When A<sub>v,min</sub> is triggered</a></li>
+          <li><a href="#what-to-do">What this means in practice</a></li>
+        </ol>
+      </div>
+      <div class="aside-buy">
+        <h4>ACI 318 design sheets</h4>
+        <p>Beams, columns, slabs and footings to ACI 318-19 — open formulas, no macros, every check traceable to its section.</p>
+        <a href="../aci-318-pack.html" class="btn btn-solid">View the pack — &euro;19.99</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a class="wordmark" href="../index.html">Structural&nbsp;Studio</a>
+      <div class="footer-links">
+        <a href="../eurocode-2-pack.html">Eurocode 2 pack</a>
+        <a href="../aci-318-pack.html">ACI 318 pack</a>
+        <a href="./">Notes</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../contact.html">Contact</a>
+      </div>
+    </div>
+    <p class="fine">Independent design aids, not affiliated with CEN or ACI. Verify all output against the current code edition before use.</p>
+  </div>
+</footer>
+
+</body>
+</html>
