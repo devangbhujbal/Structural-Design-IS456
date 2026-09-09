@@ -453,3 +453,54 @@ table.data .num{font-family:'IBM Plex Mono',ui-monospace,monospace;white-space:n
   .article-cta{padding:26px 22px;}
   .eqn{font-size:0.8rem;padding:15px 16px;}
 }
+
+/* ---------- Cookie consent banner ---------- */
+.consent{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;
+  background:var(--bg);border-top:1px solid var(--line-2);
+  box-shadow:0 -8px 28px rgba(20,23,26,0.07);
+  animation:consent-in .22s ease-out;
+}
+.consent-inner{
+  max-width:var(--wrap);margin:0 auto;padding:20px 32px;
+  display:flex;align-items:center;justify-content:space-between;gap:36px;
+}
+.consent-copy{max-width:46rem;}
+.consent-title{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:7px;
+}
+.consent-copy p:last-child{font-size:0.92rem;color:var(--ink-2);line-height:1.6;}
+
+.consent-actions{display:flex;gap:10px;flex-shrink:0;}
+/* Both buttons carry the same size and weight: refusing has to be as easy
+   as accepting, so neither is visually demoted. */
+.consent-actions button{
+  font:inherit;font-size:0.9rem;font-weight:500;
+  padding:11px 22px;border-radius:var(--radius);cursor:pointer;
+  border:1px solid var(--line-2);background:var(--bg);color:var(--ink);
+  transition:background .15s ease,border-color .15s ease;
+}
+.consent-actions button:hover{background:var(--bg-soft);border-color:var(--ink-3);}
+.consent-actions button[data-consent="accept"]{
+  background:var(--ink);border-color:var(--ink);color:#fff;
+}
+.consent-actions button[data-consent="accept"]:hover{background:#000;}
+.consent-actions button:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+
+/* Deliberately a short fade and an 8px lift rather than a full slide: the
+   resting state is the untransformed one, so if the animation never runs
+   (throttled background tab, animations disabled) the banner still sits
+   correctly instead of parked off the bottom of the viewport. */
+@keyframes consent-in{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+@media (max-width:760px){
+  .consent-inner{
+    flex-direction:column;align-items:stretch;gap:16px;padding:18px 22px;
+  }
+  .consent-actions button{flex:1;}
+}
+@media (prefers-reduced-motion:reduce){
+  .consent{animation:none;}
+}

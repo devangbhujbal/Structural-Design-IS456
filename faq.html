@@ -14,16 +14,40 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20260909b">
+<link rel="stylesheet" href="styles.css?v=20260909c">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DP111VJT0Q"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
+  /* Consent Mode v2. Everything denied before gtag.js loads, so no cookie is
+     set until the visitor accepts. GA still sends cookieless pings while
+     denied, so a refusal costs detail rather than the whole pageview.
+     ad_* stay denied for good — this site runs no advertising. */
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'denied',
+    'personalization_storage': 'denied',
+    'security_storage': 'granted',
+    'wait_for_update': 500
+  });
+
+  /* Re-apply a stored choice before config, so a returning visitor who
+     accepted is measured on this pageview rather than the next one. */
+  try {
+    if (localStorage.getItem('ss-consent') === 'granted') {
+      gtag('consent', 'update', {'analytics_storage': 'granted'});
+    }
+  } catch (e) {}
+
+  gtag('js', new Date());
   gtag('config', 'G-DP111VJT0Q');
 </script>
+<script src="/consent.js" defer></script>
 </head>
 <body>
 
@@ -115,6 +139,7 @@
         <a href="eurocode-2-pack.html">Eurocode 2 pack</a>
         <a href="aci-318-pack.html">ACI 318 pack</a>
         <a href="notes/">Notes</a>
+        <a href="#" data-consent-reopen>Cookies</a>
         <a href="faq.html">FAQ</a>
         <a href="contact.html">Contact</a>
       </div>
