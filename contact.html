@@ -38,29 +38,66 @@
 </div>
 
 <section>
-  <div class="wrap">
+  <div class="wrap contact-grid">
+
     <form class="form" id="contact-form" action="https://formspree.io/f/xeaqpwvj" method="POST">
       <div class="field">
         <label for="name">Your name</label>
-        <input type="text" id="name" name="name" required autocomplete="name">
+        <input type="text" id="name" name="name" required autocomplete="name" placeholder="Jane Okoro">
       </div>
       <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required autocomplete="email">
+        <label for="email">Email <span class="opt">WHERE THE REPLY GOES</span></label>
+        <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@practice.com">
+      </div>
+      <div class="field">
+        <label for="subject">About <span class="opt">OPTIONAL</span></label>
+        <input type="text" id="subject" name="subject" placeholder="Eurocode 2 pack, ACI 318 pack, licensing…">
       </div>
       <div class="field">
         <label for="message">Your question</label>
         <textarea id="message" name="message" required placeholder="If it is about a specific check or clause, say which — it makes the answer much more useful."></textarea>
       </div>
       <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <button type="submit" id="send">Send</button>
+      <div class="form-foot">
+        <button type="submit" id="send">Send question</button>
+        <span class="hint">Your address is used to reply, nothing else.</span>
+      </div>
       <p class="form-msg" id="form-msg" hidden></p>
     </form>
 
-    <p style="margin-top:34px;color:var(--ink-3);font-size:0.94rem;max-width:33rem;">
-      Already bought a pack and need help with it? Reply to the receipt email from Lemon&nbsp;Squeezy —
-      that thread reaches the same inbox and already has your order attached.
-    </p>
+    <aside class="contact-aside">
+      <div class="aside-block">
+        <h3>Check the FAQ first</h3>
+        <p>National annexes, ACI load combinations, units, what you receive, licensing across a team
+          and Excel compatibility are all answered there.</p>
+        <div class="aside-links">
+          <a href="faq.html">Read the FAQ →</a>
+        </div>
+      </div>
+
+      <div class="aside-block">
+        <h3>Or just look at the sheets</h3>
+        <p>You do not need to ask to judge the quality. Each pack has a free sample: one complete,
+          unlocked beam sheet with the Parameters tab it reads from, and nothing disabled.</p>
+        <div class="aside-links">
+          <a href="samples/eurocode-2-beam-sample.xlsx">Eurocode 2 beam sample (.xlsx) →</a>
+          <a href="samples/aci-318-beam-sample.xlsx">ACI 318 beam sample (.xlsx) →</a>
+        </div>
+      </div>
+
+      <div class="aside-block">
+        <h3>Already bought a pack?</h3>
+        <p>Reply to the receipt email from Lemon&nbsp;Squeezy instead. That thread reaches the same
+          inbox and already has your order attached.</p>
+      </div>
+
+      <div class="aside-block">
+        <h3>Who answers</h3>
+        <p>The engineer who wrote the sheets, not a support desk — so questions about a specific
+          clause or a result you disagree with are welcome.</p>
+      </div>
+    </aside>
+
   </div>
 </section>
 
@@ -85,14 +122,23 @@
   var msg  = document.getElementById('form-msg');
   var send = document.getElementById('send');
 
-  function show(text) { msg.textContent = text; msg.hidden = false; }
+  function show(text, kind) {
+    msg.textContent = text;
+    msg.className = 'form-msg' + (kind ? ' is-' + kind : '');
+    msg.hidden = false;
+  }
+
+  function reset(label) {
+    send.disabled = false;
+    send.textContent = label;
+  }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // Endpoint not configured yet — never pretend a message was sent.
+    // Endpoint not configured — never pretend a message was sent.
     if (form.action.indexOf('YOUR_FORM_ID') !== -1) {
-      show('This form is not connected yet. Please try again shortly.');
+      show('This form is not connected yet. Please try again shortly.', 'err');
       return;
     }
 
@@ -107,17 +153,15 @@
     }).then(function (res) {
       if (res.ok) {
         form.reset();
-        show('Thanks — your question has been sent. You will get a reply at the address you gave.');
+        show('Thanks — your question has been sent. You will get a reply at the address you gave.', 'ok');
         send.textContent = 'Sent';
       } else {
-        show('Something went wrong sending that. Please try again in a moment.');
-        send.disabled = false;
-        send.textContent = 'Send';
+        show('Something went wrong sending that. Please try again in a moment.', 'err');
+        reset('Send question');
       }
     }).catch(function () {
-      show('Could not reach the server. Check your connection and try again.');
-      send.disabled = false;
-      send.textContent = 'Send';
+      show('Could not reach the server. Check your connection and try again.', 'err');
+      reset('Send question');
     });
   });
 })();
