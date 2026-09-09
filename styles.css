@@ -1,4 +1,11 @@
-/* Structural Studio — shared styles */
+/* Structural Studio — shared styles
+ *
+ * Hero photograph: img/hero.jpg and img/hero-sm.jpg, cropped from
+ * https://images.unsplash.com/photo-1549791084-5f78368b208b
+ * Used under the Unsplash License, which permits commercial use and does not
+ * require attribution. Photographer not identified from the CDN URL; if you
+ * want to credit them, look the photo up on unsplash.com and add it here.
+ */
 
 :root{
   --bg:#FFFFFF;
