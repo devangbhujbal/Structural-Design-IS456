@@ -123,7 +123,8 @@ nav.links a:hover,nav.links a[aria-current="page"]{color:var(--ink);border-botto
 .hero h1{margin-bottom:22px;}
 .hero .lead{max-width:30rem;}
 
-.page-head{padding:76px 0 12px;}
+/* padding-top/bottom only — a shorthand here would cancel .wrap's side padding */
+.page-head{padding-top:76px;padding-bottom:12px;}
 .page-head h1{font-size:clamp(2.1rem,4vw,3.1rem);margin:10px 0 18px;}
 .page-head .lead{max-width:40rem;}
 
@@ -193,6 +194,33 @@ ul.checks li::before{content:"";position:absolute;left:0;top:11px;width:8px;heig
 .shots img{width:100%;height:auto;display:block;border-bottom:1px solid var(--line);}
 .shots figcaption{font-size:0.85rem;color:var(--ink-3);padding:14px 16px;line-height:1.5;}
 
+/* ---------- Contact form ---------- */
+.form{display:grid;gap:20px;max-width:33rem;margin-top:8px;}
+.field label{display:block;font-size:0.92rem;font-weight:500;color:var(--ink);margin-bottom:7px;}
+.field input,.field textarea{
+  width:100%;padding:12px 14px;font:inherit;color:var(--ink);
+  background:var(--bg);border:1px solid var(--line-2);border-radius:var(--radius);
+}
+.field textarea{min-height:150px;resize:vertical;}
+.field input:focus,.field textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue);}
+.form button{
+  justify-self:start;padding:13px 26px;font:inherit;font-weight:500;font-size:0.95rem;
+  color:#fff;background:var(--ink);border:1px solid var(--ink);border-radius:var(--radius);cursor:pointer;
+}
+.form button:hover{background:#000;}
+.form button[disabled]{opacity:.55;cursor:default;}
+.form-msg{font-size:0.94rem;padding:12px 15px;border-radius:var(--radius);border:1px solid var(--line-2);background:var(--bg-soft);}
+.form-msg[hidden]{display:none;}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+
+/* ---------- Sample download ---------- */
+.sample-line{
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  margin-top:16px;padding-top:16px;border-top:1px solid var(--line);
+  font-size:0.9rem;color:var(--ink-3);
+}
+.sample-line a{color:var(--ink);text-underline-offset:3px;}
+
 /* ---------- FAQ ---------- */
 .faq-list{max-width:46rem;}
 .faq-item{border-top:1px solid var(--line);padding:22px 0;}
@@ -234,7 +262,7 @@ footer .fine{color:var(--ink-3);font-size:0.85rem;max-width:34rem;margin-top:18p
       rgba(255,255,255,0.35) 100%);
   }
   .hero .wrap{padding-top:64px;padding-bottom:76px;}
-  .page-head{padding:52px 0 8px;}
+  .page-head{padding-top:52px;padding-bottom:8px;}
   nav.links{gap:18px;font-size:0.9rem;}
 }
 @media (prefers-reduced-motion:reduce){
