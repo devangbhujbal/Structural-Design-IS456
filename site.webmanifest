@@ -1,0 +1,21 @@
+{
+  "name": "Structural Studio",
+  "short_name": "Structural Studio",
+  "description": "Reinforced concrete design sheets for Eurocode 2 and ACI 318.",
+  "icons": [
+    {
+      "src": "web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#14171A",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/"
+}
