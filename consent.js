@@ -33,7 +33,8 @@
           '<p class="consent-title">Cookies</p>' +
           '<p>We use Google Analytics to see which notes people actually read. ' +
           'It sets cookies in your browser. Decline and nothing is stored — ' +
-          'the site works exactly the same either way.</p>' +
+          'the site works exactly the same either way. ' +
+          '<a href="/privacy.html">What we collect</a>.</p>' +
         '</div>' +
         '<div class="consent-actions">' +
           '<button type="button" data-consent="decline">Decline</button>' +

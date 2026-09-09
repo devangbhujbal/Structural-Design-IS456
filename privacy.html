@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy and cookies — Structural Studio</title>
+<meta name="description" content="What Structural Studio collects, why, who processes it and how to get it removed — analytics, the contact form, purchases and hosting, in plain language.">
+<link rel="canonical" href="https://devangbhujbal.com/privacy.html">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#14171A">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20260909c">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DP111VJT0Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+
+  /* Consent Mode v2. Everything denied before gtag.js loads, so no cookie is
+     set until the visitor accepts. GA still sends cookieless pings while
+     denied, so a refusal costs detail rather than the whole pageview.
+     ad_* stay denied for good — this site runs no advertising. */
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'denied',
+    'personalization_storage': 'denied',
+    'security_storage': 'granted',
+    'wait_for_update': 500
+  });
+
+  /* Re-apply a stored choice before config, so a returning visitor who
+     accepted is measured on this pageview rather than the next one. */
+  try {
+    if (localStorage.getItem('ss-consent') === 'granted') {
+      gtag('consent', 'update', {'analytics_storage': 'granted'});
+    }
+  } catch (e) {}
+
+  gtag('js', new Date());
+  gtag('config', 'G-DP111VJT0Q');
+</script>
+<script src="/consent.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="wordmark" href="/">Structural&nbsp;Studio</a>
+    <nav class="links">
+      <a href="/">Home</a>
+      <a href="eurocode-2-pack.html">Eurocode 2</a>
+      <a href="aci-318-pack.html">ACI 318</a>
+      <a href="notes/">Notes</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap article-head">
+  <div class="kicker">Privacy</div>
+  <h1>Privacy and cookies.</h1>
+  <p class="lead">What this site collects, why, who else sees it, and how to get it removed. Written to be read rather than agreed to.</p>
+  <div class="article-meta">
+    <time datetime="2026-09-09">Last updated 9 September 2026</time>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <article class="prose" style="max-width:40rem;">
+
+      <div class="callout">
+        <span class="kicker">The short version</span>
+        <p>Reading this site is anonymous unless you choose otherwise. Nothing that identifies you is stored until you either accept analytics cookies, send a message, or buy something. There is no advertising, no profiling, and nothing is ever sold or shared for marketing.</p>
+      </div>
+
+      <h2 id="who">Who is responsible</h2>
+
+      <p>Structural Studio is operated by <strong>[YOUR NAME OR TRADING NAME]</strong>, based in <strong>[COUNTRY]</strong>, who is the data controller for the information described here.</p>
+
+      <p>For anything on this page — a question, a correction, or a request to delete something — use the <a href="contact.html">contact page</a>.</p>
+
+      <h2 id="analytics">Analytics</h2>
+
+      <p>Two measurement tools run on this site, and they behave differently.</p>
+
+      <h3>Cloudflare Web Analytics — always on</h3>
+
+      <p>Cloudflare records that a page was viewed, along with the referring site, browser, operating system, country and page performance. It <strong>sets no cookies</strong>, assigns no identifier, and cannot follow you across other websites. Because it collects no personal data, it runs without asking and there is nothing to opt out of.</p>
+
+      <h3>Google Analytics — only with consent</h3>
+
+      <p>Google Analytics 4 (property <span class="mono">G-DP111VJT0Q</span>) gives more detail about how pages are used. It <strong>does</strong> set cookies, so it stays switched off until you accept it.</p>
+
+      <p>Until you accept, Google Consent Mode holds every storage permission in a denied state, and Google Analytics sends only cookieless pings — enough to count a visit, not enough to recognise you. Advertising signals are denied permanently, not just by default: this site runs no advertising and never requests them.</p>
+
+      <p>You can change your mind at any time using the <a href="#" data-consent-reopen>Cookies</a> link in the footer of every page. Declining after having accepted also deletes the cookies that were already set.</p>
+
+      <h2 id="contact">If you send a message</h2>
+
+      <p>The contact form collects your name, email address, an optional subject line and your message. It is delivered by <strong>Formspree</strong>, which passes it on by email. That information is used to answer you and for nothing else — no mailing list, no marketing.</p>
+
+      <h2 id="purchases">If you buy a pack</h2>
+
+      <p>Purchases are handled entirely by <strong>Lemon Squeezy</strong>, which acts as merchant of record. They collect your name, email address, payment details and whatever billing or tax information the sale requires, and they deliver the file to you.</p>
+
+      <p><strong>Card details never reach this site</strong> — checkout happens on Lemon Squeezy's own pages, and payment information is never seen or stored here. What comes back is the order record needed to provide support and meet accounting obligations.</p>
+
+      <h2 id="hosting">Hosting and fonts</h2>
+
+      <p>The site is hosted on <strong>GitHub Pages</strong> and served through <strong>Cloudflare</strong>. Both keep short-lived server logs, including IP addresses, to deliver pages and defend against attacks. This is ordinary infrastructure logging and applies to every visitor.</p>
+
+      <p>Typefaces are loaded from <strong>Google Fonts</strong>. Doing so sends your IP address to Google as part of the request for the font files. This happens before any consent choice, because it is part of rendering the page. If you would rather avoid it, a browser extension that blocks Google Fonts will not break the layout — the site falls back to system fonts.</p>
+
+      <h2 id="processors">Who processes what</h2>
+
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr><th>Service</th><th>What it handles</th><th>When</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Cloudflare</td><td>Content delivery, security, cookieless analytics</td><td>Every visit</td></tr>
+            <tr><td>GitHub Pages</td><td>Hosting and server logs</td><td>Every visit</td></tr>
+            <tr><td>Google Fonts</td><td>Typeface files; receives your IP</td><td>Every visit</td></tr>
+            <tr><td>Google Analytics</td><td>Usage measurement, cookies</td><td>Only after you accept</td></tr>
+            <tr><td>Formspree</td><td>Contact form delivery</td><td>Only if you write</td></tr>
+            <tr><td>Lemon Squeezy</td><td>Payment, invoicing, file delivery</td><td>Only if you buy</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="table-note">Each of these is an independent company with its own privacy policy. Some are based outside the UK and EU, so data may be transferred internationally under the safeguards those providers publish.</p>
+
+      <h2 id="storage">Cookies and local storage</h2>
+
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr><th>Name</th><th>Purpose</th><th>Set when</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="num">ss-consent</td><td>Remembers your cookie choice. Local storage, not a cookie, and never sent to any server.</td><td>When you choose</td></tr>
+            <tr><td class="num">_ga</td><td>Google Analytics visitor identifier</td><td>Only if you accept</td></tr>
+            <tr><td class="num">_ga_DP111VJT0Q</td><td>Google Analytics session state</td><td>Only if you accept</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>That is the complete list. There are no advertising, social or third-party tracking cookies on this site.</p>
+
+      <h2 id="legal">Why we are allowed to hold it</h2>
+
+      <ul>
+        <li><strong>Consent</strong> — Google Analytics cookies. Withdrawable at any time, with no effect on anything else.</li>
+        <li><strong>Legitimate interests</strong> — cookieless analytics, server logs and security. Needed to keep the site working and understand whether it is useful, at minimal cost to your privacy.</li>
+        <li><strong>Contract</strong> — order and delivery records when you buy something.</li>
+        <li><strong>Legal obligation</strong> — sales and tax records, which have to be kept for a fixed period regardless of preference.</li>
+      </ul>
+
+      <h2 id="retention">How long it is kept</h2>
+
+      <p>Analytics data is retained by Google for up to <strong>14 months</strong>, the Google Analytics default. Cloudflare's cookieless analytics are aggregated and hold nothing identifying. Messages sent through the contact form are kept as long as they are useful for answering you and any follow-up, then deleted. Order records are kept as long as accounting and tax rules require.</p>
+
+      <h2 id="rights">Your rights</h2>
+
+      <p>If you are in the UK or EU you can ask for a copy of what is held about you, ask for it to be corrected or deleted, object to it being processed, or ask for it to be restricted. Ask through the <a href="contact.html">contact page</a> and you will get a reply within a month.</p>
+
+      <p>You can also complain to a supervisory authority — the ICO in the UK, or your national data protection authority in the EU — though raising it directly first is usually faster.</p>
+
+      <h2 id="changes">Changes</h2>
+
+      <p>If what this site collects changes, this page changes with it and the date at the top is updated. Any change that materially affects your choices will reset the cookie banner so you can decide again.</p>
+
+      <p class="article-foot">This page describes actual behaviour rather than covering every hypothetical, and it is not legal advice. If a detail here does not match what you observe, that is a defect worth reporting — <a href="contact.html">tell us</a> and it gets fixed.</p>
+
+    </article>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a class="wordmark" href="/">Structural&nbsp;Studio</a>
+      <div class="footer-links">
+        <a href="eurocode-2-pack.html">Eurocode 2 pack</a>
+        <a href="aci-318-pack.html">ACI 318 pack</a>
+        <a href="notes/">Notes</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="#" data-consent-reopen>Cookies</a>
+        <a href="faq.html">FAQ</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+    <p class="fine">Independent design aids, not affiliated with CEN or ACI. Verify all output against the current code edition before use.</p>
+  </div>
+</footer>
+
+</body>
+</html>

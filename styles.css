@@ -504,3 +504,5 @@ table.data .num{font-family:'IBM Plex Mono',ui-monospace,monospace;white-space:n
 @media (prefers-reduced-motion:reduce){
   .consent{animation:none;}
 }
+.consent-copy a{color:var(--ink);text-underline-offset:3px;text-decoration-color:var(--line-2);}
+.consent-copy a:hover{color:var(--blue);text-decoration-color:var(--blue);}
